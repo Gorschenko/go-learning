@@ -6,37 +6,37 @@ import (
 )
 
 func main() {
-	testLinks()
+	testPointers()
 	testFirstTask()
 	testSecondTask()
 }
 
-func testLinks() {
+func testPointers() {
 	var x int
 	// Получить адрес переменной, то есть указатель
 	// Значение по умолчанию для указателя является nil
-	link := &x
+	pointer := &x
 
-	fmt.Println(link) // 0xc00000a098
+	fmt.Println(pointer) // 0xc00000a098
 
 	x = 64
 
 	// Для получения значения по адресу нужно разыменовать указатель
-	fmt.Println(*link) // 64
+	fmt.Println(*pointer) // 64
 
 	// Можно присвоить новое значение, используя указатель
-	*link = 31
-	fmt.Println(*link) // 31
-	fmt.Println(x)     // 31
+	*pointer = 31
+	fmt.Println(*pointer) // 31
+	fmt.Println(x)        // 31
 
 	// Для удобства работы с указателями есть new()
 
 	var value int
-	link2 := &value
-	fmt.Println(link2) // 0xc00000a098
+	pointer2 := &value
+	fmt.Println(pointer2) // 0xc00000a098
 
-	link3 := new(int)
-	fmt.Println(link3) // 0xc00000a099
+	pointer3 := new(int)
+	fmt.Println(pointer3) // 0xc00000a099
 }
 
 func testFirstTask() {
@@ -57,8 +57,8 @@ func testSecondTask() {
 	var radius float64 = math.Round(float64(circleLength)/2/math.Pi*100) / 100
 	fmt.Println(radius)
 
-	radiusLink := &radius
+	radiusPointer := &radius
 
-	circleArea := math.Round(*radiusLink**radiusLink*math.Pi*100) / 100
+	circleArea := math.Round(*radiusPointer**radiusPointer*math.Pi*100) / 100
 	fmt.Println(circleArea)
 }
