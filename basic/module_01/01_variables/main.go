@@ -15,7 +15,7 @@ func main() {
 	testString()
 	testArray()
 	testDefineTypes()
-	task()
+	testTask()
 }
 
 // ПЕРЕМЕННЫЕ
@@ -198,7 +198,7 @@ func testDefineTypes() {
 
 // ЗАДАЧА
 
-func task() {
+func testTask() {
 	str := "104"
 	number := 35
 
