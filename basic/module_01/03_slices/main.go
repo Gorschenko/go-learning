@@ -4,7 +4,7 @@ import "fmt"
 
 func main() {
 	testSlice()
-
+	testTask()
 }
 
 func testSlice() {
@@ -59,4 +59,18 @@ func testSlice() {
 	// Функция возвращает кол-во скопированных элементов
 	qnt := copy(dst, src)
 	fmt.Println(qnt, dst) // 3 [1 2 3]
+}
+
+func testTask() {
+	days := []int{1, 2, 3, 4, 5, 6, 7}
+	workDays := make([]int, 0, 5)
+	// count := copy(workDays, days)
+	// fmt.Println(count, workDays)
+	workDays = append(workDays, days[0:5]...)
+	fmt.Println(workDays)
+	days = append(days[:0], days[5:]...)
+	fmt.Println((days))
+
+	newDays := append(days, workDays...)
+	fmt.Println((newDays))
 }
