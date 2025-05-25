@@ -36,6 +36,32 @@ func main() {
 	// var IMT = float64(userKg) / userHeight
 	var IMT = userKg / math.Pow(userHeight, IMTPower)
 	fmt.Printf("Ваш индекс массы тела %v", IMT)
-	fmt.Print("Ваш индекс массы тела: ")
-	fmt.Print(IMT)
+	outputResult(IMT)
+	calculateIMT(userKg, userHeight)
+}
+
+func outputResult(IMT float64) {
+	result := fmt.Sprintf("\nВаш индекс массы тела: %v", IMT)
+	fmt.Print(result)
+}
+
+func calculateIMT(userKg float64, userHeight float64) float64 {
+	const IMTPower = 2
+	IMT := userKg / math.Pow(userHeight, IMTPower)
+	return IMT
+}
+
+func getUserInput() (float64, float64) {
+	var userHeight float64
+	var userKg float64
+	fmt.Print("Введите свой рост в метрах: ")
+	fmt.Scan(&userHeight)
+	fmt.Print("Введите свой вес в кг: ")
+	fmt.Scan((&userKg))
+
+	return userHeight, userKg
+}
+
+func getUserInputTwo() (userHeight float64, userKg float64) {
+	return userHeight, 85
 }
