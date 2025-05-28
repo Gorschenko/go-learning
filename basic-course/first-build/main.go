@@ -36,8 +36,6 @@ func main() {
 	// var IMT = float64(userKg) / userHeight
 	var IMT = userKg / math.Pow(userHeight, IMTPower)
 	fmt.Printf("Ваш индекс массы тела %v", IMT)
-	outputResult(IMT)
-	calculateIMT(userKg, userHeight)
 }
 
 func outputResult(IMT float64) {
