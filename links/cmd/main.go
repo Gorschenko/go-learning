@@ -3,16 +3,18 @@ package main
 import (
 	"fmt"
 	"net/http"
+	"test/configs"
 	"test/internal/auth"
 )
 
 func main() {
-	// conf := configs.LoadConfig()
+	conf := configs.LoadConfig()
 	router := http.NewServeMux()
-	auth.NewAuthHandler(router)
-	
+	auth.NewAuthHandler(router, auth.AuthHandlerDeps{
+		Config: conf,
+	})
 	server:= http.Server{
-		Addr: ":8081",
+		Addr: ":" + conf.Server.Port,
 		Handler: router,
 	}
 
