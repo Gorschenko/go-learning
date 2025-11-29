@@ -1,3 +1,4 @@
 [build]
 cmd = "go build -o ./tmp/main.exe ./cmd"
 bin = "./tmp/main.exe"
+ignore = []
