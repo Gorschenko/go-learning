@@ -1,10 +1,11 @@
 package auth
 
 import (
-	"encoding/json"
 	"fmt"
 	"net/http"
 	"test/configs"
+	"test/packages/request"
+	"test/packages/response"
 )
 
 type AuthHandlerDeps struct {
@@ -24,21 +25,30 @@ func NewAuthHandler(router *http.ServeMux, deps AuthHandlerDeps) {
 }
 
 func (handler *AuthHandler) Login() http.HandlerFunc {
-	return func(w http.ResponseWriter, req *http.Request) {
-		fmt.Println(handler.Config.Auth.Secret)
-		fmt.Println("Login")
-		res := LoginResponse{
+	return func(w http.ResponseWriter, r *http.Request) {
+		body, err := request.HandleBody[LoginRequest](&w, r)
+
+		if err != nil {
+			return
+		}
+
+		fmt.Println(body)
+
+		data := LoginResponse{
 			Token: "123",
 		}
-		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(200)
-		json.NewEncoder(w).Encode(res)
+		response.Json(w, data, 200)
 	}
-}  
-
+}
 
 func (handler *AuthHandler) Register() http.HandlerFunc {
-	return func(w http.ResponseWriter, req *http.Request) {
-		fmt.Println("Register")
+	return func(w http.ResponseWriter, r *http.Request) {
+		body, err := request.HandleBody[RegisterRequest](&w, r)
+
+		if err != nil {
+			return
+		}
+
+		fmt.Println(body)
 	}
 }

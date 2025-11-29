@@ -8,4 +8,8 @@
 3. Hot reloader
     -   https://github.com/air-verse/air
     -   go install github.com/air-verse/air@latest
-    -   Создать миниальный конфиг в корне проекта.
+    -   Создать минимальный конфиг в корне проекта.
+
+4. Validator
+    -   https://github.com/go-playground/validator
+    -   go get github.com/go-playground/validator/v10
