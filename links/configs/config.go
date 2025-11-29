@@ -8,8 +8,8 @@ import (
 )
 
 type Config struct {
-	Db DbConfig
-	Auth AuthConfig
+	Db     DbConfig
+	Auth   AuthConfig
 	Server ServerConfig
 }
 

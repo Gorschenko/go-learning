@@ -13,3 +13,11 @@
 4. Validator
     -   https://github.com/go-playground/validator
     -   go get github.com/go-playground/validator/v10
+
+5. Выбор ORM:
+    -   https://github.com/d-tsuji/awesome-go-orms
+
+6. ORM:
+    -   https://github.com/go-gorm/gorm?tab=readme-ov-file
+    -   go get -u gorm.io/gorm
+    -   go get -u gorm.io/driver/postgres
