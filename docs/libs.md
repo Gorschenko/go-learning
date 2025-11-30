@@ -21,3 +21,9 @@
     -   https://github.com/go-gorm/gorm?tab=readme-ov-file
     -   go get -u gorm.io/gorm
     -   go get -u gorm.io/driver/postgres
+
+
+7. Crypto:
+    -   https://github.com/golang/crypto
+    -   Встроена в стандартную библиотеку. Нужно просто указать импорт, например, import "golang.org/x/crypto/bcrypt".
+

@@ -1,7 +1,6 @@
 package auth
 
 import (
-	"fmt"
 	"net/http"
 	"test/configs"
 	"test/packages/request"
@@ -35,10 +34,15 @@ func (handler *AuthHandler) Login() http.HandlerFunc {
 			return
 		}
 
-		fmt.Println(body)
+		token, err := handler.AuthService.Login(body.Email, body.Password)
+
+		if err != nil {
+			response.Json(w, err, http.StatusUnauthorized)
+			return
+		}
 
 		data := LoginResponse{
-			Token: "123",
+			Token: token,
 		}
 		response.Json(w, data, http.StatusOK)
 	}
