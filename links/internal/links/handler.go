@@ -37,7 +37,8 @@ func (handler *LinksHandler) Create() http.HandlerFunc {
 		createdLink, err := handler.LinksRepository.Create(link)
 
 		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
 		}
 
 		response.Json(w, createdLink, http.StatusCreated)
@@ -59,6 +60,14 @@ func (handler *LinksHandler) Delete() http.HandlerFunc {
 
 func (handler *LinksHandler) GoTo() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
+		hash := r.PathValue("hash")
+		link, err := handler.LinksRepository.GetByHash(hash)
 
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
+		}
+
+		http.Redirect(w, r, link.Url, http.StatusTemporaryRedirect)
 	}
 }
