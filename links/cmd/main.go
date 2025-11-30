@@ -15,10 +15,10 @@ func main() {
 	db := db.NewDb(conf)
 	router := http.NewServeMux()
 
-	// repositories
+	// Repositories
 	linksRepository := links.NewLinksRepository(db)
 
-	// handlers
+	// Handlers
 	auth.NewAuthHandler(router, auth.AuthHandlerDeps{
 		Config: conf,
 	})
@@ -26,9 +26,15 @@ func main() {
 		LinksRepository: linksRepository,
 	})
 
+	// Middlewares
+	stack := middlewares.ChainMiddlewares(
+		middlewares.CorsMiddleware,
+		middlewares.LoggerMiddleware,
+	)
+
 	server := http.Server{
 		Addr:    ":" + conf.Server.Port,
-		Handler: middlewares.CorsMiddleware(middlewares.LoggerMiddleware(router)),
+		Handler: stack(router),
 	}
 
 	fmt.Println("Server is listening on port 8081")
