@@ -3,8 +3,11 @@ package links
 import (
 	"fmt"
 	"net/http"
+	"strconv"
 	"test/packages/request"
 	"test/packages/response"
+
+	"gorm.io/gorm"
 )
 
 type LinksHandlerDeps struct {
@@ -28,12 +31,20 @@ func NewLinksHandler(router *http.ServeMux, deps LinksHandlerDeps) {
 func (handler *LinksHandler) Create() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		body, err := request.HandleBody[LinksCreateRequest](&w, r)
-
 		if err != nil {
 			return
 		}
 
 		link := NewLink(body.Url)
+		for {
+
+			existedLink, _ := handler.LinksRepository.GetByHash(link.Hash)
+			if existedLink == nil {
+				break
+			}
+			link.GenerateHash()
+		}
+
 		createdLink, err := handler.LinksRepository.Create(link)
 
 		if err != nil {
@@ -47,7 +58,30 @@ func (handler *LinksHandler) Create() http.HandlerFunc {
 
 func (handler *LinksHandler) Update() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
+		body, err := request.HandleBody[LinksUpdateRequest](&w, r)
+		if err != nil {
+			return
+		}
 
+		idString := r.PathValue("id")
+
+		idInt, err := strconv.ParseUint(idString, 10, 32)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
+		}
+
+		link, err := handler.LinksRepository.Update(&Link{
+			Model: gorm.Model{ID: uint(idInt)},
+			Url:   body.Url,
+			Hash:  body.Hash,
+		})
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
+		}
+
+		response.Json(w, link, http.StatusOK)
 	}
 }
 
