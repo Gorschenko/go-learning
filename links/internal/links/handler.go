@@ -1,7 +1,6 @@
 package links
 
 import (
-	"fmt"
 	"net/http"
 	"strconv"
 	"test/packages/request"
@@ -64,7 +63,6 @@ func (handler *LinksHandler) Update() http.HandlerFunc {
 		}
 
 		idString := r.PathValue("id")
-
 		idInt, err := strconv.ParseUint(idString, 10, 32)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
@@ -87,8 +85,23 @@ func (handler *LinksHandler) Update() http.HandlerFunc {
 
 func (handler *LinksHandler) Delete() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		id := r.PathValue("id")
-		fmt.Println(id)
+		idString := r.PathValue("id")
+		idInt, err := strconv.ParseUint(idString, 10, 32)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
+		}
+
+		_, err = handler.LinksRepository.GetById(uint(idInt))
+
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusNotFound)
+			return
+		}
+
+		handler.LinksRepository.Delete(uint(idInt))
+
+		response.Json(w, nil, http.StatusOK)
 	}
 }
 

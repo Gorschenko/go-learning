@@ -44,3 +44,22 @@ func (repository *LinksRepository) Update(link *Link) (*Link, error) {
 
 	return link, nil
 }
+
+func (repository *LinksRepository) Delete(id uint) error {
+	result := repository.Database.DB.Delete(&Link{}, id)
+	if result.Error != nil {
+		return result.Error
+	}
+	return nil
+}
+
+func (repository *LinksRepository) GetById(id uint) (*Link, error) {
+	var link Link
+	result := repository.Database.DB.First(&link, "id = ?", id)
+
+	if result.Error != nil {
+		return nil, result.Error
+	}
+
+	return &link, nil
+}
