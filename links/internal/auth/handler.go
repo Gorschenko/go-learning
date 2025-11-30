@@ -37,7 +37,7 @@ func (handler *AuthHandler) Login() http.HandlerFunc {
 		data := LoginResponse{
 			Token: "123",
 		}
-		response.Json(w, data, 200)
+		response.Json(w, data, http.StatusOK)
 	}
 }
 

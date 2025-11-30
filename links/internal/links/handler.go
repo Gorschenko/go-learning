@@ -3,6 +3,8 @@ package links
 import (
 	"fmt"
 	"net/http"
+	"test/packages/request"
+	"test/packages/response"
 )
 
 type LinksHandlerDeps struct {
@@ -24,7 +26,22 @@ func NewLinksHandler(router *http.ServeMux, deps LinksHandlerDeps) {
 }
 
 func (handler *LinksHandler) Create() http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {}
+	return func(w http.ResponseWriter, r *http.Request) {
+		body, err := request.HandleBody[LinksCreateRequest](&w, r)
+
+		if err != nil {
+			return
+		}
+
+		link := NewLink(body.Url)
+		createdLink, err := handler.LinksRepository.Create(link)
+
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+		}
+
+		response.Json(w, createdLink, http.StatusCreated)
+	}
 }
 
 func (handler *LinksHandler) Update() http.HandlerFunc {
