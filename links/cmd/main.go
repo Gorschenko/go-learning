@@ -7,6 +7,7 @@ import (
 	"test/internal/auth"
 	"test/internal/links"
 	"test/packages/db"
+	"test/packages/middlewares"
 )
 
 func main() {
@@ -27,7 +28,7 @@ func main() {
 
 	server := http.Server{
 		Addr:    ":" + conf.Server.Port,
-		Handler: router,
+		Handler: middlewares.LoggerMiddleware(router),
 	}
 
 	fmt.Println("Server is listening on port 8081")

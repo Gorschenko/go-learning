@@ -1,0 +1,19 @@
+package middlewares
+
+import (
+	"log"
+	"net/http"
+	"time"
+)
+
+func LoggerMiddleware(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		start := time.Now()
+		wrapper := &WrapperWriter{
+			ResponseWriter: w,
+			StatusCode:     http.StatusOK,
+		}
+		next.ServeHTTP(wrapper, r)
+		log.Println("LoggerMiddleware", wrapper.StatusCode, r.Method, r.URL.Path, time.Since(start))
+	})
+}
