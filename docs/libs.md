@@ -22,8 +22,11 @@
     -   go get -u gorm.io/gorm
     -   go get -u gorm.io/driver/postgres
 
-
 7. Crypto:
     -   https://github.com/golang/crypto
     -   Встроена в стандартную библиотеку. Нужно просто указать импорт, например, import "golang.org/x/crypto/bcrypt".
+
+8. JWT:
+    -   https://github.com/golang-jwt/jwt
+    -   go get -u github.com/golang-jwt/jwt/v5
 

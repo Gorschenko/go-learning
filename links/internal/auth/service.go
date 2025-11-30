@@ -30,7 +30,7 @@ func (service *AuthService) Login(email, password string) (string, error) {
 		return "", errors.New(ErrorInvalidPassword)
 	}
 
-	return "logged", nil
+	return email, nil
 }
 
 func (service *AuthService) Register(email, password, name string) (string, error) {

@@ -3,6 +3,7 @@ package auth
 import (
 	"net/http"
 	"test/configs"
+	"test/packages/jwt"
 	"test/packages/request"
 	"test/packages/response"
 )
@@ -34,11 +35,17 @@ func (handler *AuthHandler) Login() http.HandlerFunc {
 			return
 		}
 
-		token, err := handler.AuthService.Login(body.Email, body.Password)
+		email, err := handler.AuthService.Login(body.Email, body.Password)
 
 		if err != nil {
 			response.Json(w, err, http.StatusUnauthorized)
 			return
+		}
+
+		token, err := jwt.NewJWT(handler.Config.Auth.Secret).Create(email)
+
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
 		}
 
 		data := LoginResponse{
@@ -56,8 +63,22 @@ func (handler *AuthHandler) Register() http.HandlerFunc {
 			return
 		}
 
-		email, _ := handler.AuthService.Register(body.Email, body.Password, body.Name)
+		email, err := handler.AuthService.Register(body.Email, body.Password, body.Name)
 
-		response.Json(w, email, http.StatusOK)
+		if err != nil {
+			response.Json(w, err, http.StatusBadRequest)
+		}
+
+		token, err := jwt.NewJWT(handler.Config.Auth.Secret).Create(email)
+
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+		}
+
+		data := RegisterResponse{
+			Token: token,
+		}
+
+		response.Json(w, data, http.StatusOK)
 	}
 }
