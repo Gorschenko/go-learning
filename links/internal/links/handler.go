@@ -3,6 +3,7 @@ package links
 import (
 	"net/http"
 	"strconv"
+	"test/configs"
 	"test/packages/middlewares"
 	"test/packages/request"
 	"test/packages/response"
@@ -12,6 +13,7 @@ import (
 
 type LinksHandlerDeps struct {
 	LinksRepository *LinksRepository
+	Config          *configs.Config
 }
 
 type LinksHandler struct {
@@ -22,10 +24,10 @@ func NewLinksHandler(router *http.ServeMux, deps LinksHandlerDeps) {
 	handler := &LinksHandler{
 		LinksRepository: deps.LinksRepository,
 	}
-	router.Handle("POST /links", middlewares.IsAuthenticated(handler.Create()))
-	router.Handle("PATCH /links/{id}", middlewares.IsAuthenticated(handler.Update()))
-	router.Handle("DELETE /links/{id}", middlewares.IsAuthenticated(handler.Delete()))
-	router.Handle("GET /{hash}", middlewares.IsAuthenticated(handler.GoTo()))
+	router.Handle("POST /links", middlewares.IsAuthenticated(handler.Create(), deps.Config))
+	router.Handle("PATCH /links/{id}", middlewares.IsAuthenticated(handler.Update(), deps.Config))
+	router.Handle("DELETE /links/{id}", middlewares.IsAuthenticated(handler.Delete(), deps.Config))
+	router.Handle("GET /{hash}", handler.GoTo())
 }
 
 func (handler *LinksHandler) Create() http.HandlerFunc {

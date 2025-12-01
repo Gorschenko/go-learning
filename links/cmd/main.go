@@ -1,7 +1,6 @@
 package main
 
 import (
-	"context"
 	"fmt"
 	"net/http"
 	"test/configs"
@@ -10,33 +9,10 @@ import (
 	"test/internal/users"
 	"test/packages/db"
 	"test/packages/middlewares"
-	"time"
 )
 
-func tickOperation(ctx context.Context) {
-	ticker := time.NewTicker(200 * time.Millisecond)
-
-	for {
-		select {
-		case <-ticker.C:
-			fmt.Println("Tick")
-		case <-ctx.Done():
-			fmt.Println("Cancel")
-			return
-		}
-	}
-}
-
+// 12.07 last lesson
 func main() {
-	ctx, cancel := context.WithCancel(context.Background())
-	go tickOperation(ctx)
-
-	time.Sleep(2 * time.Second)
-	cancel()
-	time.Sleep(2 * time.Second)
-}
-
-func main2() {
 	conf := configs.LoadConfig()
 	db := db.NewDb(conf)
 	router := http.NewServeMux()
@@ -54,6 +30,7 @@ func main2() {
 		AuthService: authService,
 	})
 	links.NewLinksHandler(router, links.LinksHandlerDeps{
+		Config:          conf,
 		LinksRepository: linksRepository,
 	})
 
