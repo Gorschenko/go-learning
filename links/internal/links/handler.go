@@ -1,6 +1,7 @@
 package links
 
 import (
+	"fmt"
 	"net/http"
 	"strconv"
 	"test/configs"
@@ -27,7 +28,7 @@ func NewLinksHandler(router *http.ServeMux, deps LinksHandlerDeps) {
 	router.Handle("POST /links", middlewares.IsAuthenticated(handler.Create(), deps.Config))
 	router.Handle("PATCH /links/{id}", middlewares.IsAuthenticated(handler.Update(), deps.Config))
 	router.Handle("DELETE /links/{id}", middlewares.IsAuthenticated(handler.Delete(), deps.Config))
-	router.Handle("GET /{hash}", handler.GoTo())
+	router.Handle("GET /{hash}", middlewares.IsAuthenticated(handler.GoTo(), deps.Config))
 }
 
 func (handler *LinksHandler) Create() http.HandlerFunc {
@@ -60,6 +61,12 @@ func (handler *LinksHandler) Create() http.HandlerFunc {
 
 func (handler *LinksHandler) Update() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
+		email, ok := r.Context().Value(middlewares.ContextEmailKey).(string)
+
+		if ok {
+			fmt.Println(email)
+		}
+
 		body, err := request.HandleBody[LinksUpdateRequest](&w, r)
 		if err != nil {
 			return
