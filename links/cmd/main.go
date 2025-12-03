@@ -11,7 +11,7 @@ import (
 	"test/packages/middlewares"
 )
 
-// 12.07 last lesson
+// 13.05 last lesson
 func main() {
 	conf := configs.LoadConfig()
 	db := db.NewDb(conf)

@@ -28,7 +28,9 @@ func NewLinksHandler(router *http.ServeMux, deps LinksHandlerDeps) {
 	router.Handle("POST /links", middlewares.IsAuthenticated(handler.Create(), deps.Config))
 	router.Handle("PATCH /links/{id}", middlewares.IsAuthenticated(handler.Update(), deps.Config))
 	router.Handle("DELETE /links/{id}", middlewares.IsAuthenticated(handler.Delete(), deps.Config))
-	router.Handle("GET /{hash}", middlewares.IsAuthenticated(handler.GoTo(), deps.Config))
+	router.Handle("GET /links", middlewares.IsAuthenticated(handler.GetAll(), deps.Config))
+	router.Handle("GET /links/{hash}/goTo", middlewares.IsAuthenticated(handler.GoTo(), deps.Config))
+
 }
 
 func (handler *LinksHandler) Create() http.HandlerFunc {
@@ -118,6 +120,7 @@ func (handler *LinksHandler) Delete() http.HandlerFunc {
 func (handler *LinksHandler) GoTo() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		hash := r.PathValue("hash")
+		fmt.Println(hash)
 		link, err := handler.LinksRepository.GetByHash(hash)
 
 		if err != nil {
@@ -126,5 +129,18 @@ func (handler *LinksHandler) GoTo() http.HandlerFunc {
 		}
 
 		http.Redirect(w, r, link.Url, http.StatusTemporaryRedirect)
+	}
+}
+
+func (handler *LinksHandler) GetAll() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		limitString := r.URL.Query().Get("limit")
+		limitInt, err := strconv.Atoi(limitString)
+
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
+		}
+		fmt.Println(limitInt)
 	}
 }
