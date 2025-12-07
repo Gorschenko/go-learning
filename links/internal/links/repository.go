@@ -64,10 +64,11 @@ func (repository *LinksRepository) GetById(id uint) (*Link, error) {
 	return &link, nil
 }
 
-func (repository *LinksRepository) Count(limit, offset uint) (int64, error) {
+func (repository *LinksRepository) Count(limit, offset int) (int64, error) {
 	var count int64
 
 	result := repository.Database.DB.
+		Table("links").
 		Where("deleted_at IS NULL").
 		Count(&count)
 
@@ -78,14 +79,15 @@ func (repository *LinksRepository) Count(limit, offset uint) (int64, error) {
 	return count, nil
 }
 
-func (repository *LinksRepository) GetAll(limit, offset uint) ([]*Link, error) {
+func (repository *LinksRepository) GetAll(limit, offset int) ([]*Link, error) {
 	var links []*Link
 
 	result := repository.Database.DB.
+		Table("links").
 		Where("deleted_at IS NULL").
 		Order("id ASC").
-		Limit(int(limit)).
-		Offset(int(offset)).
+		Limit(limit).
+		Offset(offset).
 		Find(&links)
 
 	if result.Error != nil {

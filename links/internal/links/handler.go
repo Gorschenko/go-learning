@@ -141,6 +141,30 @@ func (handler *LinksHandler) GetAll() http.HandlerFunc {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
 		}
-		fmt.Println(limitInt)
+
+		offsetString := r.URL.Query().Get("offset")
+		offsetInt, err := strconv.Atoi(offsetString)
+
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
+		}
+
+		links, err := handler.LinksRepository.GetAll(limitInt, offsetInt)
+
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+		}
+
+		count, err := handler.LinksRepository.Count(limitInt, offsetInt)
+
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+		}
+
+		response.Json(w, LinksGetAllResponse{
+			Links: links,
+			Count: count,
+		}, http.StatusOK)
 	}
 }
