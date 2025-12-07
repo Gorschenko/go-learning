@@ -3,6 +3,7 @@ package main
 import (
 	"os"
 	"test/internal/links"
+	"test/internal/stats"
 	"test/internal/users"
 
 	"github.com/joho/godotenv"
@@ -25,4 +26,5 @@ func main() {
 
 	db.AutoMigrate(&links.Link{})
 	db.AutoMigrate(&users.User{})
+	db.AutoMigrate(&stats.Stat{})
 }
