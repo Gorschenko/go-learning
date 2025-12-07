@@ -6,12 +6,14 @@ import (
 	"test/configs"
 	"test/internal/auth"
 	"test/internal/links"
+	"test/internal/stats"
 	"test/internal/users"
 	"test/packages/db"
 	"test/packages/middlewares"
 )
 
 // 13.05 last lesson
+
 func main() {
 	conf := configs.LoadConfig()
 	db := db.NewDb(conf)
@@ -20,6 +22,7 @@ func main() {
 	// Repositories
 	usersRepository := users.NewUsersRepository(db)
 	linksRepository := links.NewLinksRepository(db)
+	statsRepository := stats.NewStatsRepository(db)
 
 	// Services
 	authService := auth.NewAuthService(usersRepository)
@@ -32,6 +35,7 @@ func main() {
 	links.NewLinksHandler(router, links.LinksHandlerDeps{
 		Config:          conf,
 		LinksRepository: linksRepository,
+		StatsRepository: statsRepository,
 	})
 
 	// Middlewares

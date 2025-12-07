@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"strconv"
 	"test/configs"
+	"test/internal/stats"
 	"test/packages/middlewares"
 	"test/packages/request"
 	"test/packages/response"
@@ -14,16 +15,19 @@ import (
 
 type LinksHandlerDeps struct {
 	LinksRepository *LinksRepository
+	StatsRepository *stats.StatsRepository
 	Config          *configs.Config
 }
 
 type LinksHandler struct {
 	LinksRepository *LinksRepository
+	StatsRepository *stats.StatsRepository
 }
 
 func NewLinksHandler(router *http.ServeMux, deps LinksHandlerDeps) {
 	handler := &LinksHandler{
 		LinksRepository: deps.LinksRepository,
+		StatsRepository: deps.StatsRepository,
 	}
 	router.Handle("POST /links", middlewares.IsAuthenticated(handler.Create(), deps.Config))
 	router.Handle("PATCH /links/{id}", middlewares.IsAuthenticated(handler.Update(), deps.Config))
@@ -127,6 +131,8 @@ func (handler *LinksHandler) GoTo() http.HandlerFunc {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
 		}
+
+		handler.StatsRepository.AddClick(link.ID)
 
 		http.Redirect(w, r, link.Url, http.StatusTemporaryRedirect)
 	}
