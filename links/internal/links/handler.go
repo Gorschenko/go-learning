@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"strconv"
 	"test/configs"
-	"test/packages/di"
+	eventsbus "test/packages/events"
 	"test/packages/middlewares"
 	"test/packages/request"
 	"test/packages/response"
@@ -15,19 +15,19 @@ import (
 
 type LinksHandlerDeps struct {
 	LinksRepository *LinksRepository
-	StatsRepository di.IStatsRepository
 	Config          *configs.Config
+	EventBus        *eventsbus.EventBus
 }
 
 type LinksHandler struct {
 	LinksRepository *LinksRepository
-	StatsRepository di.IStatsRepository
+	EventBus        *eventsbus.EventBus
 }
 
 func NewLinksHandler(router *http.ServeMux, deps LinksHandlerDeps) {
 	handler := &LinksHandler{
 		LinksRepository: deps.LinksRepository,
-		StatsRepository: deps.StatsRepository,
+		EventBus:        deps.EventBus,
 	}
 	router.Handle("POST /links", middlewares.IsAuthenticated(handler.Create(), deps.Config))
 	router.Handle("PATCH /links/{id}", middlewares.IsAuthenticated(handler.Update(), deps.Config))
@@ -132,8 +132,10 @@ func (handler *LinksHandler) GoTo() http.HandlerFunc {
 			return
 		}
 
-		handler.StatsRepository.AddClick(link.ID)
-
+		go handler.EventBus.Publish((eventsbus.Event{
+			Type: eventsbus.EventLinkVisited,
+			Data: link.ID,
+		}))
 		http.Redirect(w, r, link.Url, http.StatusTemporaryRedirect)
 	}
 }

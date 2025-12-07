@@ -1,5 +1,9 @@
 package eventsbus
 
+const (
+	EventLinkVisited = "link.visited"
+)
+
 type Event struct {
 	Type string
 	Data any

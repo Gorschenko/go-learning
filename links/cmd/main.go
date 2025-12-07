@@ -9,16 +9,18 @@ import (
 	"test/internal/stats"
 	"test/internal/users"
 	"test/packages/db"
+	eventsbus "test/packages/events"
 	"test/packages/middlewares"
 )
 
 // Пропущены 3 и 4 модули
-// 13.05 последняя лекция
+// 13.14 последняя лекция
 
 func main() {
 	conf := configs.LoadConfig()
 	db := db.NewDb(conf)
 	router := http.NewServeMux()
+	eventBus := eventsbus.NewEventBus()
 
 	// Repositories
 	usersRepository := users.NewUsersRepository(db)
@@ -27,6 +29,10 @@ func main() {
 
 	// Services
 	authService := auth.NewAuthService(usersRepository)
+	statsService := stats.NewStatsService(&stats.StatsServiceDeps{
+		EventBus:        eventBus,
+		StatsRepository: statsRepository,
+	})
 
 	// Handlers
 	auth.NewAuthHandler(router, auth.AuthHandlerDeps{
@@ -36,7 +42,7 @@ func main() {
 	links.NewLinksHandler(router, links.LinksHandlerDeps{
 		Config:          conf,
 		LinksRepository: linksRepository,
-		StatsRepository: statsRepository,
+		EventBus:        eventBus,
 	})
 
 	// Middlewares
@@ -49,6 +55,8 @@ func main() {
 		Addr:    ":" + conf.Server.Port,
 		Handler: stack(router),
 	}
+
+	go statsService.AddClick()
 
 	fmt.Println("Server is listening on port 8081")
 	server.ListenAndServe()
