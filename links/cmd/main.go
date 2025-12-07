@@ -12,7 +12,8 @@ import (
 	"test/packages/middlewares"
 )
 
-// 13.05 last lesson
+// Пропущены 3 и 4 модули
+// 13.05 последняя лекция
 
 func main() {
 	conf := configs.LoadConfig()

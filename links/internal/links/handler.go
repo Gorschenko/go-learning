@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"strconv"
 	"test/configs"
-	"test/internal/stats"
+	"test/packages/di"
 	"test/packages/middlewares"
 	"test/packages/request"
 	"test/packages/response"
@@ -15,13 +15,13 @@ import (
 
 type LinksHandlerDeps struct {
 	LinksRepository *LinksRepository
-	StatsRepository *stats.StatsRepository
+	StatsRepository di.IStatsRepository
 	Config          *configs.Config
 }
 
 type LinksHandler struct {
 	LinksRepository *LinksRepository
-	StatsRepository *stats.StatsRepository
+	StatsRepository di.IStatsRepository
 }
 
 func NewLinksHandler(router *http.ServeMux, deps LinksHandlerDeps) {
