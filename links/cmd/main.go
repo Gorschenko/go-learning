@@ -14,9 +14,9 @@ import (
 )
 
 // Пропущены 3 и 4 модули
-// 13.14 последняя лекция
+// 14.05 последняя лекция
 
-func main() {
+func App() http.Handler {
 	conf := configs.LoadConfig()
 	db := db.NewDb(conf)
 	router := http.NewServeMux()
@@ -49,18 +49,24 @@ func main() {
 		StatsRepository: statsRepository,
 	})
 
+	go statsService.AddClick()
+
 	// Middlewares
 	stack := middlewares.ChainMiddlewares(
 		middlewares.CorsMiddleware,
 		middlewares.LoggerMiddleware,
 	)
 
-	server := http.Server{
-		Addr:    ":" + conf.Server.Port,
-		Handler: stack(router),
-	}
+	return stack(router)
+}
 
-	go statsService.AddClick()
+func main() {
+	app := App()
+
+	server := http.Server{
+		Addr:    ":8081",
+		Handler: app,
+	}
 
 	fmt.Println("Server is listening on port 8081")
 	server.ListenAndServe()
