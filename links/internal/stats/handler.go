@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 	"test/configs"
+	"test/packages/response"
 	"time"
 )
 
@@ -54,5 +55,8 @@ func (handler *StatsHandler) Get() http.HandlerFunc {
 		}
 
 		fmt.Println(fromDate, toDate, by)
+		stats := handler.StatsRepository.GetStats(fromDate, toDate, by)
+
+		response.Json(w, stats, http.StatusOK)
 	}
 }
