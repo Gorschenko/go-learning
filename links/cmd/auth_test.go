@@ -6,17 +6,58 @@ import (
 	"io"
 	"net/http"
 	"net/http/httptest"
+	"os"
 	"test/internal/auth"
+	"test/internal/users"
 	"testing"
+
+	"github.com/joho/godotenv"
+	"gorm.io/driver/postgres"
+	"gorm.io/gorm"
 )
 
+func initDb() *gorm.DB {
+	err := godotenv.Load()
+
+	if err != nil {
+		panic(err)
+	}
+
+	db, err := gorm.Open(postgres.Open(os.Getenv("DSN")), &gorm.Config{})
+
+	if err != nil {
+		panic(err)
+	}
+
+	return db
+}
+
+func initData(db *gorm.DB) {
+	db.Create(&users.User{
+		Email:    "test@test.ru",
+		Password: "$2a$10$jHzca/OIc0dxg3xgsvo6du9Z6qkYYWlk.HAHX.AzjZD3uknXhiA92",
+		Name:     "test",
+	})
+}
+
+func removeData(db *gorm.DB) {
+	db.
+		Unscoped().
+		Where("email = ?", "test@test.ru").
+		Delete(&users.User{})
+
+}
+
 func TestLoginSuccess(t *testing.T) {
+	db := initDb()
+	initData(db)
+
 	ts := httptest.NewServer(App())
 	defer ts.Close()
 
 	data, _ := json.Marshal(&auth.LoginRequest{
-		Email:    "a2@a.ru",
-		Password: "1",
+		Email:    "test@test.ru",
+		Password: "test",
 	})
 
 	res, err := http.Post(ts.URL+"/auth/login", "application/json", bytes.NewReader(data))
@@ -45,4 +86,6 @@ func TestLoginSuccess(t *testing.T) {
 	if resData.Token == "" {
 		t.Fatal("Token empty")
 	}
+
+	removeData(db)
 }
