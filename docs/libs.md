@@ -30,3 +30,9 @@
     -   https://github.com/golang-jwt/jwt
     -   go get -u github.com/golang-jwt/jwt/v5
 
+
+9. SQL Mock:
+    -   https://github.com/DATA-DOG/go-sqlmock
+    -   go get github.com/DATA-DOG/go-sqlmock
+
+

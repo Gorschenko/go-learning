@@ -21,7 +21,6 @@ func (repository *MockUsersRepository) FindByEmail(email string) (*users.User, e
 }
 
 func TestRegisterSuccess(t *testing.T) {
-
 	authService := auth.NewAuthService(&MockUsersRepository{})
 	resultedEmail, err := authService.Register(email, "test", "test")
 	if err != nil {
