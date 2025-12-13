@@ -67,7 +67,7 @@ func TestLoginSuccess(t *testing.T) {
 	}
 
 	if res.StatusCode != http.StatusOK {
-		t.Fatalf("Expected %d got %d", http.StatusOK, res.StatusCode)
+		t.Fatalf("Expected %s got %s", http.StatusOK, res.StatusCode)
 	}
 
 	body, err := io.ReadAll(res.Body)
