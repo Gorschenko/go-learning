@@ -1,4 +1,13 @@
 {
+  "databases": {
+    "pg": {
+      "port": 5432,
+      "host": "localhost",
+      "database": "admin",
+      "user": "admin",
+      "password": "admin"
+    }
+  },
   "services": {
     "auth": {
       "port": 8080,

@@ -6,22 +6,29 @@ import (
 )
 
 type Config struct {
-	Services ServicesConfig `json:"services"`
+	Databases DatabasesConfig `json:"databases"`
+	Services  ServicesConfig  `json:"services"`
+}
+
+type DatabasesConfig struct {
+	Pg PgDatabaseConfig `json:"pg"`
 }
 
 type ServicesConfig struct {
-	Auth   AuthServiceConfig   `json:"auth"`
-	Orders OrdersServiceConfig `json:"orders"`
+	Auth   ServiceConfig `json:"auth"`
+	Orders ServiceConfig `json:"orders"`
 }
 
-type AuthServiceConfig struct {
+type ServiceConfig struct {
 	Port int    `json:"port"`
 	Host string `json:"host"`
 }
 
-type OrdersServiceConfig struct {
-	Port int    `json:"port"`
-	Host string `json:"host"`
+type PgDatabaseConfig struct {
+	ServiceConfig
+	Database string `json:"database"`
+	User     string `json:"user"`
+	Password string `json:"password"`
 }
 
 func LoadConfig(filePath string) (*Config, error) {
