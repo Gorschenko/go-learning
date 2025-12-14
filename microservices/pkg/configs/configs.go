@@ -1,4 +1,4 @@
-package config
+package configs
 
 import (
 	"encoding/json"
@@ -6,12 +6,8 @@ import (
 )
 
 type Config struct {
-	Databases DatabasesConfig `json:"databases"`
-	Services  ServicesConfig  `json:"services"`
-}
-
-type DatabasesConfig struct {
-	Pg PgDatabaseConfig `json:"pg"`
+	Database DatabaseConfig `json:"database"`
+	Services ServicesConfig `json:"services"`
 }
 
 type ServicesConfig struct {
@@ -24,7 +20,7 @@ type ServiceConfig struct {
 	Host string `json:"host"`
 }
 
-type PgDatabaseConfig struct {
+type DatabaseConfig struct {
 	ServiceConfig
 	Database string `json:"database"`
 	User     string `json:"user"`

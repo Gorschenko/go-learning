@@ -13,9 +13,6 @@ import (
 	"test/packages/middlewares"
 )
 
-// Пропущены 3 и 4 модули
-// 14.05 последняя лекция
-
 func App() http.Handler {
 	conf := configs.LoadConfig()
 	db := db.NewDb(conf)

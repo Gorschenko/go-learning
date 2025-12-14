@@ -1,7 +1,7 @@
-package databases
+package database
 
 import (
-	"pkg/config"
+	"pkg/configs"
 	"strconv"
 
 	"gorm.io/driver/postgres"
@@ -12,12 +12,12 @@ type Db struct {
 	*gorm.DB
 }
 
-func NewDb(config *config.Config) (*Db, error) {
-	host := config.Databases.Pg.Host
-	port := config.Databases.Pg.Port
-	user := config.Databases.Pg.User
-	password := config.Databases.Pg.Password
-	database := config.Databases.Pg.Database
+func NewDb(config *configs.Config) (*Db, error) {
+	host := config.Database.Host
+	port := config.Database.Port
+	user := config.Database.User
+	password := config.Database.Password
+	database := config.Database.Database
 
 	dsn := "host=" + host + " " + "port=" + strconv.Itoa(port) + " " + "user=" + user + " " + "password=" + password + " " + "database=" + database + " " + "sslmode=disable"
 
