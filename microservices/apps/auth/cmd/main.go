@@ -1,7 +1,8 @@
 package main
 
 import (
-	"encoding/json"
+	"auth/internal/auth"
+	"auth/internal/users"
 	"log"
 	"net"
 	"net/http"
@@ -17,15 +18,27 @@ func main() {
 		panic(err)
 	}
 
-	_, err = database.NewDb(config)
+	db, err := database.NewDb(config)
 	if err != nil {
 		panic(err)
 	}
 
 	router := http.NewServeMux()
-	router.HandleFunc("GET /", func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Content-Type", "application/json")
-		json.NewEncoder(w).Encode("Hi")
+
+	// repositories
+	usersRepository := users.NewUsersRepository(&users.UsersRepositoryDependencies{
+		Database: db,
+		Config:   config,
+	})
+
+	// services
+	authService := auth.NewAuthService(auth.AuthServiceDependencies{
+		UsersRepository: usersRepository,
+	})
+
+	// controllers
+	auth.NewAuthController(router, auth.AuthControllerDependencies{
+		AuthService: authService,
 	})
 
 	address := ":" + strconv.Itoa(config.Services.Auth.Port)
@@ -43,5 +56,4 @@ func main() {
 
 	log.Printf("Starting Auth service on %s port", address)
 	server.ListenAndServe()
-
 }

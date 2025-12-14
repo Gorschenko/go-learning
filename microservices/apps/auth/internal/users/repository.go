@@ -1,17 +1,33 @@
 package users
 
-import "pkg/database"
+import (
+	"log"
+	"pkg/configs"
+	"pkg/database"
+)
 
 type UsersRepository struct {
 	Database *database.Db
+	Config   *configs.Config
 }
 
 type UsersRepositoryDependencies struct {
 	Database *database.Db
+	Config   *configs.Config
 }
 
 func NewUsersRepository(dependencies *UsersRepositoryDependencies) *UsersRepository {
+	needToMigrate := dependencies.Config.Database.Automigrate
+	if needToMigrate {
+		dependencies.Database.DB.AutoMigrate(&database.User{})
+		log.Println("User automigrate completed")
+	}
+
 	return &UsersRepository{
 		Database: dependencies.Database,
 	}
 }
+
+// func (repository *UsersRepository) Create(*database.User) (*database.User, error) {
+
+// }

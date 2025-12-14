@@ -22,9 +22,10 @@ type ServiceConfig struct {
 
 type DatabaseConfig struct {
 	ServiceConfig
-	Database string `json:"database"`
-	User     string `json:"user"`
-	Password string `json:"password"`
+	Database    string `json:"database"`
+	User        string `json:"user"`
+	Password    string `json:"password"`
+	Automigrate bool   `json:"automigrate"`
 }
 
 func LoadConfig(filePath string) (*Config, error) {
