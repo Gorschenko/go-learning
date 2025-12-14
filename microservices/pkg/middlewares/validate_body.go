@@ -8,12 +8,6 @@ import (
 	"github.com/go-playground/validator/v10"
 )
 
-type contextKey struct{}
-
-var (
-	ContextBodyKey = contextKey{}
-)
-
 func ValidateBody[T any](next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		var body T

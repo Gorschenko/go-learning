@@ -21,7 +21,7 @@ func NewAuthController(router *http.ServeMux, dependencies AuthControllerDepende
 
 	router.Handle(
 		AuthRegisterPath,
-		middlewares.ValidateBody[RegisterBodyRequestDto](controller.Register()),
+		middlewares.ValidateParams[UserPathParams](middlewares.ValidateBody[RegisterBodyRequestDto](controller.Register())),
 	)
 
 }
@@ -29,7 +29,8 @@ func NewAuthController(router *http.ServeMux, dependencies AuthControllerDepende
 func (controller *AuthController) Register() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		body, _ := r.Context().Value(middlewares.ContextBodyKey).(RegisterBodyRequestDto)
-
-		fmt.Printf("Body: %s", body)
+		fmt.Printf("Body: %+v\n", body)
+		params, _ := r.Context().Value(middlewares.ContextParamsKey).(UserPathParams)
+		fmt.Printf("Params: %+v\n", params)
 	}
 }
