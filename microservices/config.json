@@ -1,0 +1,12 @@
+{
+  "services": {
+    "auth": {
+      "port": 8080,
+      "host": "localhost"
+    },
+    "orders": {
+      "port": 8081,
+      "host": "localhost"
+    }
+  }
+}

@@ -5,7 +5,7 @@ import (
 	"log"
 	"net/http"
 
-	"shared/models"
+	"pkg/models"
 )
 
 func main() {

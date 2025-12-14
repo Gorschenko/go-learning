@@ -1,19 +1,21 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"net/http"
+	"strconv"
 
-	"shared/models"
+	"pkg/config"
 )
 
 func main() {
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		user := models.User{ID: 1, Name: "From Service 1"}
-		fmt.Fprintf(w, "Service 1 Response\nUser: %v", user)
-	})
+	config, err := config.LoadConfig("../../config.json")
+
+	if err != nil {
+		panic(err)
+	}
 
 	log.Println("Starting Service 1 on :8080")
-	log.Fatal(http.ListenAndServe(":8080", nil))
+	address := config.Services.Auth.Host + ":" + strconv.Itoa(config.Services.Auth.Port)
+	log.Fatal(http.ListenAndServe(address, nil))
 }
