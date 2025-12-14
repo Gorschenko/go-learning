@@ -7,7 +7,8 @@
 
 3. Hot reloader
     -   https://github.com/air-verse/air
-    -   go install github.com/air-verse/air@latest
+    -   go install github.com/air-verse/air@latest - глобально
+    -   go get -tool github.com/air-verse/air@latest - локально
     -   Создать минимальный конфиг в корне проекта.
 
 4. Validator
