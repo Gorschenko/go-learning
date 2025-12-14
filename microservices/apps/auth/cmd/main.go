@@ -6,10 +6,16 @@ import (
 	"strconv"
 
 	"pkg/config"
+	databases "pkg/databases/pg"
 )
 
 func main() {
 	config, err := config.LoadConfig("../../config.json")
+	if err != nil {
+		panic(err)
+	}
+
+	_, err = databases.NewDb(config)
 
 	if err != nil {
 		panic(err)
