@@ -1,7 +1,9 @@
 package auth
 
 import (
+	"fmt"
 	"net/http"
+	"pkg/middlewares"
 )
 
 type AuthControllerDependencies struct {
@@ -17,9 +19,17 @@ func NewAuthController(router *http.ServeMux, dependencies AuthControllerDepende
 		AuthService: dependencies.AuthService,
 	}
 
-	router.HandleFunc("POST /auth/register", controller.Register())
+	router.Handle(
+		AuthRegisterPath,
+		middlewares.ValidateBody[RegisterBodyRequestDto](controller.Register()),
+	)
+
 }
 
 func (controller *AuthController) Register() http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {}
+	return func(w http.ResponseWriter, r *http.Request) {
+		body, _ := r.Context().Value(middlewares.ContextBodyKey).(RegisterBodyRequestDto)
+
+		fmt.Printf("Body: %s", body)
+	}
 }
