@@ -7,14 +7,21 @@
     "password": "admin",
     "automigrate": true
   },
+  "software": {
+    "api": {
+      "timeout_sec": 5
+    }
+  },
   "services": {
     "auth": {
       "port": 3000,
-      "host": "localhost"
+      "host": "localhost",
+      "protocol": "http"
     },
     "orders": {
       "port": 3001,
-      "host": "localhost"
+      "host": "localhost",
+      "protocol": "http"
     }
   }
 }

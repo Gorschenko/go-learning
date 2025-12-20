@@ -7,25 +7,8 @@ import (
 
 type Config struct {
 	Database DatabaseConfig `json:"database"`
+	Software SoftwareConfig `json:"software"`
 	Services ServicesConfig `json:"services"`
-}
-
-type ServicesConfig struct {
-	Auth   ServiceConfig `json:"auth"`
-	Orders ServiceConfig `json:"orders"`
-}
-
-type ServiceConfig struct {
-	Port int    `json:"port"`
-	Host string `json:"host"`
-}
-
-type DatabaseConfig struct {
-	ServiceConfig
-	Database    string `json:"database"`
-	User        string `json:"user"`
-	Password    string `json:"password"`
-	Automigrate bool   `json:"automigrate"`
 }
 
 func LoadConfig(filePath string) (*Config, error) {
