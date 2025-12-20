@@ -50,8 +50,7 @@ func main() {
 	}
 	listener.Close()
 
-	handler := middlewares.LogsMiddleware(router)
-
+	handler := middlewares.CorrelationIDMiddleware(middlewares.LogsMiddleware(router))
 	server := http.Server{
 		Addr:    address,
 		Handler: handler,

@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 	"pkg/middlewares"
+	"pkg/static"
 )
 
 type AuthControllerDependencies struct {
@@ -28,9 +29,9 @@ func NewAuthController(router *http.ServeMux, dependencies AuthControllerDepende
 
 func (controller *AuthController) Register() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		body, _ := r.Context().Value(middlewares.ContextBodyKey).(RegisterBodyRequestDto)
+		body, _ := r.Context().Value(static.ContextBodyKey).(RegisterBodyRequestDto)
 		fmt.Printf("Body: %+v\n", body)
-		params, _ := r.Context().Value(middlewares.ContextParamsKey).(UserPathParams)
+		params, _ := r.Context().Value(static.ContextParamsKey).(UserPathParams)
 		fmt.Printf("Params: %+v\n", params)
 	}
 }

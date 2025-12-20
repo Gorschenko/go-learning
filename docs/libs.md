@@ -35,4 +35,6 @@
     -   https://github.com/DATA-DOG/go-sqlmock
     -   go get github.com/DATA-DOG/go-sqlmock
 
-
+10. UUID:
+    - https://github.com/google/uuid
+    - go get github.com/google/uuid

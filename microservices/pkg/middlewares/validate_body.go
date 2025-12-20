@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"net/http"
+	"pkg/static"
 
 	"github.com/go-playground/validator/v10"
 )
@@ -26,7 +27,7 @@ func ValidateBody[T any](next http.Handler) http.Handler {
 			return
 		}
 
-		ctx := context.WithValue(r.Context(), ContextBodyKey, body)
+		ctx := context.WithValue(r.Context(), static.ContextBodyKey, body)
 		next.ServeHTTP(w, r.WithContext(ctx))
 	})
 }

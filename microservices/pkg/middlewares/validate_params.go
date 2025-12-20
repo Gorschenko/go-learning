@@ -3,6 +3,7 @@ package middlewares
 import (
 	"context"
 	"net/http"
+	"pkg/static"
 	"reflect"
 	"strings"
 
@@ -47,7 +48,7 @@ func ValidateParams[T any](next http.Handler) http.Handler {
 			return
 		}
 
-		ctx := context.WithValue(r.Context(), ContextParamsKey, params)
+		ctx := context.WithValue(r.Context(), static.ContextParamsKey, params)
 
 		next.ServeHTTP(w, r.WithContext(ctx))
 	})
