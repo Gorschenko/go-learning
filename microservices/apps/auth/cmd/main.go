@@ -10,6 +10,7 @@ import (
 
 	"pkg/configs"
 	"pkg/database"
+	"pkg/middlewares"
 )
 
 func main() {
@@ -49,9 +50,11 @@ func main() {
 	}
 	listener.Close()
 
+	handler := middlewares.LogsMiddleware(router)
+
 	server := http.Server{
 		Addr:    address,
-		Handler: router,
+		Handler: handler,
 	}
 
 	log.Printf("Starting Auth service on %s port", address)

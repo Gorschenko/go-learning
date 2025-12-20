@@ -2,9 +2,20 @@ package middlewares
 
 import (
 	"fmt"
+	"net/http"
 	"reflect"
 	"strconv"
 )
+
+type WrapperWriter struct {
+	http.ResponseWriter
+	StatusCode int
+}
+
+func (w *WrapperWriter) WriterHeader(statusCode int) {
+	w.ResponseWriter.WriteHeader(statusCode)
+	w.StatusCode = statusCode
+}
 
 func setFieldFromString(field reflect.Value, value string) error {
 	if !field.CanSet() {
