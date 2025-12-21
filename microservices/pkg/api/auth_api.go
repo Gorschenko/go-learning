@@ -1,7 +1,8 @@
 package api
 
 import (
-	"encoding/json"
+	"errors"
+	"log"
 	"pkg/configs"
 	"pkg/database"
 	"strconv"
@@ -30,21 +31,18 @@ func NewAuthApi(dependencies *AuthApiDependencies) *AuthApi {
 	}
 }
 
-func (api *AuthApi) RegisterUser(body *database.User) (*database.User, error) {
-	url := api.BaseURL + "/auth"
+func (api *AuthApi) RegisterUser(body *database.User) (string, error) {
+	url := api.BaseURL + "/auth/register"
 	response, err := api.HttpApi.Client.
 		R().
 		SetHeader("Content-Type", "application/json").
 		SetBody(body).
 		Post(url)
+	log.Printf("RESPONSE: %s", response)
 
-	if err != nil {
-		return nil, err
+	if err != nil || response.IsError() {
+		return "", errors.New("Bad external request")
 	}
 
-	var user database.User
-
-	json.Unmarshal(response.Body(), &user)
-
-	return &user, err
+	return "User", nil
 }

@@ -5,5 +5,6 @@ type SoftwareConfig struct {
 }
 
 type ApiSoftwareConfig struct {
-	TimeoutSec int `json:"timeout_sec"`
+	TimeoutSec int  `json:"timeout_sec"`
+	Debug      bool `json:"debug"`
 }

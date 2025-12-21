@@ -3,6 +3,7 @@ package middlewares
 import (
 	"context"
 	"net/http"
+	"pkg/api"
 	"pkg/static"
 	"reflect"
 	"strings"
@@ -34,7 +35,7 @@ func ValidateParams[T any](next http.Handler) http.Handler {
 			err := setFieldFromString(v.Field(i), paramValue)
 
 			if err != nil {
-				http.Error(w, err.Error(), http.StatusBadRequest)
+				api.JSON(w, err.Error(), http.StatusBadRequest)
 				return
 			}
 		}
@@ -44,7 +45,7 @@ func ValidateParams[T any](next http.Handler) http.Handler {
 		err := validate.Struct(params)
 
 		if err != nil {
-			http.Error(w, err.Error(), http.StatusBadRequest)
+			api.JSON(w, err.Error(), http.StatusBadRequest)
 			return
 		}
 

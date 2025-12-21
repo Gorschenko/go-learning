@@ -1,6 +1,7 @@
 package auth
 
 import (
+	"fmt"
 	"net/http"
 	"pkg/api"
 	"pkg/middlewares"
@@ -30,7 +31,8 @@ func NewAuthController(router *http.ServeMux, dependencies AuthControllerDepende
 func (controller *AuthController) Register() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		body, _ := r.Context().Value(static.ContextBodyKey).(RegisterBodyRequestDto)
-		// fmt.Printf("Body: %+v\n", body)
+
+		fmt.Printf("Body: %+v\n", body)
 		// params, _ := r.Context().Value(static.ContextParamsKey).(UserPathParams)
 		// fmt.Printf("Params: %+v\n", params)
 		api.JSON(w, body, http.StatusOK)

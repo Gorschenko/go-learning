@@ -29,8 +29,9 @@ func main() {
 	})
 
 	if err != nil {
-		log.Print("Error", err)
+		log.Printf("Error: %s", err)
+		return
 	}
 
-	log.Print("User", user)
+	log.Printf("User: %s", user)
 }

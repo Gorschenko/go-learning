@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"net/http"
+	"pkg/api"
 	"pkg/static"
 
 	"github.com/go-playground/validator/v10"
@@ -15,7 +16,7 @@ func ValidateBody[T any](next http.Handler) http.Handler {
 
 		err := json.NewDecoder(r.Body).Decode(&body)
 		if err != nil {
-			http.Error(w, err.Error(), http.StatusBadRequest)
+			api.JSON(w, err.Error(), http.StatusBadRequest)
 			return
 		}
 
@@ -23,7 +24,7 @@ func ValidateBody[T any](next http.Handler) http.Handler {
 		err = validate.Struct(body)
 
 		if err != nil {
-			http.Error(w, err.Error(), http.StatusBadRequest)
+			api.JSON(w, err.Error(), http.StatusBadRequest)
 			return
 		}
 
