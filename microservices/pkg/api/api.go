@@ -1,9 +1,10 @@
 package api
 
 import (
-	"net/http"
 	"pkg/configs"
 	"time"
+
+	"github.com/go-resty/resty/v2"
 )
 
 type HttpApiDependencies struct {
@@ -11,13 +12,13 @@ type HttpApiDependencies struct {
 }
 
 type HttpApi struct {
-	Client *http.Client
+	Client *resty.Client
 }
 
 func NewHttpApi(dependencies *HttpApiDependencies) *HttpApi {
-	client := &http.Client{
-		Timeout: time.Duration(dependencies.Config.Software.Api.TimeoutSec) * time.Second,
-	}
+	timeout := time.Duration(dependencies.Config.Software.Api.TimeoutSec) * time.Second
+	client := resty.New().SetTimeout(timeout)
+
 	return &HttpApi{
 		Client: client,
 	}

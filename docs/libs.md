@@ -38,3 +38,7 @@
 10. UUID:
     - https://github.com/google/uuid
     - go get github.com/google/uuid
+
+11. HTTP Requests:
+    -   https://github.com/go-resty/resty
+    -   go get -u github.com/go-resty/resty/v2

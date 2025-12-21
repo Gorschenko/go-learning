@@ -1,11 +1,13 @@
 package main
 
 import (
+	"log"
 	"pkg/api"
 	"pkg/configs"
+	"pkg/database"
 )
 
-func init_db() {
+func main() {
 	config, err := configs.LoadConfig("../../config.json")
 	if err != nil {
 		panic(err)
@@ -19,4 +21,16 @@ func init_db() {
 		Config:  config,
 		HttpApi: httpApi,
 	})
+
+	user, err := authApi.RegisterUser(&database.User{
+		Email:    "123@123.com",
+		Password: "123",
+		Name:     "123",
+	})
+
+	if err != nil {
+		log.Print("Error", err)
+	}
+
+	log.Print("User", user)
 }
