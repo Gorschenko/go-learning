@@ -37,3 +37,15 @@ func (repository *UsersRepository) Create(user *database.User) (*database.User, 
 
 	return user, nil
 }
+
+func (repository *UsersRepository) FindByEmail(email string) (*database.User, error) {
+	var user database.User
+
+	result := repository.Database.DB.First(&user, "email = ?", email)
+
+	if result.Error != nil {
+		return nil, result.Error
+	}
+
+	return &user, nil
+}

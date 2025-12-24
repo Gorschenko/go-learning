@@ -46,6 +46,11 @@ func (handler *AuthHandler) Register() http.HandlerFunc {
 
 		createdUser, err := handler.AuthService.RegisterUser(&user)
 
+		if err != nil && err.Error() == static.ErrorUserAlreadyExists {
+			http.Error(w, err.Error(), http.StatusConflict)
+			return
+		}
+
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
