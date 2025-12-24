@@ -6,6 +6,7 @@ import (
 	auth_api "pkg/api/auth"
 	"pkg/configs"
 	"pkg/database"
+	"sync"
 	"time"
 
 	"github.com/brianvoe/gofakeit/v7"
@@ -33,24 +34,51 @@ func main() {
 		rejected: 0,
 	}
 
+	result := make(chan bool, usersCount)
+	var wg sync.WaitGroup
+
 	for i := 0; i < usersCount; i++ {
-		user := &database.User{
-			Email:    gofakeit.Email(),
-			Password: gofakeit.Password(false, false, true, false, false, 5),
-			Name:     gofakeit.Name(),
-		}
+		wg.Add(1)
 
-		ID, err := authApi.RegisterUser(user)
+		go func(userNumber int) {
+			defer wg.Done()
 
-		if err != nil {
-			status.rejected++
-			log.Printf("User created with ID %d: ", ID)
-		} else {
-			status.fulfiled++
-		}
+			user := &database.User{
+				Email:    gofakeit.Email(),
+				Password: gofakeit.Password(false, false, true, false, false, 5),
+				Name:     gofakeit.Name(),
+			}
 
-		time.Sleep(1 * time.Second)
+			ID, err := authApi.RegisterUser(user)
+
+			if err != nil {
+				log.Printf("Error creating user %d: %v", userNumber, err)
+
+				result <- false
+			} else {
+				log.Printf("User %d created with ID %d: ", userNumber, ID)
+
+				result <- true
+			}
+
+			time.Sleep(1 * time.Second)
+		}(i)
 	}
 
-	log.Printf("Body: %+v\n", status)
+	// Ждем завершения всех горутин и закрываем канал
+	go func() {
+		wg.Wait()
+		close(result)
+	}()
+
+	// Обрабатываем результаты
+	for success := range result {
+		if success {
+			status.fulfiled++
+		} else {
+			status.rejected++
+		}
+	}
+
+	log.Printf("Result: %+v\n", status)
 }
