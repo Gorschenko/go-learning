@@ -35,10 +35,14 @@
     -   https://github.com/DATA-DOG/go-sqlmock
     -   go get github.com/DATA-DOG/go-sqlmock
 
-10. UUID:
+10. Создание фейковых данных:
+    -   https://github.com/brianvoe/gofakeit
+    -   go get github.com/brianvoe/gofakeit/v7
+
+11. UUID:
     - https://github.com/google/uuid
     - go get github.com/google/uuid
 
-11. HTTP Requests:
+12. HTTP Requests:
     -   https://github.com/go-resty/resty
     -   go get -u github.com/go-resty/resty/v2

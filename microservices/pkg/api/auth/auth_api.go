@@ -30,7 +30,7 @@ func NewAuthApi(dependencies *AuthApiDependencies) *AuthApi {
 	}
 }
 
-func (api *AuthApi) RegisterUser(body *database.User) (string, error) {
+func (api *AuthApi) RegisterUser(body *database.User) (int, error) {
 	url := api.BaseURL + AuthRegisterPath
 	response, err := api.HttpApi.Client.
 		R().
@@ -39,8 +39,8 @@ func (api *AuthApi) RegisterUser(body *database.User) (string, error) {
 		Execute(AuthRegisterMethod, url)
 
 	if err != nil || response.IsError() {
-		return "", err
+		return 0, err
 	}
 
-	return "User", nil
+	return response.StatusCode(), nil
 }

@@ -6,9 +6,10 @@ import (
 )
 
 type Config struct {
-	Database DatabaseConfig `json:"database"`
-	Software SoftwareConfig `json:"software"`
-	Services ServicesConfig `json:"services"`
+	Database     DatabaseConfig     `json:"database"`
+	InitDatabase InitDatabaseConfig `json:"init_database"`
+	Software     SoftwareConfig     `json:"software"`
+	Services     ServicesConfig     `json:"services"`
 }
 
 func LoadConfig(filePath string) (*Config, error) {

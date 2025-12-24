@@ -6,6 +6,9 @@ import (
 	auth_api "pkg/api/auth"
 	"pkg/configs"
 	"pkg/database"
+	"time"
+
+	"github.com/brianvoe/gofakeit/v7"
 )
 
 func main() {
@@ -23,16 +26,31 @@ func main() {
 		HttpApi: httpApi,
 	})
 
-	ID, err := authApi.RegisterUser(&database.User{
-		Email:    "123@123.com",
-		Password: "123",
-		Name:     "123",
-	})
-
-	if err != nil {
-		log.Printf("Error: %s", err)
-		return
+	usersCount := config.InitDatabase.Users.Count
+	status := &OperationStatus{
+		total:    usersCount,
+		fulfiled: 0,
+		rejected: 0,
 	}
 
-	log.Printf("User: %s", ID)
+	for i := 0; i < usersCount; i++ {
+		user := &database.User{
+			Email:    gofakeit.Email(),
+			Password: gofakeit.Password(false, false, true, false, false, 5),
+			Name:     gofakeit.Name(),
+		}
+
+		ID, err := authApi.RegisterUser(user)
+
+		if err != nil {
+			status.rejected++
+			log.Printf("User created with ID %d: ", ID)
+		} else {
+			status.fulfiled++
+		}
+
+		time.Sleep(1 * time.Second)
+	}
+
+	log.Printf("Body: %+v\n", status)
 }
