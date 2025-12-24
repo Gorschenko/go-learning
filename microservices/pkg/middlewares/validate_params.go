@@ -35,7 +35,7 @@ func ValidateParams[T any](next http.Handler) http.Handler {
 			err := setFieldFromString(v.Field(i), paramValue)
 
 			if err != nil {
-				api.JSON(w, err.Error(), http.StatusBadRequest)
+				api.SendJSON(w, err.Error(), http.StatusBadRequest)
 				return
 			}
 		}
@@ -45,7 +45,7 @@ func ValidateParams[T any](next http.Handler) http.Handler {
 		err := validate.Struct(params)
 
 		if err != nil {
-			api.JSON(w, err.Error(), http.StatusBadRequest)
+			api.SendJSON(w, err.Error(), http.StatusBadRequest)
 			return
 		}
 

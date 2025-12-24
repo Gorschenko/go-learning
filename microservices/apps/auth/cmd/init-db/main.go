@@ -23,7 +23,7 @@ func main() {
 		HttpApi: httpApi,
 	})
 
-	user, err := authApi.RegisterUser(&database.User{
+	ID, err := authApi.RegisterUser(&database.User{
 		Email:    "123@123.com",
 		Password: "123",
 		Name:     "123",
@@ -34,5 +34,5 @@ func main() {
 		return
 	}
 
-	log.Printf("User: %s", user)
+	log.Printf("User: %s", ID)
 }

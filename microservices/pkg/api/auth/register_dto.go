@@ -10,3 +10,7 @@ type RegisterBodyRequestDto struct {
 	Password string `json:"password" validate:"required"`
 	Name     string `json:"name" validate:"required"`
 }
+
+type RegisterBodyResponseDto struct {
+	ID int `json:"ID"`
+}

@@ -28,6 +28,12 @@ func NewUsersRepository(dependencies *UsersRepositoryDependencies) *UsersReposit
 	}
 }
 
-// func (repository *UsersRepository) Create(*database.User) (*database.User, error) {
+func (repository *UsersRepository) Create(user *database.User) (*database.User, error) {
+	result := repository.Database.DB.Create(user)
 
-// }
+	if result.Error != nil {
+		return nil, result.Error
+	}
+
+	return user, nil
+}

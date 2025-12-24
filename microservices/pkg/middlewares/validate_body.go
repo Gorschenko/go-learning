@@ -16,7 +16,7 @@ func ValidateBody[T any](next http.Handler) http.Handler {
 
 		err := json.NewDecoder(r.Body).Decode(&body)
 		if err != nil {
-			api.JSON(w, err.Error(), http.StatusBadRequest)
+			api.SendJSON(w, err.Error(), http.StatusBadRequest)
 			return
 		}
 
@@ -24,7 +24,7 @@ func ValidateBody[T any](next http.Handler) http.Handler {
 		err = validate.Struct(body)
 
 		if err != nil {
-			api.JSON(w, err.Error(), http.StatusBadRequest)
+			api.SendJSON(w, err.Error(), http.StatusBadRequest)
 			return
 		}
 

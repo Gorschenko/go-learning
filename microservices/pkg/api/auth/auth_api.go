@@ -1,7 +1,6 @@
 package auth_api
 
 import (
-	"log"
 	"pkg/api"
 	"pkg/configs"
 	"pkg/database"
@@ -38,7 +37,6 @@ func (api *AuthApi) RegisterUser(body *database.User) (string, error) {
 		SetHeader("Content-Type", "application/json").
 		SetBody(body).
 		Execute(AuthRegisterMethod, url)
-	log.Printf("RESPONSE: %s", response)
 
 	if err != nil || response.IsError() {
 		return "", err
