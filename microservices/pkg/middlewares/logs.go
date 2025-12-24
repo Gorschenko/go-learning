@@ -17,6 +17,13 @@ func LogsMiddleware(next http.Handler) http.Handler {
 
 		next.ServeHTTP(wrapper, r)
 
-		log.Println("LoggerMiddleware", wrapper.StatusCode, r.Method, r.URL.Path, time.Since(start))
+		log.Printf(
+			"%s - Method: %s, Path: %s, Status: %d, Duration: %v",
+			"[LogMiddleware]",
+			r.Method,
+			r.URL.Path,
+			wrapper.StatusCode,
+			time.Since(start),
+		)
 	})
 }

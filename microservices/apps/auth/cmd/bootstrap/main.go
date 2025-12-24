@@ -37,8 +37,8 @@ func main() {
 		UsersRepository: usersRepository,
 	})
 
-	// controllers
-	auth.NewAuthController(router, auth.AuthControllerDependencies{
+	// handlers
+	auth.NewAuthHandler(router, auth.AuthHandlerDependencies{
 		AuthService: authService,
 	})
 

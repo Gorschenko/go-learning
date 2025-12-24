@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 	"pkg/api"
+	auth_api "pkg/api/auth"
 	"pkg/configs"
 	"pkg/database"
 )
@@ -17,7 +18,7 @@ func main() {
 	httpApi := api.NewHttpApi(&api.HttpApiDependencies{
 		Config: config,
 	})
-	authApi := api.NewAuthApi(&api.AuthApiDependencies{
+	authApi := auth_api.NewAuthApi(&auth_api.AuthApiDependencies{
 		Config:  config,
 		HttpApi: httpApi,
 	})

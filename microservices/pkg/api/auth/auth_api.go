@@ -1,8 +1,8 @@
-package api
+package auth_api
 
 import (
-	"errors"
 	"log"
+	"pkg/api"
 	"pkg/configs"
 	"pkg/database"
 	"strconv"
@@ -10,11 +10,11 @@ import (
 
 type AuthApiDependencies struct {
 	Config  *configs.Config
-	HttpApi *HttpApi
+	HttpApi *api.HttpApi
 }
 
 type AuthApi struct {
-	HttpApi *HttpApi
+	HttpApi *api.HttpApi
 	BaseURL string
 }
 
@@ -32,16 +32,16 @@ func NewAuthApi(dependencies *AuthApiDependencies) *AuthApi {
 }
 
 func (api *AuthApi) RegisterUser(body *database.User) (string, error) {
-	url := api.BaseURL + "/auth/register"
+	url := api.BaseURL + AuthRegisterPath
 	response, err := api.HttpApi.Client.
 		R().
 		SetHeader("Content-Type", "application/json").
 		SetBody(body).
-		Post(url)
+		Execute(AuthRegisterMethod, url)
 	log.Printf("RESPONSE: %s", response)
 
 	if err != nil || response.IsError() {
-		return "", errors.New("Bad external request")
+		return "", err
 	}
 
 	return "User", nil

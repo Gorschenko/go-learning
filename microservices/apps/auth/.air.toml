@@ -1,4 +1,4 @@
 [build]
 cmd = "go build -o ./tmp/main.exe ./cmd/bootstrap"
 bin = "./tmp/main.exe"
-ignore = []
+include_dir = [".", "../../pkg"] 
