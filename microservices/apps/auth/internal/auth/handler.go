@@ -9,14 +9,6 @@ import (
 	"pkg/static"
 )
 
-type AuthHandlerDependencies struct {
-	AuthService *AuthService
-}
-
-type AuthHandler struct {
-	AuthService *AuthService
-}
-
 func NewAuthHandler(router *http.ServeMux, dependencies AuthHandlerDependencies) {
 	handler := &AuthHandler{
 		AuthService: dependencies.AuthService,
@@ -30,7 +22,7 @@ func NewAuthHandler(router *http.ServeMux, dependencies AuthHandlerDependencies)
 
 }
 
-func (handler *AuthHandler) Register() http.HandlerFunc {
+func (h *AuthHandler) Register() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		body, _ := r.Context().Value(static.ContextBodyKey).(auth_api.RegisterBodyRequestDto)
 
@@ -44,7 +36,7 @@ func (handler *AuthHandler) Register() http.HandlerFunc {
 			Name:     body.Name,
 		}
 
-		createdUser, err := handler.AuthService.RegisterUser(&user)
+		createdUser, err := h.AuthService.RegisterUser(&user)
 
 		if err != nil && err.Error() == static.ErrorUserAlreadyExists {
 			http.Error(w, err.Error(), http.StatusConflict)

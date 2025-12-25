@@ -1,28 +1,8 @@
 package jwt
 
 import (
-	"pkg/configs"
-
 	"github.com/golang-jwt/jwt/v5"
 )
-
-type JWTDependencies struct {
-	Config *configs.Config
-}
-
-type JWTToken struct {
-	Secret   string
-	TTLHours int
-}
-
-type JWTData struct {
-	UserID int
-	Email  string
-}
-
-type JWT struct {
-	Access *JWTToken
-}
 
 func NewJWT(dependencies JWTDependencies) *JWT {
 	return &JWT{
