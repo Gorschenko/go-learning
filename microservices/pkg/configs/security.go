@@ -1,8 +1,10 @@
 package configs
 
+import "time"
+
 type JWTTokenConfig struct {
-	Secret   string `json:"secret"`
-	TTLHours int    `json:"ttl_hours"`
+	Secret string        `json:"secret"`
+	TTL    time.Duration `json:"ttl_hours"`
 }
 
 type JWTSecurityConfig struct {

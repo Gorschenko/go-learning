@@ -1,6 +1,9 @@
 package auth
 
-import "auth/internal/users"
+import (
+	"auth/internal/users"
+	"pkg/configs"
+)
 
 type AuthHandlerDependencies struct {
 	AuthService *AuthService
@@ -11,9 +14,11 @@ type AuthHandler struct {
 }
 
 type AuthServiceDependencies struct {
+	Config          *configs.Config
 	UsersRepository *users.UsersRepository
 }
 
 type AuthService struct {
+	Config           *configs.Config
 	UsersRespository *users.UsersRepository
 }

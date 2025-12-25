@@ -34,6 +34,7 @@ func main() {
 
 	// services
 	authService := auth.NewAuthService(auth.AuthServiceDependencies{
+		Config:          config,
 		UsersRepository: usersRepository,
 	})
 

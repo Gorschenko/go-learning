@@ -1,21 +1,32 @@
 package jwt
 
-import "pkg/configs"
+import (
+	"pkg/configs"
+	"time"
+
+	"github.com/golang-jwt/jwt/v5"
+)
 
 type JWTDependencies struct {
 	Config *configs.Config
 }
 
-type JWTToken struct {
-	Secret   string
-	TTLHours int
+type JWTAccessConfig struct {
+	Secret    string
+	ExpiresIn time.Duration
 }
 
-type JWTData struct {
+type JWT struct {
+	Access *JWTAccessConfig
+}
+
+type JWTPayload struct {
 	UserID int
 	Email  string
 }
 
-type JWT struct {
-	Access *JWTToken
+type JWTClaims struct {
+	UserID string
+	Email  string
+	jwt.RegisteredClaims
 }

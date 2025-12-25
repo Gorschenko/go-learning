@@ -20,6 +20,11 @@ func NewAuthHandler(router *http.ServeMux, dependencies AuthHandlerDependencies)
 		middlewares.ValidateBody[auth_api.RegisterBodyRequestDto](handler.Register()),
 	)
 
+	authLoginURL := auth_api.AuthLoginMethod + " " + auth_api.AuthLoginPath
+	router.Handle(
+		authLoginURL,
+		middlewares.ValidateBody[auth_api.LoginBodyRequestDto](handler.Login()),
+	)
 }
 
 func (h *AuthHandler) Register() http.HandlerFunc {
@@ -50,6 +55,36 @@ func (h *AuthHandler) Register() http.HandlerFunc {
 
 		response := auth_api.RegisterBodyResponseDto{
 			ID: int(createdUser.ID),
+		}
+
+		api.SendJSON(w, response, http.StatusOK)
+	}
+}
+
+func (h *AuthHandler) Login() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		body, _ := r.Context().Value(static.ContextBodyKey).(auth_api.LoginBodyRequestDto)
+
+		token, expirationTime, err := h.AuthService.LoginUser(body.Email, body.Password)
+
+		if err != nil && err.Error() == static.ErrorUserNotFound {
+			http.Error(w, err.Error(), http.StatusNotFound)
+			return
+		}
+
+		if err != nil && err.Error() == static.ErrorInvalidPassowrd {
+			http.Error(w, err.Error(), http.StatusUnauthorized)
+			return
+		}
+
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+
+		response := auth_api.LoginBodyResponseDto{
+			Token:          token,
+			ExpirationTime: expirationTime,
 		}
 
 		api.SendJSON(w, response, http.StatusOK)
