@@ -29,5 +29,13 @@
       "host": "localhost",
       "protocol": "http"
     }
+  },
+  "security": {
+    "jwt": {
+      "access": {
+        "secret": "test-secret",
+        "ttl_hours": 1
+      }
+    }
   }
 }

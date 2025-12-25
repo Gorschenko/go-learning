@@ -1,7 +1,7 @@
 package configs
 
 type SoftwareConfig struct {
-	Api ApiSoftwareConfig
+	Api ApiSoftwareConfig `json:"api"`
 }
 
 type ApiSoftwareConfig struct {
