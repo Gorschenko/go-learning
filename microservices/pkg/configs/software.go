@@ -1,7 +1,12 @@
 package configs
 
 type SoftwareConfig struct {
-	Api ApiSoftwareConfig `json:"api"`
+	Api    ApiSoftwareConfig    `json:"api"`
+	Logger LoggerSoftwareConfig `json:"logger"`
+}
+
+type LoggerSoftwareConfig struct {
+	Level string `json:"level"`
 }
 
 type ApiSoftwareConfig struct {

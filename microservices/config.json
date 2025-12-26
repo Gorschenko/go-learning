@@ -1,4 +1,7 @@
 {
+  "other": {
+    "env": "localhost"
+  },
   "database": {
     "port": 5432,
     "host": "localhost",
@@ -14,8 +17,10 @@
   },
   "software": {
     "api": {
-      "timeout_sec": 5,
-      "debug": true
+      "timeout_sec": 5
+    },
+    "logger": {
+      "level": "debug"
     }
   },
   "services": {

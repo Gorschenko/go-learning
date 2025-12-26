@@ -3,13 +3,14 @@ package main
 import (
 	"auth/internal/auth"
 	"auth/internal/users"
-	"log"
+	"log/slog"
 	"net"
 	"net/http"
 	"strconv"
 
 	"pkg/configs"
 	"pkg/database"
+	"pkg/logger"
 	"pkg/middlewares"
 )
 
@@ -18,6 +19,10 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
+
+	logger.SetLogger(&logger.LoggerServiceDependencies{
+		Config: config,
+	})
 
 	db, err := database.NewDb(config)
 	if err != nil {
@@ -43,9 +48,9 @@ func main() {
 		AuthService: authService,
 	})
 
-	address := ":" + strconv.Itoa(config.Services.Auth.Port)
+	port := ":" + strconv.Itoa(config.Services.Auth.Port)
 
-	listener, err := net.Listen("tcp", address)
+	listener, err := net.Listen("tcp", port)
 	if err != nil {
 		panic(err)
 	}
@@ -53,10 +58,14 @@ func main() {
 
 	handler := middlewares.LogsMiddleware(router)
 	server := http.Server{
-		Addr:    address,
+		Addr:    port,
 		Handler: handler,
 	}
 
-	log.Printf("Starting Auth service on %s port", address)
+	slog.Info(
+		"Starting service",
+		"Port",
+		port,
+	)
 	server.ListenAndServe()
 }

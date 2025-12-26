@@ -1,11 +1,12 @@
 package main
 
 import (
-	"log"
+	"log/slog"
 	"pkg/api"
 	auth_api "pkg/api/auth"
 	"pkg/configs"
 	"pkg/database"
+	"pkg/logger"
 	"sync"
 	"time"
 
@@ -17,6 +18,10 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
+
+	logger.SetLogger(&logger.LoggerServiceDependencies{
+		Config: config,
+	})
 
 	// api
 	httpApi := api.NewHttpApi(&api.HttpApiDependencies{
@@ -52,11 +57,23 @@ func main() {
 			ID, err := authApi.RegisterUser(user)
 
 			if err != nil {
-				log.Printf("Error creating user %d: %v", userNumber, err)
+				slog.Error(
+					"Error creating user",
+					"UserNumber",
+					userNumber,
+					"Error",
+					err,
+				)
 
 				result <- false
 			} else {
-				log.Printf("User %d created with ID %d: ", userNumber, ID)
+				slog.Info(
+					"User created",
+					"UserNumber",
+					userNumber,
+					"ID",
+					ID,
+				)
 
 				result <- true
 			}
@@ -79,6 +96,9 @@ func main() {
 			status.rejected++
 		}
 	}
-
-	log.Printf("Result: %+v\n", status)
+	slog.Info(
+		"Result",
+		"Status",
+		status,
+	)
 }

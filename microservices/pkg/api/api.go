@@ -19,7 +19,7 @@ func NewHttpApi(dependencies *HttpApiDependencies) *HttpApi {
 	timeout := time.Duration(dependencies.Config.Software.Api.TimeoutSec) * time.Second
 	client := resty.New().SetTimeout(timeout)
 
-	if dependencies.Config.Software.Api.Debug {
+	if dependencies.Config.Software.Logger.Level == "debug" {
 		client.SetDebug(true)
 	}
 

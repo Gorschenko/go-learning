@@ -2,10 +2,12 @@ package configs
 
 import (
 	"encoding/json"
+	"log/slog"
 	"os"
 )
 
 type Config struct {
+	Other        OtherConfig        `json:"other"`
 	Database     DatabaseConfig     `json:"database"`
 	InitDatabase InitDatabaseConfig `json:"init_database"`
 	Software     SoftwareConfig     `json:"software"`
@@ -27,6 +29,12 @@ func LoadConfig(filePath string) (*Config, error) {
 	if err != nil {
 		return nil, err
 	}
+
+	slog.Debug(
+		"Config is loaded",
+		"Data",
+		config,
+	)
 
 	return &config, nil
 }
