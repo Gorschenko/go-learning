@@ -18,7 +18,7 @@ func LogsMiddleware(next http.Handler) http.Handler {
 		next.ServeHTTP(wrapper, r)
 
 		slog.Info(
-			"[LogMiddleware]",
+			"[LogsMiddleware]",
 			"Method", r.Method,
 			"Path", r.URL.Path,
 			"Status", wrapper.StatusCode,
