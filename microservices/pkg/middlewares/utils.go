@@ -9,12 +9,18 @@ import (
 
 type WrapperWriter struct {
 	http.ResponseWriter
-	StatusCode int
+	StatusCode   int
+	ResponseBody []byte
 }
 
 func (w *WrapperWriter) WriteHeader(statusCode int) {
-	w.ResponseWriter.WriteHeader(statusCode)
 	w.StatusCode = statusCode
+	w.ResponseWriter.WriteHeader(statusCode)
+}
+
+func (w *WrapperWriter) Write(b []byte) (int, error) {
+	w.ResponseBody = append(w.ResponseBody, b...)
+	return w.ResponseWriter.Write(b)
 }
 
 func setFieldFromString(field reflect.Value, value string) error {

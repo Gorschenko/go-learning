@@ -1,6 +1,8 @@
 package middlewares
 
 import (
+	"bytes"
+	"io"
 	"net/http"
 	"pkg/logger"
 	"time"
@@ -17,6 +19,17 @@ func LogsMiddleware(next http.Handler) http.Handler {
 			StatusCode:     http.StatusOK,
 		}
 
+		var stringRequestBody string
+
+		if r.Body != nil && r.Method != "GET" && r.Method != "HEAD" {
+			bodyBytes, err := io.ReadAll(r.Body)
+			if err == nil {
+				stringRequestBody = string(bodyBytes)
+				// Восстанавливаем тело для последующих обработчиков
+				r.Body = io.NopCloser(bytes.NewBuffer(bodyBytes))
+			}
+		}
+
 		next.ServeHTTP(wrapper, r.WithContext(ctx))
 
 		logger.Info(
@@ -25,6 +38,8 @@ func LogsMiddleware(next http.Handler) http.Handler {
 			"Path", r.URL.Path,
 			"Status", wrapper.StatusCode,
 			"Duration", time.Since(start),
+			"RequestBody", stringRequestBody,
+			"ResponseBody", wrapper.ResponseBody,
 		)
 	})
 }
