@@ -7,6 +7,7 @@ import (
 	"net"
 	"net/http"
 	"strconv"
+	"time"
 
 	"pkg/configs"
 	"pkg/database"
@@ -56,7 +57,7 @@ func main() {
 	}
 	listener.Close()
 
-	handler := middlewares.CorrelationIdMiddleware(middlewares.LogsMiddleware(router))
+	handler := middlewares.CorrelationIdMiddleware(middlewares.LogsMiddleware(middlewares.TimeoutMiddleware(5 * time.Second)(router)))
 	server := http.Server{
 		Addr:    port,
 		Handler: handler,

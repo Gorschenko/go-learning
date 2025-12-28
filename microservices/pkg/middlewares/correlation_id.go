@@ -20,7 +20,7 @@ func CorrelationIdMiddleware(next http.Handler) http.Handler {
 			correlationId = uuid.New().String()
 		}
 
-		logger.Debug("CorrelationID is created", "ID", correlationId)
+		logger.Debug("CorrelationIDMiddleware", "CorelationID", correlationId)
 
 		w.Header().Set(static.HeadersCorrelationID, correlationId)
 		ctx = context.WithValue(ctx, static.ContextCorrelationID, correlationId)
