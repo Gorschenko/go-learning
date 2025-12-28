@@ -20,7 +20,8 @@
       "timeout_sec": 5
     },
     "logger": {
-      "level": "debug"
+      "level": "debug",
+      "add_source": false
     }
   },
   "services": {

@@ -20,7 +20,7 @@ func main() {
 		panic(err)
 	}
 
-	logger.SetLogger(&logger.LoggerServiceDependencies{
+	logger.SetupLogger(&logger.LoggerServiceDependencies{
 		Config: config,
 	})
 
@@ -56,7 +56,7 @@ func main() {
 	}
 	listener.Close()
 
-	handler := middlewares.LogsMiddleware(router)
+	handler := middlewares.CorrelationIdMiddleware(middlewares.LogsMiddleware(router))
 	server := http.Server{
 		Addr:    port,
 		Handler: handler,

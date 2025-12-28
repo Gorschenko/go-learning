@@ -49,7 +49,8 @@ func ValidateParams[T any](next http.Handler) http.Handler {
 			return
 		}
 
-		ctx := context.WithValue(r.Context(), static.ContextParamsKey, params)
+		ctx := r.Context()
+		ctx = context.WithValue(ctx, static.ContextParamsKey, params)
 
 		next.ServeHTTP(w, r.WithContext(ctx))
 	})

@@ -6,7 +6,8 @@ type SoftwareConfig struct {
 }
 
 type LoggerSoftwareConfig struct {
-	Level string `json:"level"`
+	Level     string `json:"level"`
+	AddSource bool   `json:"add_source"`
 }
 
 type ApiSoftwareConfig struct {

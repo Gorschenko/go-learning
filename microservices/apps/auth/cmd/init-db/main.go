@@ -19,7 +19,7 @@ func main() {
 		panic(err)
 	}
 
-	logger.SetLogger(&logger.LoggerServiceDependencies{
+	logger.SetupLogger(&logger.LoggerServiceDependencies{
 		Config: config,
 	})
 

@@ -1,9 +1,7 @@
 package static
 
-type contextKey struct{}
-
-var (
-	ContextBodyKey       = contextKey{}
-	ContextParamsKey     = contextKey{}
-	ContextCorrelationID = contextKey{}
+const (
+	ContextBodyKey       = "ContextBodyKey"
+	ContextParamsKey     = "ContextParamsKey"
+	ContextCorrelationID = "ContextCorrelationID"
 )

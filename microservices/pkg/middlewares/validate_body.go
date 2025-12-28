@@ -28,7 +28,8 @@ func ValidateBody[T any](next http.Handler) http.Handler {
 			return
 		}
 
-		ctx := context.WithValue(r.Context(), static.ContextBodyKey, body)
+		ctx := r.Context()
+		ctx = context.WithValue(ctx, static.ContextBodyKey, body)
 		next.ServeHTTP(w, r.WithContext(ctx))
 	})
 }

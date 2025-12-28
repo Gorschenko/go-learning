@@ -1,7 +1,7 @@
 package users
 
 import (
-	"log"
+	"log/slog"
 	"pkg/database"
 )
 
@@ -9,7 +9,7 @@ func NewUsersRepository(dependencies *UsersRepositoryDependencies) *UsersReposit
 	needToMigrate := dependencies.Config.Database.Automigrate
 	if needToMigrate {
 		dependencies.Database.DB.AutoMigrate(&database.User{})
-		log.Println("User automigrate completed")
+		slog.Debug("User automigrate completed")
 	}
 
 	return &UsersRepository{
