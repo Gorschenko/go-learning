@@ -3,10 +3,17 @@ package api
 import (
 	"encoding/json"
 	"net/http"
+	"pkg/errors"
 )
 
 func SendJSON(w http.ResponseWriter, data any, statusCode int) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(statusCode)
 	json.NewEncoder(w).Encode(data)
+}
+
+func SendJSONError(w http.ResponseWriter, e *errors.InternalError) {
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(e.Status)
+	json.NewEncoder(w).Encode(e)
 }

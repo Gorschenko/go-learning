@@ -5,7 +5,7 @@
 - + ValidateBodyMiddleware
 - + CorrelationIdMiddleware
 - + LogMiddleware
-- TimeoutMiddleware
+- + TimeoutMiddleware
 - + HttpApi
 - Возвращать клиенту ошибку в виде объекта, а не строки.
 - Swagger.
