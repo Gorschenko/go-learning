@@ -17,17 +17,17 @@ func NewAuthHandler(router *http.ServeMux, dependencies AuthHandlerDependencies)
 	authResiterURL := auth_api.AuthRegisterMethod + " " + auth_api.AuthRegisterPath
 	router.Handle(
 		authResiterURL,
-		middlewares.ValidateBody[auth_api.RegisterRequestBodyDto](handler.Register()),
+		middlewares.ValidateBody[auth_api.RegisterRequestBodyDto](handler.RegisterUser()),
 	)
 
 	authLoginURL := auth_api.AuthLoginMethod + " " + auth_api.AuthLoginPath
 	router.Handle(
 		authLoginURL,
-		middlewares.ValidateBody[auth_api.LoginRequestBodyDto](handler.Login()),
+		middlewares.ValidateBody[auth_api.LoginRequestBodyDto](handler.LoginUser()),
 	)
 }
 
-func (h *AuthHandler) Register() http.HandlerFunc {
+func (h *AuthHandler) RegisterUser() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		body, _ := r.Context().Value(static.ContextBodyKey).(auth_api.RegisterRequestBodyDto)
 
@@ -62,7 +62,7 @@ func (h *AuthHandler) Register() http.HandlerFunc {
 	}
 }
 
-func (h *AuthHandler) Login() http.HandlerFunc {
+func (h *AuthHandler) LoginUser() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		body, _ := r.Context().Value(static.ContextBodyKey).(auth_api.LoginRequestBodyDto)
 

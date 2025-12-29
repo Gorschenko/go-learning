@@ -1,4 +1,4 @@
-package e2e
+package auth_e2e
 
 import (
 	"auth/internal/app"
@@ -15,7 +15,7 @@ import (
 )
 
 func TestRegisterUserPositive(t *testing.T) {
-	app, _ := app.GetApp("../../../config.json")
+	app, _ := app.GetApp("../../../../config.json")
 	ts := httptest.NewServer(app)
 	defer ts.Close()
 
@@ -40,7 +40,7 @@ func TestRegisterUserPositive(t *testing.T) {
 }
 
 func TestRegisterUserNegative(t *testing.T) {
-	app, _ := app.GetApp("../../../config.json")
+	app, _ := app.GetApp("../../../../config.json")
 	ts := httptest.NewServer(app)
 	defer ts.Close()
 
