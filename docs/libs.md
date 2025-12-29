@@ -1,7 +1,7 @@
 1. Swagger
     -   https://github.com/swaggo/swag
     -   go get -tool github.com/swaggo/swag/cmd/swag
-    -   go tool swag init -g cmd/bootstrap/main.go -o ./docs - локально
+    -   go tool swag init -g cmd/server/main.go -o ./docs - локально
 
 2. Envs
     -   https://github.com/joho/godotenv
@@ -41,10 +41,14 @@
     -   https://github.com/brianvoe/gofakeit
     -   go get github.com/brianvoe/gofakeit/v7
 
-11. UUID:
+11. Тестирование. Проверки. Хорошие текстовки:
+    -   https://github.com/stretchr/testify
+    -   go get github.com/stretchr/testify/assert
+
+12. UUID:
     - https://github.com/google/uuid
     - go get github.com/google/uuid
 
-12. HTTP Requests:
+13. HTTP Requests:
     -   https://github.com/go-resty/resty
     -   go get -u github.com/go-resty/resty/v2

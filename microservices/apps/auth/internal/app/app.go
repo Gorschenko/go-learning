@@ -1,22 +1,18 @@
-package main
+package app
 
 import (
 	"auth/internal/auth"
 	"auth/internal/users"
-	"log/slog"
-	"net"
 	"net/http"
-	"strconv"
-	"time"
-
 	"pkg/configs"
 	"pkg/database"
 	"pkg/logger"
 	"pkg/middlewares"
+	"time"
 )
 
-func main() {
-	config, err := configs.LoadConfig("../../config.json")
+func GetApp(configPath string) (http.Handler, *configs.Config) {
+	config, err := configs.LoadConfig(configPath)
 	if err != nil {
 		panic(err)
 	}
@@ -49,24 +45,7 @@ func main() {
 		AuthService: authService,
 	})
 
-	port := ":" + strconv.Itoa(config.Services.Auth.Port)
-
-	listener, err := net.Listen("tcp", port)
-	if err != nil {
-		panic(err)
-	}
-	listener.Close()
-
 	handler := middlewares.CorrelationIdMiddleware(middlewares.LogsMiddleware(middlewares.TimeoutMiddleware(5 * time.Second)(router)))
-	server := http.Server{
-		Addr:    port,
-		Handler: handler,
-	}
 
-	slog.Info(
-		"Starting service",
-		"Port",
-		port,
-	)
-	server.ListenAndServe()
+	return handler, config
 }

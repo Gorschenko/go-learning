@@ -7,7 +7,6 @@ import (
 	"pkg/database"
 	"pkg/middlewares"
 	"pkg/static"
-	"time"
 )
 
 func NewAuthHandler(router *http.ServeMux, dependencies AuthHandlerDependencies) {
@@ -65,7 +64,6 @@ func (h *AuthHandler) Register() http.HandlerFunc {
 
 func (h *AuthHandler) Login() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		time.Sleep(6 * time.Second)
 		body, _ := r.Context().Value(static.ContextBodyKey).(auth_api.LoginRequestBodyDto)
 
 		token, err := h.AuthService.LoginUser(body.Email, body.Password)
