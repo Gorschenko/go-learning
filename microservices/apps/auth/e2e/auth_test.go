@@ -11,9 +11,10 @@ import (
 	"testing"
 
 	"github.com/brianvoe/gofakeit/v7"
+	"github.com/stretchr/testify/assert"
 )
 
-func TestRegisterUserSuccess(t *testing.T) {
+func TestRegisterUserPositive(t *testing.T) {
 	app, _ := app.GetApp("../../../config.json")
 	ts := httptest.NewServer(app)
 	defer ts.Close()
@@ -25,25 +26,31 @@ func TestRegisterUserSuccess(t *testing.T) {
 	})
 
 	URL := ts.URL + auth_api.AuthRegisterPath
-	response, err := http.Post(URL, "application/json", bytes.NewReader(requestBody))
+	response, _ := http.Post(URL, "application/json", bytes.NewReader(requestBody))
 
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	if response.StatusCode != http.StatusOK {
-		t.Fatalf("Expected %d got %d", http.StatusOK, response.StatusCode)
-	}
+	assert.Equal(t, http.StatusOK, response.StatusCode)
 
 	responseBodyString, _ := io.ReadAll(response.Body)
+
 	var responseBody auth_api.RegisterResponseBodyDto
 	json.Unmarshal(responseBodyString, &responseBody)
 
-	if responseBody.Token == "" {
-		t.Error("Expected token in response")
-	}
+	assert.NotEmpty(t, responseBody.Token)
+	assert.False(t, responseBody.ExpirationTime.IsZero())
+}
 
-	if responseBody.ExpirationTime.IsZero() {
-		t.Error("Expected expiration time in response")
-	}
+func TestRegisterUserNegative(t *testing.T) {
+	app, _ := app.GetApp("../../../config.json")
+	ts := httptest.NewServer(app)
+	defer ts.Close()
+
+	requestBody, _ := json.Marshal(&auth_api.RegisterRequestBodyDto{
+		Password: gofakeit.Password(false, false, true, false, false, 5),
+		Name:     gofakeit.Name(),
+	})
+
+	URL := ts.URL + auth_api.AuthRegisterPath
+	response, _ := http.Post(URL, "application/json", bytes.NewReader(requestBody))
+
+	assert.Equal(t, http.StatusBadRequest, response.StatusCode)
 }
