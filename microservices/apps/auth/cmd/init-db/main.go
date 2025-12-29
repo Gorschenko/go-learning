@@ -54,7 +54,7 @@ func main() {
 				Name:     gofakeit.Name(),
 			}
 
-			ID, err := authApi.RegisterUser(user)
+			data, err := authApi.RegisterUser(user)
 
 			if err != nil {
 				slog.Error(
@@ -71,8 +71,8 @@ func main() {
 					"User created",
 					"UserNumber",
 					userNumber,
-					"ID",
-					ID,
+					"Data",
+					data,
 				)
 
 				result <- true

@@ -18,19 +18,19 @@ func NewAuthHandler(router *http.ServeMux, dependencies AuthHandlerDependencies)
 	authResiterURL := auth_api.AuthRegisterMethod + " " + auth_api.AuthRegisterPath
 	router.Handle(
 		authResiterURL,
-		middlewares.ValidateBody[auth_api.RegisterBodyRequestDto](handler.Register()),
+		middlewares.ValidateBody[auth_api.RegisterRequestBodyDto](handler.Register()),
 	)
 
 	authLoginURL := auth_api.AuthLoginMethod + " " + auth_api.AuthLoginPath
 	router.Handle(
 		authLoginURL,
-		middlewares.ValidateBody[auth_api.LoginBodyRequestDto](handler.Login()),
+		middlewares.ValidateBody[auth_api.LoginRequestBodyDto](handler.Login()),
 	)
 }
 
 func (h *AuthHandler) Register() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		body, _ := r.Context().Value(static.ContextBodyKey).(auth_api.RegisterBodyRequestDto)
+		body, _ := r.Context().Value(static.ContextBodyKey).(auth_api.RegisterRequestBodyDto)
 
 		// fmt.Printf("Body: %+v\n", body)
 		// params, _ := r.Context().Value(static.ContextParamsKey).(UserPathParams)
@@ -54,7 +54,7 @@ func (h *AuthHandler) Register() http.HandlerFunc {
 			return
 		}
 
-		response := auth_api.RegisterBodyResponseDto{
+		response := auth_api.RegisterResponseBodyDto{
 			ID: int(createdUser.ID),
 		}
 
@@ -65,7 +65,7 @@ func (h *AuthHandler) Register() http.HandlerFunc {
 func (h *AuthHandler) Login() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		time.Sleep(6 * time.Second)
-		body, _ := r.Context().Value(static.ContextBodyKey).(auth_api.LoginBodyRequestDto)
+		body, _ := r.Context().Value(static.ContextBodyKey).(auth_api.LoginRequestBodyDto)
 
 		token, expirationTime, err := h.AuthService.LoginUser(body.Email, body.Password)
 
@@ -84,7 +84,7 @@ func (h *AuthHandler) Login() http.HandlerFunc {
 			return
 		}
 
-		response := auth_api.LoginBodyResponseDto{
+		response := auth_api.LoginResponseBodyDto{
 			Token:          token,
 			ExpirationTime: expirationTime,
 		}

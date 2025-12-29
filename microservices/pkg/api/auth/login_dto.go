@@ -7,12 +7,12 @@ const (
 	AuthLoginMethod = "POST"
 )
 
-type LoginBodyRequestDto struct {
+type LoginRequestBodyDto struct {
 	Email    string `json:"email" validate:"required,email"`
 	Password string `json:"password" validate:"required"`
 }
 
-type LoginBodyResponseDto struct {
+type LoginResponseBodyDto struct {
 	Token          string    `json:"token"`
 	ExpirationTime time.Time `json:"expirationTime"`
 }

@@ -5,12 +5,12 @@ const (
 	AuthRegisterMethod = "POST"
 )
 
-type RegisterBodyRequestDto struct {
+type RegisterRequestBodyDto struct {
 	Email    string `json:"email" validate:"required,email"`
 	Password string `json:"password" validate:"required"`
 	Name     string `json:"name" validate:"required"`
 }
 
-type RegisterBodyResponseDto struct {
+type RegisterResponseBodyDto struct {
 	ID int `json:"ID"`
 }

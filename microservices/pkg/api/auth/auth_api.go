@@ -30,17 +30,21 @@ func NewAuthApi(dependencies *AuthApiDependencies) *AuthApi {
 	}
 }
 
-func (api *AuthApi) RegisterUser(body *database.User) (int, error) {
+func (api *AuthApi) RegisterUser(body *database.User) (*RegisterResponseBodyDto, error) {
 	url := api.BaseURL + AuthRegisterPath
+
+	var data RegisterResponseBodyDto
+
 	response, err := api.HttpApi.Client.
 		R().
 		SetHeader("Content-Type", "application/json").
 		SetBody(body).
+		SetResult(&data).
 		Execute(AuthRegisterMethod, url)
 
 	if err != nil || response.IsError() {
-		return 0, err
+		return nil, err
 	}
 
-	return response.StatusCode(), nil
+	return &data, nil
 }
