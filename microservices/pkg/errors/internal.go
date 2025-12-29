@@ -21,7 +21,15 @@ func NewInternalError(code string) *InternalError {
 	}
 }
 
+// Реализация интерфейса error
+func (e *InternalError) Error() string {
+	return e.Code
+}
+
+// Immutable версия - возвращает новый объект
 func (e *InternalError) WithMessage(m string) *InternalError {
-	e.Message = m
-	return e
+	// Создаем копию, чтобы избежать побочных эффектов
+	newErr := *e
+	newErr.Message = m
+	return &newErr
 }
