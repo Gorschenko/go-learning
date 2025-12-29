@@ -5,7 +5,6 @@ import (
 	"pkg/database"
 	"pkg/jwt"
 	"pkg/static"
-	"time"
 )
 
 func NewAuthService(dependencies AuthServiceDependencies) *AuthService {
@@ -15,41 +14,50 @@ func NewAuthService(dependencies AuthServiceDependencies) *AuthService {
 	}
 }
 
-func (s *AuthService) RegisterUser(user *database.User) (*database.User, error) {
+func (s *AuthService) RegisterUser(user *database.User) (*jwt.JWTToken, error) {
 	existedUser, _ := s.UsersRespository.FindByEmail(user.Email)
 
 	if existedUser != nil {
 		return nil, errors.New(static.ErrorUserAlreadyExists)
 	}
 
-	user, err := s.UsersRespository.Create(user)
+	createdUser, err := s.UsersRespository.Create(user)
 
 	if err != nil {
-		return nil, err
+		return nil, errors.New(static.ErrorInternalServerError)
 	}
 
-	return user, nil
+	payload := jwt.JWTDataToCreate{
+		UserID: int(createdUser.ID),
+		Email:  createdUser.Email,
+	}
+
+	token := jwt.NewJWT(jwt.JWTDependencies{
+		Config: s.Config,
+	}).Create(payload)
+
+	return token, nil
 }
 
-func (s *AuthService) LoginUser(email, password string) (string, time.Time, error) {
+func (s *AuthService) LoginUser(email, password string) (*jwt.JWTToken, error) {
 	existedUser, err := s.UsersRespository.FindByEmail(email)
 
 	if err != nil {
-		return "", time.Time{}, errors.New(static.ErrorUserNotFound)
+		return nil, errors.New(static.ErrorUserNotFound)
 	}
 
 	if existedUser.Password != password {
-		return "", time.Time{}, errors.New(static.ErrorInvalidPassowrd)
+		return nil, errors.New(static.ErrorInvalidPassowrd)
 	}
 
-	payload := jwt.JWTPayload{
+	payload := jwt.JWTDataToCreate{
 		UserID: int(existedUser.ID),
 		Email:  email,
 	}
 
-	token, expirationTime := jwt.NewJWT(jwt.JWTDependencies{
+	token := jwt.NewJWT(jwt.JWTDependencies{
 		Config: s.Config,
 	}).Create(payload)
 
-	return token, expirationTime, err
+	return token, err
 }

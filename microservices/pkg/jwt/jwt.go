@@ -13,22 +13,22 @@ func NewJWT(dependencies JWTDependencies) *JWT {
 	expiresIn := time.Duration(dependencies.Config.Security.JWT.Access.TTL) * time.Hour
 
 	return &JWT{
-		Access: &JWTAccessConfig{
+		AccessConfig: &JWTAccessConfig{
 			Secret:    dependencies.Config.Security.JWT.Access.Secret,
 			ExpiresIn: expiresIn,
 		},
 	}
 }
 
-func (j *JWT) Create(payload JWTPayload) (string, time.Time) {
-	stringUserId := strconv.Itoa(payload.UserID)
-	expirationTime := time.Now().Add(j.Access.ExpiresIn)
+func (j *JWT) Create(data JWTDataToCreate) *JWTToken {
+	stringUserId := strconv.Itoa(data.UserID)
+	expirationTime := time.Now().Add(j.AccessConfig.ExpiresIn)
 	expiresAt := jwt.NewNumericDate(expirationTime)
 	issuedAt := jwt.NewNumericDate(time.Now())
 
 	claims := JWTClaims{
 		UserID: stringUserId,
-		Email:  payload.Email,
+		Email:  data.Email,
 		RegisteredClaims: jwt.RegisteredClaims{
 			ExpiresAt: expiresAt,
 			IssuedAt:  issuedAt,
@@ -37,19 +37,22 @@ func (j *JWT) Create(payload JWTPayload) (string, time.Time) {
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 
-	signedToken, err := token.SignedString([]byte(j.Access.Secret))
+	signedToken, err := token.SignedString([]byte(j.AccessConfig.Secret))
 
 	if err != nil {
 		panic(err)
 	}
 
-	return signedToken, expirationTime
+	return &JWTToken{
+		Token:          signedToken,
+		ExpirationTime: expirationTime,
+	}
 }
 
-func (j *JWT) Parse(token string) (*JWTPayload, error) {
+func (j *JWT) Parse(token string) (*JWTDataToCreate, error) {
 	claims := JWTClaims{}
 	t, err := jwt.ParseWithClaims(token, &claims, func(t *jwt.Token) (any, error) {
-		return []byte(j.Access.Secret), nil
+		return []byte(j.AccessConfig.Secret), nil
 	})
 
 	if err != nil {
@@ -62,7 +65,7 @@ func (j *JWT) Parse(token string) (*JWTPayload, error) {
 
 	intUserId, _ := strconv.Atoi(claims.UserID)
 
-	payload := &JWTPayload{
+	payload := &JWTDataToCreate{
 		UserID: intUserId,
 		Email:  claims.Email,
 	}

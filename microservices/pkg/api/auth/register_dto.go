@@ -1,5 +1,7 @@
 package auth_api
 
+import "time"
+
 const (
 	AuthRegisterPath   = "/auth/register"
 	AuthRegisterMethod = "POST"
@@ -12,5 +14,6 @@ type RegisterRequestBodyDto struct {
 }
 
 type RegisterResponseBodyDto struct {
-	ID int `json:"ID"`
+	Token          string    `json:"token"`
+	ExpirationTime time.Time `json:"expirationTime"`
 }

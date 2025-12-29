@@ -42,7 +42,7 @@ func (h *AuthHandler) Register() http.HandlerFunc {
 			Name:     body.Name,
 		}
 
-		createdUser, err := h.AuthService.RegisterUser(&user)
+		token, err := h.AuthService.RegisterUser(&user)
 
 		if err != nil && err.Error() == static.ErrorUserAlreadyExists {
 			http.Error(w, err.Error(), http.StatusConflict)
@@ -55,7 +55,8 @@ func (h *AuthHandler) Register() http.HandlerFunc {
 		}
 
 		response := auth_api.RegisterResponseBodyDto{
-			ID: int(createdUser.ID),
+			Token:          token.Token,
+			ExpirationTime: token.ExpirationTime,
 		}
 
 		api.SendJSON(w, response, http.StatusOK)
@@ -67,7 +68,7 @@ func (h *AuthHandler) Login() http.HandlerFunc {
 		time.Sleep(6 * time.Second)
 		body, _ := r.Context().Value(static.ContextBodyKey).(auth_api.LoginRequestBodyDto)
 
-		token, expirationTime, err := h.AuthService.LoginUser(body.Email, body.Password)
+		token, err := h.AuthService.LoginUser(body.Email, body.Password)
 
 		if err != nil && err.Error() == static.ErrorUserNotFound {
 			http.Error(w, err.Error(), http.StatusNotFound)
@@ -85,8 +86,8 @@ func (h *AuthHandler) Login() http.HandlerFunc {
 		}
 
 		response := auth_api.LoginResponseBodyDto{
-			Token:          token,
-			ExpirationTime: expirationTime,
+			Token:          token.Token,
+			ExpirationTime: token.ExpirationTime,
 		}
 
 		api.SendJSON(w, response, http.StatusOK)

@@ -17,10 +17,10 @@ type JWTAccessConfig struct {
 }
 
 type JWT struct {
-	Access *JWTAccessConfig
+	AccessConfig *JWTAccessConfig
 }
 
-type JWTPayload struct {
+type JWTDataToCreate struct {
 	UserID int
 	Email  string
 }
@@ -29,4 +29,9 @@ type JWTClaims struct {
 	UserID string
 	Email  string
 	jwt.RegisteredClaims
+}
+
+type JWTToken struct {
+	Token          string    `json:"token"`
+	ExpirationTime time.Time `json:"expirationTime"`
 }
