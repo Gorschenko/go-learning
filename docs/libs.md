@@ -1,5 +1,7 @@
 1. Swagger
     -   https://github.com/swaggo/swag
+    -   go get -tool github.com/swaggo/swag/cmd/swag
+    -   go tool swag init -g cmd/bootstrap/main.go -o ./docs - локально
 
 2. Envs
     -   https://github.com/joho/godotenv
