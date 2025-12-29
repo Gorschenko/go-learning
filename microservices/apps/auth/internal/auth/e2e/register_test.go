@@ -1,0 +1,54 @@
+package auth_e2e
+
+import (
+	"bytes"
+	"encoding/json"
+	"io"
+	"net/http"
+	auth_api "pkg/api/auth"
+	"strconv"
+	"testing"
+
+	"github.com/brianvoe/gofakeit/v7"
+	"github.com/stretchr/testify/assert"
+)
+
+func TestRegisterUser(t *testing.T) {
+
+	t.Run("Positive", func(t *testing.T) {
+		t.Run(strconv.Itoa(http.StatusOK), func(t *testing.T) {
+			requestBody, _ := json.Marshal(&auth_api.RegisterRequestBodyDto{
+				Email:    gofakeit.Email(),
+				Password: gofakeit.Password(false, false, true, false, false, 5),
+				Name:     gofakeit.Name(),
+			})
+
+			URL := testServer.URL + auth_api.AuthRegisterPath
+			response, _ := http.Post(URL, "application/json", bytes.NewReader(requestBody))
+
+			assert.Equal(t, http.StatusOK, response.StatusCode)
+
+			responseBodyString, _ := io.ReadAll(response.Body)
+
+			var responseBody auth_api.RegisterResponseBodyDto
+			json.Unmarshal(responseBodyString, &responseBody)
+
+			assert.NotEmpty(t, responseBody.Token)
+			assert.False(t, responseBody.ExpirationTime.IsZero())
+		})
+	})
+
+	t.Run("Negative", func(t *testing.T) {
+		t.Run(strconv.Itoa(http.StatusBadRequest), func(t *testing.T) {
+			requestBody, _ := json.Marshal(&auth_api.RegisterRequestBodyDto{
+				Password: gofakeit.Password(false, false, true, false, false, 5),
+				Name:     gofakeit.Name(),
+			})
+
+			URL := testServer.URL + auth_api.AuthRegisterPath
+			response, _ := http.Post(URL, "application/json", bytes.NewReader(requestBody))
+
+			assert.Equal(t, http.StatusBadRequest, response.StatusCode)
+		})
+	})
+}
