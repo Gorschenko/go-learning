@@ -40,8 +40,11 @@ func GetApp(configPath string) (http.Handler, *configs.Config) {
 	})
 
 	// services
-	authService := auth.NewAuthService(auth.AuthServiceDependencies{
+	authService := auth.NewAuthService(&auth.AuthServiceDependencies{
 		Config:          config,
+		UsersRepository: usersRepository,
+	})
+	usersService := users.NewUsersService(&users.UsersServiceDependencies{
 		UsersRepository: usersRepository,
 	})
 	carsService := cars.NewCarsService(&cars.CarsServiceDependencies{
@@ -50,10 +53,13 @@ func GetApp(configPath string) (http.Handler, *configs.Config) {
 	})
 
 	// handlers
-	auth.NewAuthHandler(router, auth.AuthHandlerDependencies{
+	auth.NewAuthHandler(router, &auth.AuthHandlerDependencies{
 		AuthService: authService,
 	})
-	cars.NewCarsHandler(router, cars.CarsHandlerDependencies{
+	users.NewUsersHandler(router, &users.UsersHandlerDependencies{
+		UsersService: usersService,
+	})
+	cars.NewCarsHandler(router, &cars.CarsHandlerDependencies{
 		CarsService: carsService,
 	})
 

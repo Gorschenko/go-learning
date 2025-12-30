@@ -6,7 +6,7 @@ import (
 	"pkg/middlewares"
 )
 
-func NewCarsHandler(router *http.ServeMux, dependencies CarsHandlerDependencies) {
+func NewCarsHandler(router *http.ServeMux, dependencies *CarsHandlerDependencies) {
 	handler := &CarsHandler{
 		CarsService: dependencies.CarsService,
 	}
@@ -19,7 +19,5 @@ func NewCarsHandler(router *http.ServeMux, dependencies CarsHandlerDependencies)
 }
 
 func (h *CarsHandler) AddCar() http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-
-	}
+	return func(w http.ResponseWriter, r *http.Request) {}
 }

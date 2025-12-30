@@ -9,7 +9,7 @@ import (
 	"pkg/static"
 )
 
-func NewAuthHandler(router *http.ServeMux, dependencies AuthHandlerDependencies) {
+func NewAuthHandler(router *http.ServeMux, dependencies *AuthHandlerDependencies) {
 	handler := &AuthHandler{
 		AuthService: dependencies.AuthService,
 	}

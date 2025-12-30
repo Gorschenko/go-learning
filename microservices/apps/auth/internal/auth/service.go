@@ -7,7 +7,7 @@ import (
 	"pkg/static"
 )
 
-func NewAuthService(dependencies AuthServiceDependencies) *AuthService {
+func NewAuthService(dependencies *AuthServiceDependencies) *AuthService {
 	return &AuthService{
 		Config:           dependencies.Config,
 		UsersRespository: dependencies.UsersRepository,
