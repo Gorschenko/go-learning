@@ -2,12 +2,14 @@ package errors
 
 import "net/http"
 
+type ErrorCode string
+
 const (
-	CodeBadRequest     = "CodeBadRequest"
-	CodeRequestTimeout = "CodeRequestTimeout"
+	CodeBadRequest     ErrorCode = "CodeBadRequest"
+	CodeRequestTimeout ErrorCode = "CodeRequestTimeout"
 )
 
-var codeToStatus = map[string]int{
+var codeToStatus = map[ErrorCode]int{
 	CodeBadRequest:     http.StatusBadRequest,
 	CodeRequestTimeout: http.StatusRequestTimeout,
 }

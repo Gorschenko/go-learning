@@ -3,12 +3,12 @@ package errors
 import "net/http"
 
 type InternalError struct {
-	Code    string `json:"code"`
-	Status  int    `json:"status"`
-	Message string `json:"message"`
+	Code    ErrorCode `json:"code"`
+	Status  int       `json:"status"`
+	Message string    `json:"message"`
 }
 
-func NewInternalError(code string) *InternalError {
+func NewInternalError(code ErrorCode) *InternalError {
 	status, ok := codeToStatus[code]
 
 	if !ok {
@@ -23,7 +23,7 @@ func NewInternalError(code string) *InternalError {
 
 // Реализация интерфейса error
 func (e *InternalError) Error() string {
-	return e.Code
+	return string(e.Code)
 }
 
 // Immutable версия - возвращает новый объект
