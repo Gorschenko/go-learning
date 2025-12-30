@@ -5,8 +5,13 @@ import (
 	"pkg/database"
 )
 
-func NewUsersRepository(dependencies *UsersRepositoryDependencies) *UsersRepository {
+type UsersRepository struct {
+	Database *database.Db
+}
+
+func NewUsersRepository(dependencies *database.RepositoryDependencies) *UsersRepository {
 	needToMigrate := dependencies.Config.Database.Automigrate
+
 	if needToMigrate {
 		dependencies.Database.DB.AutoMigrate(&database.User{})
 		slog.Debug("User automigrate completed")

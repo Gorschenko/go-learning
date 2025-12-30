@@ -2,6 +2,7 @@ package app
 
 import (
 	"auth/internal/auth"
+	"auth/internal/cars"
 	"auth/internal/users"
 	"net/http"
 	"pkg/configs"
@@ -29,7 +30,11 @@ func GetApp(configPath string) (http.Handler, *configs.Config) {
 	router := http.NewServeMux()
 
 	// repositories
-	usersRepository := users.NewUsersRepository(&users.UsersRepositoryDependencies{
+	usersRepository := users.NewUsersRepository(&database.RepositoryDependencies{
+		Database: db,
+		Config:   config,
+	})
+	_ = cars.NewCarsRepository(&database.RepositoryDependencies{
 		Database: db,
 		Config:   config,
 	})
