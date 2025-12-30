@@ -34,7 +34,7 @@ func GetApp(configPath string) (http.Handler, *configs.Config) {
 		Database: db,
 		Config:   config,
 	})
-	_ = cars.NewCarsRepository(&database.RepositoryDependencies{
+	carsRepository := cars.NewCarsRepository(&database.RepositoryDependencies{
 		Database: db,
 		Config:   config,
 	})
@@ -44,10 +44,16 @@ func GetApp(configPath string) (http.Handler, *configs.Config) {
 		Config:          config,
 		UsersRepository: usersRepository,
 	})
+	carsService := cars.NewCarsService(&cars.CarsServiceDependencies{
+		CarsRepository: carsRepository,
+	})
 
 	// handlers
 	auth.NewAuthHandler(router, auth.AuthHandlerDependencies{
 		AuthService: authService,
+	})
+	cars.NewCarsHandler(router, cars.CarsHandlerDependencies{
+		CarsService: carsService,
 	})
 
 	middlewaresStack := middlewares.CombainMiddlewares(
