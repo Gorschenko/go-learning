@@ -1,5 +1,7 @@
 package cars
 
+import "auth/internal/users"
+
 type CarsHandlerDependencies struct {
 	CarsService *CarsService
 }
@@ -9,9 +11,11 @@ type CarsHandler struct {
 }
 
 type CarsServiceDependencies struct {
-	CarsRepository *CarsRepository
+	CarsRepository  *CarsRepository
+	UsersRepository *users.UsersRepository
 }
 
 type CarsService struct {
-	CarsRepository *CarsRepository
+	CarsRepository  *CarsRepository
+	UsersRepository *users.UsersRepository
 }

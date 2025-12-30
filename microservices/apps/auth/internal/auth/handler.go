@@ -14,15 +14,15 @@ func NewAuthHandler(router *http.ServeMux, dependencies AuthHandlerDependencies)
 		AuthService: dependencies.AuthService,
 	}
 
-	authResiterURL := auth_api.AuthRegisterMethod + " " + auth_api.AuthRegisterPath
+	registerURL := auth_api.RegisterMethod + " " + auth_api.RegisterPath
 	router.Handle(
-		authResiterURL,
+		registerURL,
 		middlewares.ValidateBody[auth_api.RegisterRequestBodyDto](handler.RegisterUser()),
 	)
 
-	authLoginURL := auth_api.AuthLoginMethod + " " + auth_api.AuthLoginPath
+	loginURL := auth_api.LoginMethod + " " + auth_api.LoginPath
 	router.Handle(
-		authLoginURL,
+		loginURL,
 		middlewares.ValidateBody[auth_api.LoginRequestBodyDto](handler.LoginUser()),
 	)
 }

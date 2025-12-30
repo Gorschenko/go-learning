@@ -31,7 +31,7 @@ func NewAuthApi(dependencies *AuthApiDependencies) *AuthApi {
 }
 
 func (api *AuthApi) RegisterUser(body *database.User) (*RegisterResponseBodyDto, error) {
-	url := api.BaseURL + AuthRegisterPath
+	url := api.BaseURL + RegisterPath
 
 	var data RegisterResponseBodyDto
 
@@ -40,7 +40,7 @@ func (api *AuthApi) RegisterUser(body *database.User) (*RegisterResponseBodyDto,
 		SetHeader("Content-Type", "application/json").
 		SetBody(body).
 		SetResult(&data).
-		Execute(AuthRegisterMethod, url)
+		Execute(RegisterMethod, url)
 
 	if err != nil || response.IsError() {
 		return nil, err

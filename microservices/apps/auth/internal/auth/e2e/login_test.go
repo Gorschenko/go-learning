@@ -24,7 +24,7 @@ func TestLoginUserNegative(t *testing.T) {
 			}
 			requestRegisterBody, _ := json.Marshal(&requestRegisterDTO)
 
-			URL := testServer.URL + auth_api.AuthRegisterPath
+			URL := testServer.URL + auth_api.RegisterPath
 			responseRegister, _ := http.Post(URL, "application/json", bytes.NewReader(requestRegisterBody))
 
 			assert.NotNil(t, responseRegister)
@@ -34,7 +34,7 @@ func TestLoginUserNegative(t *testing.T) {
 				Password: requestRegisterDTO.Password,
 			})
 
-			URL = testServer.URL + auth_api.AuthLoginPath
+			URL = testServer.URL + auth_api.LoginPath
 
 			responseLogin, _ := http.Post(URL, "application/json", bytes.NewReader(requestLoginBody))
 
@@ -57,7 +57,7 @@ func TestLoginUserNegative(t *testing.T) {
 				Password: gofakeit.Password(false, false, true, false, false, 5),
 			})
 
-			URL := testServer.URL + auth_api.AuthLoginPath
+			URL := testServer.URL + auth_api.LoginPath
 			response, _ := http.Post(URL, "application/json", bytes.NewReader(requestBody))
 
 			assert.Equal(t, http.StatusNotFound, response.StatusCode)

@@ -3,8 +3,8 @@ package auth_api
 import "time"
 
 const (
-	AuthLoginPath   = "/auth/login"
-	AuthLoginMethod = "POST"
+	LoginPath   = "/auth/login"
+	LoginMethod = "POST"
 )
 
 type LoginRequestBodyDto struct {

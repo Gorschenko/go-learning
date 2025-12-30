@@ -45,7 +45,8 @@ func GetApp(configPath string) (http.Handler, *configs.Config) {
 		UsersRepository: usersRepository,
 	})
 	carsService := cars.NewCarsService(&cars.CarsServiceDependencies{
-		CarsRepository: carsRepository,
+		CarsRepository:  carsRepository,
+		UsersRepository: usersRepository,
 	})
 
 	// handlers

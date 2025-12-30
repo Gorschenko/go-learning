@@ -3,8 +3,8 @@ package auth_api
 import "time"
 
 const (
-	AuthRegisterPath   = "/auth/register"
-	AuthRegisterMethod = "POST"
+	RegisterPath   = "/auth/register"
+	RegisterMethod = "POST"
 )
 
 type RegisterRequestBodyDto struct {

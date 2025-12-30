@@ -23,7 +23,7 @@ func TestRegisterUser(t *testing.T) {
 				Name:     gofakeit.Name(),
 			})
 
-			URL := testServer.URL + auth_api.AuthRegisterPath
+			URL := testServer.URL + auth_api.RegisterPath
 			response, _ := http.Post(URL, "application/json", bytes.NewReader(requestBody))
 
 			assert.Equal(t, http.StatusOK, response.StatusCode)
@@ -45,7 +45,7 @@ func TestRegisterUser(t *testing.T) {
 				Name:     gofakeit.Name(),
 			})
 
-			URL := testServer.URL + auth_api.AuthRegisterPath
+			URL := testServer.URL + auth_api.RegisterPath
 			response, _ := http.Post(URL, "application/json", bytes.NewReader(requestBody))
 
 			assert.Equal(t, http.StatusBadRequest, response.StatusCode)
