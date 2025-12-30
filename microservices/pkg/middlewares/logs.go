@@ -39,6 +39,7 @@ func LogsMiddleware(next http.Handler) http.Handler {
 			"Status", wrapper.StatusCode,
 			"Duration", time.Since(start),
 			"RequestBody", stringRequestBody,
+			"RequestQuery", r.URL.Query(),
 			"ResponseBody", wrapper.ResponseBody,
 		)
 	})

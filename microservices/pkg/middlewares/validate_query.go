@@ -12,28 +12,28 @@ import (
 	"github.com/go-playground/validator/v10"
 )
 
-func ValidateParams[DTO any](next http.Handler) http.Handler {
+func ValidateQuery[DTO any](next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		var params DTO
+		var query DTO
 
-		v := reflect.ValueOf(&params).Elem()
+		v := reflect.ValueOf(&query).Elem()
 		t := v.Type()
 
 		for i := 0; i < v.NumField(); i++ {
 			field := t.Field(i)
-			paramName := field.Tag.Get("param")
+			queryName := field.Tag.Get("query")
 
-			if paramName == "" {
-				paramName = strings.ToLower(field.Name)
+			if queryName == "" {
+				queryName = strings.ToLower(field.Name)
 			}
 
-			paramValue := r.PathValue(paramName)
+			queryValue := r.URL.Query().Get(queryName)
 
-			if paramValue == "" {
+			if queryValue == "" {
 				continue
 			}
 
-			err := setFieldFromString(v.Field(i), paramValue)
+			err := setFieldFromString(v.Field(i), queryValue)
 
 			if err != nil {
 				err := errors.
@@ -46,7 +46,7 @@ func ValidateParams[DTO any](next http.Handler) http.Handler {
 
 		validate := validator.New()
 
-		err := validate.Struct(params)
+		err := validate.Struct(query)
 
 		if err != nil {
 			err := errors.
@@ -57,7 +57,7 @@ func ValidateParams[DTO any](next http.Handler) http.Handler {
 		}
 
 		ctx := r.Context()
-		ctx = context.WithValue(ctx, static.ContextParamsKey, params)
+		ctx = context.WithValue(ctx, static.ContextQueryKey, query)
 
 		next.ServeHTTP(w, r.WithContext(ctx))
 	})

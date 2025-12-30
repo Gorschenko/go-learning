@@ -1,6 +1,6 @@
 ### ПО:
 
-- ValidateQueryMiddleware
+- + ValidateQueryMiddleware
 - + ValidateParamsMiddleware
 - + ValidateBodyMiddleware
 - + CorrelationIdMiddleware
@@ -21,4 +21,8 @@
 
 ### Скрипты:
 - + Скрипт для предзаполнения БД для тестирования и т.д.
+
+### Бизнес-логика:
+- Разработать модуль Users (4 запроса).
+- Разработать модуль Cars (4 запроса).
 
