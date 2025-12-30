@@ -45,7 +45,11 @@ func GetApp(configPath string) (http.Handler, *configs.Config) {
 		AuthService: authService,
 	})
 
-	handler := middlewares.CorrelationIdMiddleware(middlewares.LogsMiddleware(middlewares.TimeoutMiddleware(5 * time.Second)(router)))
+	middlewaresStack := middlewares.CombainMiddlewares(
+		middlewares.CorrelationIdMiddleware,
+		middlewares.LogsMiddleware,
+		middlewares.TimeoutMiddleware(5*time.Second),
+	)
 
-	return handler, config
+	return middlewaresStack(router), config
 }
