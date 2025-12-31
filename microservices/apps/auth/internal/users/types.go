@@ -15,3 +15,8 @@ type UsersServiceDependencies struct {
 type UsersService struct {
 	UsersRepository *UsersRepository
 }
+
+type FindOneUserFilters struct {
+	UserID int
+	Email  string
+}

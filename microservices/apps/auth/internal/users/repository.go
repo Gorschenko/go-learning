@@ -43,3 +43,26 @@ func (r *UsersRepository) FindByEmail(email string) (*database.User, error) {
 
 	return &user, nil
 }
+
+func (r *UsersRepository) FindOne(filters FindOneUserFilters) (*database.User, error) {
+	var user database.User
+
+	query := r.Database.DB.
+		Model(&database.User{})
+
+	if filters.Email != "" {
+		query = query.Where("email = ?", filters.Email)
+	}
+
+	if filters.UserID != 0 {
+		query = query.Where("user_id = ?", filters.UserID)
+	}
+
+	result := query.First(&user)
+
+	if result.Error != nil {
+		return nil, result.Error
+	}
+
+	return &user, nil
+}
