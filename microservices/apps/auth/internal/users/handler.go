@@ -32,11 +32,7 @@ func (h *UsersHandler) GetOne() http.HandlerFunc {
 		user, err := h.UsersService.GetOne(&filters)
 
 		if err != nil {
-			e := api.
-				NewInternalError(api.CodeInternalServerError).
-				WithMessage(err.Error())
-
-			api.SendJSONError(w, e)
+			api.SendJSONErrorV2(w, err)
 			return
 		}
 

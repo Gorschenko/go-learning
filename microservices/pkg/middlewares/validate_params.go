@@ -4,7 +4,6 @@ import (
 	"context"
 	"net/http"
 	"pkg/api"
-	"pkg/errors"
 	"pkg/static"
 	"reflect"
 	"strings"
@@ -36,8 +35,8 @@ func ValidateParams[DTO any](next http.Handler) http.Handler {
 			err := setFieldFromString(v.Field(i), paramValue)
 
 			if err != nil {
-				err := errors.
-					NewInternalError(errors.CodeBadRequest).
+				err := api.
+					NewInternalError(api.CodeBadRequest).
 					WithMessage(err.Error())
 				api.SendJSONError(w, err)
 				return
@@ -49,8 +48,8 @@ func ValidateParams[DTO any](next http.Handler) http.Handler {
 		err := validate.Struct(params)
 
 		if err != nil {
-			err := errors.
-				NewInternalError(errors.CodeBadRequest).
+			err := api.
+				NewInternalError(api.CodeBadRequest).
 				WithMessage(err.Error())
 			api.SendJSONError(w, err)
 			return

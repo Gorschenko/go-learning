@@ -1,23 +1,27 @@
-package errors
+package api
 
 import "net/http"
 
 type InternalError struct {
-	Code    ErrorCode `json:"code"`
-	Status  int       `json:"status"`
-	Message string    `json:"message"`
+	Code    string `json:"code"`
+	Status  int    `json:"status"`
+	Message string `json:"message"`
 }
 
-func NewInternalError(code ErrorCode) *InternalError {
+func NewInternalError(code string) *InternalError {
 	status, ok := codeToStatus[code]
+	message := ""
 
 	if !ok {
 		status = http.StatusInternalServerError
+		code = CodeInternalServerError
+		message = code
 	}
 
 	return &InternalError{
-		Code:   code,
-		Status: status,
+		Code:    code,
+		Status:  status,
+		Message: message,
 	}
 }
 

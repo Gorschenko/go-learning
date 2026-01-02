@@ -15,9 +15,13 @@ func NewUsersService(dependencies *UsersServiceDependencies) *UsersService {
 func (s *UsersService) GetOne(filters *GetOneUserFilters) (*database.User, error) {
 	user, err := s.UsersRepository.GetOne(filters)
 
-	if user == nil {
-		return nil, errors.New(string(api.CodeNotFound))
+	if err != nil {
+		return nil, err
 	}
 
-	return user, err
+	if user == nil {
+		return nil, errors.New(api.CodeNotFound)
+	}
+
+	return user, nil
 }
