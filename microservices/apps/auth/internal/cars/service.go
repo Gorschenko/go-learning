@@ -6,7 +6,3 @@ func NewCarsService(dependencies *CarsServiceDependencies) *CarsService {
 		UsersRepository: dependencies.UsersRepository,
 	}
 }
-
-// func (s *CarsService) AddCar(car *database.Car) *database.Car {
-// 	existedUser, _ := s.UsersRepository.FindByEmail()
-// }

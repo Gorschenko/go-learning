@@ -1,6 +1,7 @@
 package auth
 
 import (
+	"auth/internal/users"
 	"errors"
 	"pkg/database"
 	"pkg/jwt"
@@ -15,7 +16,10 @@ func NewAuthService(dependencies *AuthServiceDependencies) *AuthService {
 }
 
 func (s *AuthService) RegisterUser(user *database.User) (*jwt.JWTToken, error) {
-	existedUser, _ := s.UsersRespository.FindByEmail(user.Email)
+	filters := users.GetOneUserFilters{
+		Email: user.Email,
+	}
+	existedUser, _ := s.UsersRespository.GetOne(&filters)
 
 	if existedUser != nil {
 		return nil, errors.New(static.ErrorUserAlreadyExists)
@@ -40,7 +44,10 @@ func (s *AuthService) RegisterUser(user *database.User) (*jwt.JWTToken, error) {
 }
 
 func (s *AuthService) LoginUser(email, password string) (*jwt.JWTToken, error) {
-	existedUser, err := s.UsersRespository.FindByEmail(email)
+	filters := users.GetOneUserFilters{
+		Email: email,
+	}
+	existedUser, err := s.UsersRespository.GetOne(&filters)
 
 	if err != nil {
 		return nil, errors.New(static.ErrorUserNotFound)
