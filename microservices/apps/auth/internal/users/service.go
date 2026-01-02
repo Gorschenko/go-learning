@@ -2,8 +2,8 @@ package users
 
 import (
 	"errors"
+	"pkg/api"
 	"pkg/database"
-	pkg_errors "pkg/errors"
 )
 
 func NewUsersService(dependencies *UsersServiceDependencies) *UsersService {
@@ -16,7 +16,7 @@ func (s *UsersService) GetOne(filters *GetOneUserFilters) (*database.User, error
 	user, err := s.UsersRepository.GetOne(filters)
 
 	if user == nil {
-		return nil, errors.New(string(pkg_errors.CodeNotFound))
+		return nil, errors.New(string(api.CodeNotFound))
 	}
 
 	return user, err

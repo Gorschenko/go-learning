@@ -4,7 +4,6 @@ import (
 	"net/http"
 	"pkg/api"
 	users_api "pkg/api/users"
-	pkg_errors "pkg/errors"
 	"pkg/middlewares"
 	"pkg/static"
 )
@@ -33,8 +32,8 @@ func (h *UsersHandler) GetOne() http.HandlerFunc {
 		user, err := h.UsersService.GetOne(&filters)
 
 		if err != nil {
-			e := pkg_errors.
-				NewInternalError(pkg_errors.CodeInternalServerError).
+			e := api.
+				NewInternalError(api.CodeInternalServerError).
 				WithMessage(err.Error())
 
 			api.SendJSONError(w, e)
