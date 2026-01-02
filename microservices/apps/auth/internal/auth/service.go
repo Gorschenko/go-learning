@@ -50,6 +50,10 @@ func (s *AuthService) LoginUser(email, password string) (*jwt.JWTToken, error) {
 	existedUser, err := s.UsersRespository.GetOne(&filters)
 
 	if err != nil {
+		return nil, errors.New(static.ErrorInternalServerError)
+	}
+
+	if existedUser == nil {
 		return nil, errors.New(static.ErrorUserNotFound)
 	}
 

@@ -2,7 +2,6 @@ package auth_e2e
 
 import (
 	"auth/internal/app"
-	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"os"
@@ -23,7 +22,6 @@ func TestMain(m *testing.M) {
 }
 
 func setup() {
-	fmt.Println("Setup")
 	app, _ := app.GetApp("../../../../../config.json")
 	testApp = app
 	ts := httptest.NewServer(testApp)
@@ -31,6 +29,5 @@ func setup() {
 }
 
 func teardown() {
-	fmt.Println("Teardown")
 	defer testServer.Close()
 }
