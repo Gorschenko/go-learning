@@ -16,7 +16,7 @@ type UsersService struct {
 	UsersRepository *UsersRepository
 }
 
-type FindOneUserFilters struct {
+type GetOneUserFilters struct {
 	UserID int
 	Email  string
 }

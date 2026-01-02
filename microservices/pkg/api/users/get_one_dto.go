@@ -12,6 +12,6 @@ type GetOneRequestQueryDto struct {
 	Email  string `json:"email"`
 }
 
-type GetOneRequestBodyDto struct {
-	User database.User `json:"user"`
+type GetOneResponseBodyDto struct {
+	User *database.User `json:"user"`
 }

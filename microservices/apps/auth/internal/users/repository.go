@@ -1,8 +1,11 @@
 package users
 
 import (
+	"errors"
 	"log/slog"
 	"pkg/database"
+
+	"gorm.io/gorm"
 )
 
 type UsersRepository struct {
@@ -37,6 +40,10 @@ func (r *UsersRepository) FindByEmail(email string) (*database.User, error) {
 
 	result := r.Database.DB.First(&user, "email = ?", email)
 
+	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
+		return nil, nil
+	}
+
 	if result.Error != nil {
 		return nil, result.Error
 	}
@@ -44,7 +51,7 @@ func (r *UsersRepository) FindByEmail(email string) (*database.User, error) {
 	return &user, nil
 }
 
-func (r *UsersRepository) FindOne(filters FindOneUserFilters) (*database.User, error) {
+func (r *UsersRepository) GetOne(filters *GetOneUserFilters) (*database.User, error) {
 	var user database.User
 
 	query := r.Database.DB.
@@ -59,6 +66,10 @@ func (r *UsersRepository) FindOne(filters FindOneUserFilters) (*database.User, e
 	}
 
 	result := query.First(&user)
+
+	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
+		return nil, nil
+	}
 
 	if result.Error != nil {
 		return nil, result.Error

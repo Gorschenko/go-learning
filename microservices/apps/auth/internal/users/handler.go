@@ -2,8 +2,11 @@ package users
 
 import (
 	"net/http"
+	"pkg/api"
 	users_api "pkg/api/users"
+	pkg_errors "pkg/errors"
 	"pkg/middlewares"
+	"pkg/static"
 )
 
 func NewUsersHandler(router *http.ServeMux, dependencies *UsersHandlerDependencies) {
@@ -14,10 +17,34 @@ func NewUsersHandler(router *http.ServeMux, dependencies *UsersHandlerDependenci
 	getOneURL := users_api.GetOneMethod + " " + users_api.GetOnePath
 	router.Handle(
 		getOneURL,
-		middlewares.ValidateBody[users_api.GetOneRequestQueryDto](handler.GetOne()),
+		middlewares.ValidateQuery[users_api.GetOneRequestQueryDto](handler.GetOne()),
 	)
 }
 
 func (h *UsersHandler) GetOne() http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {}
+	return func(w http.ResponseWriter, r *http.Request) {
+		body, _ := r.Context().Value(static.ContextQueryKey).(users_api.GetOneRequestQueryDto)
+
+		filters := GetOneUserFilters{
+			UserID: body.UserID,
+			Email:  body.Email,
+		}
+
+		user, err := h.UsersService.GetOne(&filters)
+
+		if err != nil {
+			e := pkg_errors.
+				NewInternalError(pkg_errors.CodeInternalServerError).
+				WithMessage(err.Error())
+
+			api.SendJSONError(w, e)
+			return
+		}
+
+		response := users_api.GetOneResponseBodyDto{
+			User: user,
+		}
+
+		api.SendJSON(w, response, http.StatusOK)
+	}
 }
