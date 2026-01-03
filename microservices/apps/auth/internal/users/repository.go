@@ -45,8 +45,8 @@ func (r *UsersRepository) GetOne(filters *GetOneUserFilters) (*database.User, er
 		query = query.Where("email = ?", filters.Email)
 	}
 
-	if filters.UserID != 0 {
-		query = query.Where("user_id = ?", filters.UserID)
+	if filters.ID != 0 {
+		query = query.Where("id = ?", filters.ID)
 	}
 
 	result := query.First(&user)

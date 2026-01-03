@@ -22,7 +22,7 @@ func TestGetOneUser(t *testing.T) {
 		t.Run(strconv.Itoa(http.StatusNotFound), func(t *testing.T) {
 
 			requestQuery := users_api.GetOneRequestQueryDto{
-				UserID: gofakeit.Int(),
+				ID: gofakeit.Int(),
 			}
 			queryValues, _ := query.Values(requestQuery)
 			URL := testServer.URL + users_api.GetOnePath

@@ -17,6 +17,6 @@ type UsersService struct {
 }
 
 type GetOneUserFilters struct {
-	UserID int
-	Email  string
+	ID    int
+	Email string
 }

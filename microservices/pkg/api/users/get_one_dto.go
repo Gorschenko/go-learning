@@ -10,8 +10,8 @@ const (
 )
 
 type GetOneRequestQueryDto struct {
-	UserID int    `query:"userID" url:"userID"`
-	Email  string `query:"email" url:"email"`
+	ID    int    `query:"ID" url:"ID"`
+	Email string `query:"email" url:"email"`
 }
 
 type GetOneResponseBodyDto struct {

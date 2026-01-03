@@ -1,7 +1,6 @@
 package users
 
 import (
-	"fmt"
 	"net/http"
 	"pkg/api"
 	users_api "pkg/api/users"
@@ -26,11 +25,9 @@ func (h *UsersHandler) GetOne() http.HandlerFunc {
 		body, _ := r.Context().Value(static.ContextQueryKey).(users_api.GetOneRequestQueryDto)
 
 		filters := GetOneUserFilters{
-			UserID: body.UserID,
-			Email:  body.Email,
+			ID:    body.ID,
+			Email: body.Email,
 		}
-
-		fmt.Printf("Filters %+v\n", filters)
 
 		user, err := h.UsersService.GetOne(&filters)
 
