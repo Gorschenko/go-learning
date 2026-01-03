@@ -17,34 +17,29 @@ func TestLoginUser(t *testing.T) {
 
 	t.Run("Positive", func(t *testing.T) {
 		t.Run(strconv.Itoa(http.StatusOK), func(t *testing.T) {
-			requestRegisterDTO := auth_api.RegisterRequestBodyDto{
+			URL := testServer.URL + auth_api.RegisterPath
+			requestRegisterBody := auth_api.RegisterRequestBodyDto{
 				Email:    gofakeit.Email(),
 				Password: gofakeit.Password(false, false, true, false, false, 5),
 				Name:     gofakeit.Name(),
 			}
-			requestRegisterBody, _ := json.Marshal(&requestRegisterDTO)
-
-			URL := testServer.URL + auth_api.RegisterPath
-			responseRegister, _ := http.Post(URL, "application/json", bytes.NewReader(requestRegisterBody))
+			requestRegisterBodyString, _ := json.Marshal(&requestRegisterBody)
+			responseRegister, _ := http.Post(URL, "application/json", bytes.NewReader(requestRegisterBodyString))
 
 			assert.NotNil(t, responseRegister)
 
 			requestLoginBody, _ := json.Marshal(&auth_api.LoginRequestBodyDto{
-				Email:    requestRegisterDTO.Email,
-				Password: requestRegisterDTO.Password,
+				Email:    requestRegisterBody.Email,
+				Password: requestRegisterBody.Password,
 			})
 
 			URL = testServer.URL + auth_api.LoginPath
-
 			responseLogin, _ := http.Post(URL, "application/json", bytes.NewReader(requestLoginBody))
+			responseBodyLoginString, _ := io.ReadAll(responseLogin.Body)
+			var responseBody auth_api.RegisterResponseBodyDto
+			json.Unmarshal(responseBodyLoginString, &responseBody)
 
 			assert.Equal(t, http.StatusOK, responseLogin.StatusCode)
-
-			responseBodyString, _ := io.ReadAll(responseLogin.Body)
-
-			var responseBody auth_api.RegisterResponseBodyDto
-			json.Unmarshal(responseBodyString, &responseBody)
-
 			assert.NotEmpty(t, responseBody.Token)
 			assert.False(t, responseBody.ExpirationTime.IsZero())
 		})
@@ -52,12 +47,11 @@ func TestLoginUser(t *testing.T) {
 
 	t.Run("Negative", func(t *testing.T) {
 		t.Run(strconv.Itoa(http.StatusNotFound), func(t *testing.T) {
+			URL := testServer.URL + auth_api.LoginPath
 			requestBody, _ := json.Marshal(&auth_api.LoginRequestBodyDto{
 				Email:    gofakeit.Email(),
 				Password: gofakeit.Password(false, false, true, false, false, 5),
 			})
-
-			URL := testServer.URL + auth_api.LoginPath
 			response, _ := http.Post(URL, "application/json", bytes.NewReader(requestBody))
 
 			assert.Equal(t, http.StatusNotFound, response.StatusCode)

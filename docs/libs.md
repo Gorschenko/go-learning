@@ -52,3 +52,7 @@
 13. HTTP Requests:
     -   https://github.com/go-resty/resty
     -   go get -u github.com/go-resty/resty/v2
+
+14. Преобразование класса в URL Query:
+    - https://github.com/google/go-querystring
+    - go get github.com/google/go-querystring/query

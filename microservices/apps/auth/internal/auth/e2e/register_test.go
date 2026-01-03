@@ -17,19 +17,17 @@ func TestRegisterUser(t *testing.T) {
 
 	t.Run("Positive", func(t *testing.T) {
 		t.Run(strconv.Itoa(http.StatusOK), func(t *testing.T) {
-			requestBody, _ := json.Marshal(&auth_api.RegisterRequestBodyDto{
+			URL := testServer.URL + auth_api.RegisterPath
+			requestBodyString, _ := json.Marshal(&auth_api.RegisterRequestBodyDto{
 				Email:    gofakeit.Email(),
 				Password: gofakeit.Password(false, false, true, false, false, 5),
 				Name:     gofakeit.Name(),
 			})
-
-			URL := testServer.URL + auth_api.RegisterPath
-			response, _ := http.Post(URL, "application/json", bytes.NewReader(requestBody))
+			response, _ := http.Post(URL, "application/json", bytes.NewReader(requestBodyString))
 
 			assert.Equal(t, http.StatusOK, response.StatusCode)
 
 			responseBodyString, _ := io.ReadAll(response.Body)
-
 			var responseBody auth_api.RegisterResponseBodyDto
 			json.Unmarshal(responseBodyString, &responseBody)
 
@@ -40,13 +38,12 @@ func TestRegisterUser(t *testing.T) {
 
 	t.Run("Negative", func(t *testing.T) {
 		t.Run(strconv.Itoa(http.StatusBadRequest), func(t *testing.T) {
-			requestBody, _ := json.Marshal(&auth_api.RegisterRequestBodyDto{
+			URL := testServer.URL + auth_api.RegisterPath
+			requestBodyString, _ := json.Marshal(&auth_api.RegisterRequestBodyDto{
 				Password: gofakeit.Password(false, false, true, false, false, 5),
 				Name:     gofakeit.Name(),
 			})
-
-			URL := testServer.URL + auth_api.RegisterPath
-			response, _ := http.Post(URL, "application/json", bytes.NewReader(requestBody))
+			response, _ := http.Post(URL, "application/json", bytes.NewReader(requestBodyString))
 
 			assert.Equal(t, http.StatusBadRequest, response.StatusCode)
 		})

@@ -13,9 +13,9 @@ func NewInternalError(code string) *InternalError {
 	message := ""
 
 	if !ok {
+		message = code
 		status = http.StatusInternalServerError
 		code = CodeInternalServerError
-		message = code
 	}
 
 	return &InternalError{

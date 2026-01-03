@@ -1,6 +1,8 @@
 package users_api
 
-import "pkg/database"
+import (
+	"pkg/database"
+)
 
 const (
 	GetOnePath   = "/users"
@@ -8,8 +10,8 @@ const (
 )
 
 type GetOneRequestQueryDto struct {
-	UserID int    `json:"userID"`
-	Email  string `json:"email"`
+	UserID int    `query:"userID" url:"userID"`
+	Email  string `query:"email" url:"email"`
 }
 
 type GetOneResponseBodyDto struct {
