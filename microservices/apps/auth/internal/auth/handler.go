@@ -43,13 +43,8 @@ func (h *AuthHandler) RegisterUser() http.HandlerFunc {
 
 		token, err := h.AuthService.RegisterUser(&user)
 
-		if err != nil && err.Error() == static.ErrorUserAlreadyExists {
-			http.Error(w, err.Error(), http.StatusConflict)
-			return
-		}
-
 		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
+			api.SendJSONError(w, err)
 			return
 		}
 
@@ -68,18 +63,8 @@ func (h *AuthHandler) LoginUser() http.HandlerFunc {
 
 		token, err := h.AuthService.LoginUser(body.Email, body.Password)
 
-		if err != nil && err.Error() == static.ErrorUserNotFound {
-			http.Error(w, err.Error(), http.StatusNotFound)
-			return
-		}
-
-		if err != nil && err.Error() == static.ErrorInvalidPassowrd {
-			http.Error(w, err.Error(), http.StatusUnauthorized)
-			return
-		}
-
 		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
+			api.SendJSONError(w, err)
 			return
 		}
 

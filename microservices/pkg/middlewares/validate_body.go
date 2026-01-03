@@ -3,6 +3,7 @@ package middlewares
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"net/http"
 	"pkg/api"
 	"pkg/static"
@@ -16,10 +17,7 @@ func ValidateBody[DTO any](next http.Handler) http.Handler {
 
 		err := json.NewDecoder(r.Body).Decode(&body)
 		if err != nil {
-			err := api.
-				NewInternalError(api.CodeBadRequest).
-				WithMessage(err.Error())
-			api.SendJSONError(w, err)
+			api.SendJSONError(w, errors.New(api.CodeBadRequest))
 			return
 		}
 
@@ -27,10 +25,7 @@ func ValidateBody[DTO any](next http.Handler) http.Handler {
 		err = validate.Struct(body)
 
 		if err != nil {
-			err := api.
-				NewInternalError(api.CodeBadRequest).
-				WithMessage(err.Error())
-			api.SendJSONError(w, err)
+			api.SendJSONError(w, errors.New(api.CodeBadRequest))
 			return
 		}
 

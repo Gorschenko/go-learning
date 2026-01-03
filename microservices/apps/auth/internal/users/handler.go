@@ -32,7 +32,7 @@ func (h *UsersHandler) GetOne() http.HandlerFunc {
 		user, err := h.UsersService.GetOne(&filters)
 
 		if err != nil {
-			api.SendJSONErrorV2(w, err)
+			api.SendJSONError(w, err)
 			return
 		}
 

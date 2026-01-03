@@ -3,9 +3,9 @@ package auth
 import (
 	"auth/internal/users"
 	"errors"
+	"pkg/api"
 	"pkg/database"
 	"pkg/jwt"
-	"pkg/static"
 )
 
 func NewAuthService(dependencies *AuthServiceDependencies) *AuthService {
@@ -22,13 +22,13 @@ func (s *AuthService) RegisterUser(user *database.User) (*jwt.JWTToken, error) {
 	existedUser, _ := s.UsersRespository.GetOne(&filters)
 
 	if existedUser != nil {
-		return nil, errors.New(static.ErrorUserAlreadyExists)
+		return nil, errors.New(api.CodeAlreadyExists)
 	}
 
 	createdUser, err := s.UsersRespository.Create(user)
 
 	if err != nil {
-		return nil, errors.New(static.ErrorInternalServerError)
+		return nil, err
 	}
 
 	payload := jwt.JWTDataToCreate{
@@ -47,18 +47,19 @@ func (s *AuthService) LoginUser(email, password string) (*jwt.JWTToken, error) {
 	filters := users.GetOneUserFilters{
 		Email: email,
 	}
+
 	existedUser, err := s.UsersRespository.GetOne(&filters)
 
 	if err != nil {
-		return nil, errors.New(static.ErrorInternalServerError)
+		return nil, err
 	}
 
 	if existedUser == nil {
-		return nil, errors.New(static.ErrorUserNotFound)
+		return nil, errors.New(api.CodeNotFound)
 	}
 
 	if existedUser.Password != password {
-		return nil, errors.New(static.ErrorInvalidPassowrd)
+		return nil, errors.New(api.CodeUnauthorized)
 	}
 
 	payload := jwt.JWTDataToCreate{

@@ -11,13 +11,7 @@ func SendJSON(w http.ResponseWriter, data any, statusCode int) {
 	json.NewEncoder(w).Encode(data)
 }
 
-func SendJSONError(w http.ResponseWriter, e *InternalError) {
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(e.Status)
-	json.NewEncoder(w).Encode(e)
-}
-
-func SendJSONErrorV2(w http.ResponseWriter, e error) {
+func SendJSONError(w http.ResponseWriter, e error) {
 	w.Header().Set("Content-Type", "application/json")
 	err := NewInternalError(e.Error())
 	w.WriteHeader(err.Status)

@@ -2,7 +2,7 @@ package jwt
 
 import (
 	"errors"
-	"pkg/static"
+	"pkg/api"
 	"strconv"
 	"time"
 
@@ -56,11 +56,11 @@ func (j *JWT) Parse(token string) (*JWTDataToCreate, error) {
 	})
 
 	if err != nil {
-		return nil, errors.New(static.ErrorInvalidToken)
+		return nil, errors.New(api.CodeForbidden)
 	}
 
 	if !t.Valid {
-		return nil, errors.New(static.ErrorInvalidToken)
+		return nil, errors.New(api.CodeForbidden)
 	}
 
 	intUserId, _ := strconv.Atoi(claims.UserID)

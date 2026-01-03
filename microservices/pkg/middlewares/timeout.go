@@ -2,6 +2,7 @@ package middlewares
 
 import (
 	"context"
+	"errors"
 	"net/http"
 	"pkg/api"
 	"pkg/logger"
@@ -35,8 +36,7 @@ func TimeoutMiddleware(timeout time.Duration) func(http.Handler) http.Handler {
 				// Сработал таймаут
 				if ctx.Err() == context.DeadlineExceeded {
 					logger.Warn("TimeoutMiddleware", "Timeout", timeout)
-					internalError := api.NewInternalError(api.CodeRequestTimeout)
-					api.SendJSONError(w, internalError)
+					api.SendJSONError(w, errors.New(api.CodeRequestTimeout))
 					return
 				}
 			}

@@ -2,6 +2,7 @@ package middlewares
 
 import (
 	"context"
+	"errors"
 	"net/http"
 	"pkg/api"
 	"pkg/static"
@@ -35,10 +36,7 @@ func ValidateParams[DTO any](next http.Handler) http.Handler {
 			err := setFieldFromString(v.Field(i), paramValue)
 
 			if err != nil {
-				err := api.
-					NewInternalError(api.CodeBadRequest).
-					WithMessage(err.Error())
-				api.SendJSONError(w, err)
+				api.SendJSONError(w, errors.New(api.CodeBadRequest))
 				return
 			}
 		}
@@ -48,10 +46,7 @@ func ValidateParams[DTO any](next http.Handler) http.Handler {
 		err := validate.Struct(params)
 
 		if err != nil {
-			err := api.
-				NewInternalError(api.CodeBadRequest).
-				WithMessage(err.Error())
-			api.SendJSONError(w, err)
+			api.SendJSONError(w, errors.New(api.CodeBadRequest))
 			return
 		}
 
