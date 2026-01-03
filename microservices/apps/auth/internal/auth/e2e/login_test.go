@@ -13,7 +13,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestLoginUserNegative(t *testing.T) {
+func TestLoginUser(t *testing.T) {
 
 	t.Run("Positive", func(t *testing.T) {
 		t.Run(strconv.Itoa(http.StatusOK), func(t *testing.T) {
@@ -51,7 +51,7 @@ func TestLoginUserNegative(t *testing.T) {
 	})
 
 	t.Run("Negative", func(t *testing.T) {
-		t.Run(strconv.Itoa(http.StatusBadRequest), func(t *testing.T) {
+		t.Run(strconv.Itoa(http.StatusNotFound), func(t *testing.T) {
 			requestBody, _ := json.Marshal(&auth_api.LoginRequestBodyDto{
 				Email:    gofakeit.Email(),
 				Password: gofakeit.Password(false, false, true, false, false, 5),
