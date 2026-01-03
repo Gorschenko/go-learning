@@ -12,7 +12,7 @@ func NewUsersService(dependencies *UsersServiceDependencies) *UsersService {
 	}
 }
 
-func (s *UsersService) GetOne(filters *GetOneUserFilters) (*database.User, error) {
+func (s *UsersService) GetOne(filters *UserFilters) (*database.User, error) {
 	user, err := s.UsersRepository.GetOne(filters)
 
 	if err != nil {
@@ -24,4 +24,16 @@ func (s *UsersService) GetOne(filters *GetOneUserFilters) (*database.User, error
 	}
 
 	return user, nil
+}
+
+func (s *UsersService) DeleteOne(filters *UserFilters) (int, error) {
+	_, err := s.GetOne(filters)
+
+	if err != nil {
+		return 0, err
+	}
+
+	count, err := s.UsersRepository.DeleteOne(filters)
+
+	return count, err
 }

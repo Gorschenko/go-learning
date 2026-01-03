@@ -35,7 +35,7 @@ func (r *UsersRepository) Create(user *database.User) (*database.User, error) {
 	return user, nil
 }
 
-func (r *UsersRepository) GetOne(filters *GetOneUserFilters) (*database.User, error) {
+func (r *UsersRepository) GetOne(filters *UserFilters) (*database.User, error) {
 	var user database.User
 
 	query := r.Database.DB.
@@ -60,4 +60,25 @@ func (r *UsersRepository) GetOne(filters *GetOneUserFilters) (*database.User, er
 	}
 
 	return &user, nil
+}
+
+func (r *UsersRepository) DeleteOne(filters *UserFilters) (int, error) {
+	query := r.Database.DB.
+		Model(&database.User{})
+
+	if filters.Email != "" {
+		query = query.Where("email = ?", filters.Email)
+	}
+
+	if filters.ID != 0 {
+		query = query.Where("id = ?", filters.ID)
+	}
+
+	result := query.Limit(1).Delete(&database.User{})
+
+	if result.Error != nil {
+		return 0, result.Error
+	}
+
+	return int(result.RowsAffected), nil
 }

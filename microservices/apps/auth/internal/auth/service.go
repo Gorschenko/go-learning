@@ -16,7 +16,7 @@ func NewAuthService(dependencies *AuthServiceDependencies) *AuthService {
 }
 
 func (s *AuthService) RegisterUser(user *database.User) (*jwt.JWTToken, error) {
-	filters := users.GetOneUserFilters{
+	filters := users.UserFilters{
 		Email: user.Email,
 	}
 	existedUser, _ := s.UsersRespository.GetOne(&filters)
@@ -44,7 +44,7 @@ func (s *AuthService) RegisterUser(user *database.User) (*jwt.JWTToken, error) {
 }
 
 func (s *AuthService) LoginUser(email, password string) (*jwt.JWTToken, error) {
-	filters := users.GetOneUserFilters{
+	filters := users.UserFilters{
 		Email: email,
 	}
 
