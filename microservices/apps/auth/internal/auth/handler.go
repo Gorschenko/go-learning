@@ -41,7 +41,7 @@ func (h *AuthHandler) RegisterUser() http.HandlerFunc {
 			Name:     body.Name,
 		}
 
-		token, err := h.AuthService.RegisterUser(&user)
+		createdUser, err := h.AuthService.RegisterUser(&user)
 
 		if err != nil {
 			api.SendJSONError(w, err)
@@ -49,8 +49,7 @@ func (h *AuthHandler) RegisterUser() http.HandlerFunc {
 		}
 
 		response := auth_api.RegisterResponseBodyDto{
-			Token:          token.Token,
-			ExpirationTime: token.ExpirationTime,
+			User: createdUser,
 		}
 
 		api.SendJSON(w, response, http.StatusOK)

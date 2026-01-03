@@ -15,7 +15,7 @@ func NewAuthService(dependencies *AuthServiceDependencies) *AuthService {
 	}
 }
 
-func (s *AuthService) RegisterUser(user *database.User) (*jwt.JWTToken, error) {
+func (s *AuthService) RegisterUser(user *database.User) (*database.User, error) {
 	filters := users.UserFilters{
 		Email: user.Email,
 	}
@@ -27,20 +27,7 @@ func (s *AuthService) RegisterUser(user *database.User) (*jwt.JWTToken, error) {
 
 	createdUser, err := s.UsersRespository.Create(user)
 
-	if err != nil {
-		return nil, err
-	}
-
-	payload := jwt.JWTDataToCreate{
-		UserID: int(createdUser.ID),
-		Email:  createdUser.Email,
-	}
-
-	token := jwt.NewJWT(jwt.JWTDependencies{
-		Config: s.Config,
-	}).Create(payload)
-
-	return token, nil
+	return createdUser, err
 }
 
 func (s *AuthService) LoginUser(email, password string) (*jwt.JWTToken, error) {
