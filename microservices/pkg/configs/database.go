@@ -7,11 +7,3 @@ type DatabaseConfig struct {
 	Password    string `json:"password"`
 	Automigrate bool   `json:"automigrate"`
 }
-
-type UsersInitDatabaseConfig struct {
-	Count int `json:"count"`
-}
-
-type InitDatabaseConfig struct {
-	Users UsersInitDatabaseConfig `json:"users"`
-}

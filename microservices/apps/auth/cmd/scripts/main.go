@@ -32,7 +32,7 @@ func main() {
 		HttpApi: httpApi,
 	})
 
-	usersCount := config.InitDatabase.Users.Count
+	usersCount := config.Scripts.CreateUsers.Count
 	status := &OperationStatus{
 		total:    usersCount,
 		fulfiled: 0,

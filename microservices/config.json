@@ -10,10 +10,9 @@
     "password": "admin",
     "automigrate": true
   },
-  "init_database": {
-    "users": {
-      "count": 30
-    }
+  "cache": {
+    "port": 6379,
+    "host": "localhost"
   },
   "software": {
     "api": {
@@ -42,6 +41,11 @@
         "secret": "test-secret",
         "ttl_hours": 1
       }
+    }
+  },
+  "scripts": {
+    "create_users": {
+      "count": 30
     }
   }
 }
