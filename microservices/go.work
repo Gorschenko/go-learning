@@ -2,6 +2,6 @@ go 1.25.1
 
 use (
 	./apps/auth
-	./apps/orders
+	./apps/devices
 	./pkg
 )

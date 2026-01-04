@@ -1,4 +1,4 @@
-module orders
+module devices
 
 go 1.25.1
 

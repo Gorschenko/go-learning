@@ -10,6 +10,7 @@ services:
       - 5432:5432
     volumes:
       - ../docker-volumes/postgres:/data/postgres
+    restart: always
     networks:
       - go
   redis:
@@ -18,6 +19,16 @@ services:
       - 6379:6379
     volumes:
       - ../docker-volumes/redis:/data
+    restart: always
+    networks:
+      - go
+  mosquitto:
+    image: eclipse-mosquitto:latest
+    ports:
+      - 1883:1883
+    restart: always
+    networks:
+      - go
 networks:
   go:
     name: go

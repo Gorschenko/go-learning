@@ -10,6 +10,7 @@ type Config struct {
 	Other    OtherConfig    `json:"other"`
 	Database DatabaseConfig `json:"database"`
 	Cache    CacheConfig    `json:"cache"`
+	MQTT     ServiceConfig  `json:"mqtt"`
 	Software SoftwareConfig `json:"software"`
 	Services ServicesConfig `json:"services"`
 	Security SecurityConfig `json:"security"`

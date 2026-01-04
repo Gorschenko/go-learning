@@ -1,8 +1,8 @@
 package configs
 
 type ServicesConfig struct {
-	Auth   ServiceConfig `json:"auth"`
-	Orders ServiceConfig `json:"orders"`
+	Auth    ServiceConfig `json:"auth"`
+	Devices ServiceConfig `json:"devices"`
 }
 
 type ServiceConfig struct {
