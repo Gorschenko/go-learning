@@ -5,6 +5,7 @@ import (
 	"auth/internal/cars"
 	"auth/internal/users"
 	"net/http"
+	"pkg/cache"
 	"pkg/configs"
 	"pkg/database"
 	"pkg/logger"
@@ -29,7 +30,18 @@ func GetApp(configPath string) (http.Handler, *configs.Config) {
 
 	router := http.NewServeMux()
 
-	// repositories
+	cacheRepository, err := cache.NewCacheRepository(config)
+
+	if err != nil {
+		panic(err)
+	}
+
+	// cache repositories
+	cacheUsersRepository := cache.NewCacheUsersRepository(&cache.CacheUsersRepositoryDependencies{
+		CacheRepository: cacheRepository,
+	})
+
+	// db repositories
 	usersRepository := users.NewUsersRepository(&database.RepositoryDependencies{
 		Database: db,
 		Config:   config,
@@ -45,7 +57,8 @@ func GetApp(configPath string) (http.Handler, *configs.Config) {
 		UsersRepository: usersRepository,
 	})
 	usersService := users.NewUsersService(&users.UsersServiceDependencies{
-		UsersRepository: usersRepository,
+		UsersRepository:      usersRepository,
+		CacheUsersRepository: cacheUsersRepository,
 	})
 	carsService := cars.NewCarsService(&cars.CarsServiceDependencies{
 		CarsRepository:  carsRepository,

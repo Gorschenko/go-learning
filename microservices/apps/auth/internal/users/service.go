@@ -8,11 +8,20 @@ import (
 
 func NewUsersService(dependencies *UsersServiceDependencies) *UsersService {
 	return &UsersService{
-		UsersRepository: dependencies.UsersRepository,
+		UsersRepository:      dependencies.UsersRepository,
+		CacheUsersRepository: dependencies.CacheUsersRepository,
 	}
 }
 
 func (s *UsersService) GetOne(filters *UserFilters) (*database.User, error) {
+	if filters.ID != 0 {
+		cacheUser, _ := s.CacheUsersRepository.GetUser(filters.ID)
+
+		if cacheUser != nil {
+			return cacheUser, nil
+		}
+	}
+
 	user, err := s.UsersRepository.GetOne(filters)
 
 	if err != nil {
@@ -22,6 +31,8 @@ func (s *UsersService) GetOne(filters *UserFilters) (*database.User, error) {
 	if user == nil {
 		return nil, errors.New(api.CodeNotFound)
 	}
+
+	s.CacheUsersRepository.SetUser(user)
 
 	return user, nil
 }
