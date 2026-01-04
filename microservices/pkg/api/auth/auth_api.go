@@ -37,7 +37,6 @@ func (api *AuthApi) RegisterUser(body *database.User) (*RegisterResponseBodyDto,
 
 	response, err := api.HttpApi.Client.
 		R().
-		SetHeader("Content-Type", "application/json").
 		SetBody(body).
 		SetResult(&data).
 		Execute(RegisterMethod, url)

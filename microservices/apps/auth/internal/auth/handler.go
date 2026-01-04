@@ -31,10 +31,6 @@ func (h *AuthHandler) RegisterUser() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		body, _ := r.Context().Value(static.ContextBodyKey).(auth_api.RegisterRequestBodyDto)
 
-		// fmt.Printf("Body: %+v\n", body)
-		// params, _ := r.Context().Value(static.ContextParamsKey).(UserPathParams)
-		// fmt.Printf("Params: %+v\n", params)
-
 		user := database.User{
 			Email:    body.Email,
 			Password: body.Password,

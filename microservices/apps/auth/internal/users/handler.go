@@ -63,6 +63,7 @@ func (h *UsersHandler) DeleteOne() http.HandlerFunc {
 
 		if err != nil {
 			api.SendJSONError(w, err)
+			return
 		}
 
 		response := users_api.DeleteOneResponseBodyDto{
