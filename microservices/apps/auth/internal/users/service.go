@@ -38,6 +38,18 @@ func (s *UsersService) GetOne(filters *users_api.UserFiltersDto) (*database.User
 	return user, nil
 }
 
+func (s *UsersService) UpdateOne(filters *users_api.UserFiltersDto, update *users_api.UserUpdateDto) (int, error) {
+	_, err := s.GetOne(filters)
+
+	if err != nil {
+		return 0, err
+	}
+
+	count, err := s.UsersRepository.UpdateOne(filters, update)
+
+	return int(count), err
+}
+
 func (s *UsersService) DeleteOne(filters *users_api.UserFiltersDto) (int, error) {
 	_, err := s.GetOne(filters)
 
@@ -47,5 +59,5 @@ func (s *UsersService) DeleteOne(filters *users_api.UserFiltersDto) (int, error)
 
 	count, err := s.UsersRepository.DeleteOne(filters)
 
-	return count, err
+	return int(count), err
 }

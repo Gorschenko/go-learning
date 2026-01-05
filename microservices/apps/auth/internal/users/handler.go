@@ -30,12 +30,7 @@ func (h *UsersHandler) GetOne() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		body, _ := r.Context().Value(static.ContextQueryKey).(users_api.UserFiltersDto)
 
-		filters := users_api.UserFiltersDto{
-			ID:    body.ID,
-			Email: body.Email,
-		}
-
-		user, err := h.UsersService.GetOne(&filters)
+		user, err := h.UsersService.GetOne(&body)
 
 		if err != nil {
 			api.SendJSONError(w, err)
@@ -50,16 +45,30 @@ func (h *UsersHandler) GetOne() http.HandlerFunc {
 	}
 }
 
+func (h *UsersHandler) UpdateOne() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		body, _ := r.Context().Value(static.ContextBodyKey).(users_api.UpdateOneRequestBodyDto)
+
+		count, err := h.UsersService.UpdateOne(&body.Filters, &body.Update)
+
+		if err != nil {
+			api.SendJSONError(w, err)
+			return
+		}
+
+		response := users_api.UpdateOneResponseBodyDto{
+			Count: count,
+		}
+
+		api.SendJSON(w, response, http.StatusOK)
+	}
+}
+
 func (h *UsersHandler) DeleteOne() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		body, _ := r.Context().Value(static.ContextBodyKey).(users_api.UserFiltersDto)
 
-		filters := users_api.UserFiltersDto{
-			ID:    body.ID,
-			Email: body.Email,
-		}
-
-		count, err := h.UsersService.DeleteOne(&filters)
+		count, err := h.UsersService.DeleteOne(&body)
 
 		if err != nil {
 			api.SendJSONError(w, err)
