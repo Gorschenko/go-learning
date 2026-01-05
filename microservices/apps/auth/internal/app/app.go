@@ -2,7 +2,6 @@ package app
 
 import (
 	"auth/internal/auth"
-	"auth/internal/cars"
 	"auth/internal/users"
 	"net/http"
 	"pkg/cache"
@@ -44,10 +43,6 @@ func GetApp(configPath string) (http.Handler, *configs.Config) {
 		Database: db,
 		Config:   config,
 	})
-	carsRepository := cars.NewCarsRepository(&database.RepositoryDependencies{
-		Database: db,
-		Config:   config,
-	})
 
 	// services
 	authService := auth.NewAuthService(&auth.AuthServiceDependencies{
@@ -58,10 +53,6 @@ func GetApp(configPath string) (http.Handler, *configs.Config) {
 		UsersRepository:      usersRepository,
 		CacheUsersRepository: cacheUsersRepository,
 	})
-	carsService := cars.NewCarsService(&cars.CarsServiceDependencies{
-		CarsRepository:  carsRepository,
-		UsersRepository: usersRepository,
-	})
 
 	// handlers
 	auth.NewAuthHandler(router, &auth.AuthHandlerDependencies{
@@ -69,9 +60,6 @@ func GetApp(configPath string) (http.Handler, *configs.Config) {
 	})
 	users.NewUsersHandler(router, &users.UsersHandlerDependencies{
 		UsersService: usersService,
-	})
-	cars.NewCarsHandler(router, &cars.CarsHandlerDependencies{
-		CarsService: carsService,
 	})
 
 	middlewaresStack := middlewares.CombainMiddlewares(
