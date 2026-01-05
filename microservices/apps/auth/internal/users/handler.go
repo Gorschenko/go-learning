@@ -24,6 +24,12 @@ func NewUsersHandler(router *http.ServeMux, dependencies *UsersHandlerDependenci
 		deleteOneURL,
 		middlewares.ValidateBody[users_api.UserFiltersDto](handler.DeleteOne()),
 	)
+
+	updateOneURL := users_api.UpdateOneMethod + " " + users_api.UpdateOnePath
+	router.Handle(
+		updateOneURL,
+		middlewares.ValidateBody[users_api.UpdateOneRequestBodyDto](handler.UpdateOne()),
+	)
 }
 
 func (h *UsersHandler) GetOne() http.HandlerFunc {

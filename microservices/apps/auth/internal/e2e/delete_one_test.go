@@ -19,10 +19,9 @@ func TestDeleteOneUser(t *testing.T) {
 			requestBody := users_api.UserFiltersDto{
 				ID: int(user.ID),
 			}
-
 			URL := testServer.URL + users_api.DeleteOnePath
-			var responseBody users_api.DeleteOneResponseBodyDto
 
+			var responseBody users_api.DeleteOneResponseBodyDto
 			response, _ := resty.
 				New().
 				R().
@@ -40,10 +39,9 @@ func TestDeleteOneUser(t *testing.T) {
 			requestBody := users_api.UserFiltersDto{
 				ID: gofakeit.Int(),
 			}
-
 			URL := testServer.URL + users_api.DeleteOnePath
-			var responseBody users_api.DeleteOneResponseBodyDto
 
+			var responseBody users_api.DeleteOneResponseBodyDto
 			response, _ := resty.
 				New().
 				R().
