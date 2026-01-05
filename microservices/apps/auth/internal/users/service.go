@@ -3,6 +3,7 @@ package users
 import (
 	"errors"
 	"pkg/api"
+	users_api "pkg/api/users"
 	"pkg/database"
 )
 
@@ -13,7 +14,7 @@ func NewUsersService(dependencies *UsersServiceDependencies) *UsersService {
 	}
 }
 
-func (s *UsersService) GetOne(filters *UserFilters) (*database.User, error) {
+func (s *UsersService) GetOne(filters *users_api.UserFiltersDto) (*database.User, error) {
 	if filters.ID != 0 {
 		cacheUser, _ := s.CacheUsersRepository.GetUser(filters.ID)
 
@@ -37,7 +38,7 @@ func (s *UsersService) GetOne(filters *UserFilters) (*database.User, error) {
 	return user, nil
 }
 
-func (s *UsersService) DeleteOne(filters *UserFilters) (int, error) {
+func (s *UsersService) DeleteOne(filters *users_api.UserFiltersDto) (int, error) {
 	_, err := s.GetOne(filters)
 
 	if err != nil {

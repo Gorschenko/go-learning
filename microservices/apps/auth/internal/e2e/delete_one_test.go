@@ -16,7 +16,7 @@ func TestDeleteOneUser(t *testing.T) {
 		t.Run(strconv.Itoa(http.StatusOK), func(t *testing.T) {
 			user := CreateUser()
 
-			requestBody := users_api.DeleteOneRequestBodyDto{
+			requestBody := users_api.UserFiltersDto{
 				ID: int(user.ID),
 			}
 
@@ -37,7 +37,7 @@ func TestDeleteOneUser(t *testing.T) {
 
 	t.Run("Negative", func(t *testing.T) {
 		t.Run(strconv.Itoa(http.StatusNotFound), func(t *testing.T) {
-			requestBody := users_api.DeleteOneRequestBodyDto{
+			requestBody := users_api.UserFiltersDto{
 				ID: gofakeit.Int(),
 			}
 

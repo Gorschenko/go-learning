@@ -1,9 +1,9 @@
 package auth
 
 import (
-	"auth/internal/users"
 	"errors"
 	"pkg/api"
+	users_api "pkg/api/users"
 	"pkg/database"
 	"pkg/jwt"
 )
@@ -16,7 +16,7 @@ func NewAuthService(dependencies *AuthServiceDependencies) *AuthService {
 }
 
 func (s *AuthService) RegisterUser(user *database.User) (*database.User, error) {
-	filters := users.UserFilters{
+	filters := users_api.UserFiltersDto{
 		Email: user.Email,
 	}
 	existedUser, _ := s.UsersRespository.GetOne(&filters)
@@ -31,7 +31,7 @@ func (s *AuthService) RegisterUser(user *database.User) (*database.User, error) 
 }
 
 func (s *AuthService) LoginUser(email, password string) (*jwt.JWTToken, error) {
-	filters := users.UserFilters{
+	filters := users_api.UserFiltersDto{
 		Email: email,
 	}
 

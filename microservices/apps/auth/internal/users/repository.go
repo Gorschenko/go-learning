@@ -3,6 +3,7 @@ package users
 import (
 	"errors"
 	"log/slog"
+	users_api "pkg/api/users"
 	"pkg/database"
 
 	"gorm.io/gorm"
@@ -35,7 +36,11 @@ func (r *UsersRepository) Create(user *database.User) (*database.User, error) {
 	return user, nil
 }
 
-func (r *UsersRepository) GetOne(filters *UserFilters) (*database.User, error) {
+// func (r *UsersRepository) Update(user *database.User) (*database.User, error) {
+
+// }
+
+func (r *UsersRepository) GetOne(filters *users_api.UserFiltersDto) (*database.User, error) {
 	var user database.User
 
 	query := r.Database.DB.
@@ -62,7 +67,7 @@ func (r *UsersRepository) GetOne(filters *UserFilters) (*database.User, error) {
 	return &user, nil
 }
 
-func (r *UsersRepository) DeleteOne(filters *UserFilters) (int, error) {
+func (r *UsersRepository) DeleteOne(filters *users_api.UserFiltersDto) (int, error) {
 	query := r.Database.DB.
 		Model(&database.User{})
 

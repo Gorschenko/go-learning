@@ -19,8 +19,3 @@ type UsersService struct {
 	UsersRepository      *UsersRepository
 	CacheUsersRepository *cache.CacheUsersRepository
 }
-
-type UserFilters struct {
-	ID    int
-	Email string
-}

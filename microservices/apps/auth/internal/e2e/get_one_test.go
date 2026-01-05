@@ -18,7 +18,7 @@ func TestGetOneUser(t *testing.T) {
 		t.Run(strconv.Itoa(http.StatusOK), func(t *testing.T) {
 			user := CreateUser()
 
-			requestQuery := users_api.GetOneRequestQueryDto{
+			requestQuery := users_api.UserFiltersDto{
 				Email: user.Email,
 			}
 			requestQueryValues, _ := query.Values(requestQuery)
@@ -37,7 +37,7 @@ func TestGetOneUser(t *testing.T) {
 
 	t.Run("Negative", func(t *testing.T) {
 		t.Run(strconv.Itoa(http.StatusNotFound), func(t *testing.T) {
-			requestQuery := users_api.GetOneRequestQueryDto{
+			requestQuery := users_api.UserFiltersDto{
 				ID: gofakeit.Int(),
 			}
 			queryValues, _ := query.Values(requestQuery)

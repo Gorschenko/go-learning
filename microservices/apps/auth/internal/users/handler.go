@@ -16,21 +16,21 @@ func NewUsersHandler(router *http.ServeMux, dependencies *UsersHandlerDependenci
 	getOneURL := users_api.GetOneMethod + " " + users_api.GetOnePath
 	router.Handle(
 		getOneURL,
-		middlewares.ValidateQuery[users_api.GetOneRequestQueryDto](handler.GetOne()),
+		middlewares.ValidateQuery[users_api.UserFiltersDto](handler.GetOne()),
 	)
 
 	deleteOneURL := users_api.DeleteOneMethod + " " + users_api.DeleteOnePath
 	router.Handle(
 		deleteOneURL,
-		middlewares.ValidateBody[users_api.DeleteOneRequestBodyDto](handler.DeleteOne()),
+		middlewares.ValidateBody[users_api.UserFiltersDto](handler.DeleteOne()),
 	)
 }
 
 func (h *UsersHandler) GetOne() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		body, _ := r.Context().Value(static.ContextQueryKey).(users_api.GetOneRequestQueryDto)
+		body, _ := r.Context().Value(static.ContextQueryKey).(users_api.UserFiltersDto)
 
-		filters := UserFilters{
+		filters := users_api.UserFiltersDto{
 			ID:    body.ID,
 			Email: body.Email,
 		}
@@ -52,9 +52,9 @@ func (h *UsersHandler) GetOne() http.HandlerFunc {
 
 func (h *UsersHandler) DeleteOne() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		body, _ := r.Context().Value(static.ContextBodyKey).(users_api.DeleteOneRequestBodyDto)
+		body, _ := r.Context().Value(static.ContextBodyKey).(users_api.UserFiltersDto)
 
-		filters := UserFilters{
+		filters := users_api.UserFiltersDto{
 			ID:    body.ID,
 			Email: body.Email,
 		}
