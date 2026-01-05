@@ -19,9 +19,7 @@ func GetApp(configPath string) (http.Handler, *configs.Config) {
 		panic(err)
 	}
 
-	logger.SetupLogger(&logger.LoggerServiceDependencies{
-		Config: config,
-	})
+	logger.SetupLogger(config)
 
 	db, err := database.NewDb(config)
 	if err != nil {

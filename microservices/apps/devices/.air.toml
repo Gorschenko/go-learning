@@ -1,4 +1,4 @@
 [build]
-cmd = "go build -o ./tmp/main.exe ./cmd"
+cmd = "go build -o ./tmp/main.exe ./cmd/server"
 bin = "./tmp/main.exe"
-ignore = []
+include_dir = [".", "../../pkg"] 

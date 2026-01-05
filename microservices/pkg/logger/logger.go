@@ -8,15 +8,11 @@ import (
 	"pkg/static"
 )
 
-type LoggerServiceDependencies struct {
-	Config *configs.Config
-}
-
-func SetupLogger(dependencies *LoggerServiceDependencies) {
-	addSource := dependencies.Config.Software.Logger.AddSource || false
+func SetupLogger(config *configs.Config) {
+	addSource := config.Software.Logger.AddSource || false
 	logLevel := slog.LevelInfo
 
-	if dependencies.Config.Software.Logger.Level == "debug" {
+	if config.Software.Logger.Level == "debug" {
 		logLevel = slog.LevelDebug
 	}
 

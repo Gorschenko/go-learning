@@ -19,9 +19,7 @@ func main() {
 		panic(err)
 	}
 
-	logger.SetupLogger(&logger.LoggerServiceDependencies{
-		Config: config,
-	})
+	logger.SetupLogger(config)
 
 	// api
 	httpApi := api.NewHttpApi(&api.HttpApiDependencies{
