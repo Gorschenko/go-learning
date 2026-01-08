@@ -6,7 +6,7 @@ import (
 	mqtt "github.com/eclipse/paho.mqtt.golang"
 )
 
-type MQTTService struct {
+type MqttService struct {
 	client  mqtt.Client
 	options *mqtt.ClientOptions
 }
