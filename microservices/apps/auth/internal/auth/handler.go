@@ -11,7 +11,7 @@ import (
 
 func NewAuthHandler(router *http.ServeMux, dependencies *AuthHandlerDependencies) {
 	handler := &AuthHandler{
-		AuthService: dependencies.AuthService,
+		authService: dependencies.AuthService,
 	}
 
 	registerURL := auth_api.RegisterMethod + " " + auth_api.RegisterPath
@@ -38,7 +38,7 @@ func (h *AuthHandler) RegisterUser() http.HandlerFunc {
 			Name:     body.Name,
 		}
 
-		createdUser, err := h.AuthService.RegisterUser(ctx, &user)
+		createdUser, err := h.authService.RegisterUser(ctx, &user)
 
 		if err != nil {
 			api.SendJSONError(w, err)
@@ -58,7 +58,7 @@ func (h *AuthHandler) LoginUser() http.HandlerFunc {
 		ctx := r.Context()
 		body, _ := ctx.Value(static.ContextBodyKey).(auth_api.LoginRequestBodyDto)
 
-		token, err := h.AuthService.LoginUser(ctx, body.Email, body.Password)
+		token, err := h.authService.LoginUser(ctx, body.Email, body.Password)
 
 		if err != nil {
 			api.SendJSONError(w, err)

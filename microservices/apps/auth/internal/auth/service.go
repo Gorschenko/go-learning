@@ -11,9 +11,9 @@ import (
 
 func NewAuthService(dependencies *AuthServiceDependencies) *AuthService {
 	return &AuthService{
-		Config:           dependencies.Config,
-		UsersService:     dependencies.UsersService,
-		UsersRespository: dependencies.UsersRepository,
+		config:           dependencies.Config,
+		usersService:     dependencies.UsersService,
+		usersRespository: dependencies.UsersRepository,
 	}
 }
 
@@ -22,13 +22,13 @@ func (s *AuthService) RegisterUser(ctx context.Context, user *database.User) (*d
 		Email: user.Email,
 	}
 
-	existedUser, _ := s.UsersService.GetOne(ctx, &filters)
+	existedUser, _ := s.usersService.GetOne(ctx, &filters)
 
 	if existedUser != nil {
 		return nil, errors.New(api.CodeAlreadyExists)
 	}
 
-	createdUser, err := s.UsersRespository.Create(user)
+	createdUser, err := s.usersRespository.Create(user)
 
 	return createdUser, err
 }
@@ -38,7 +38,7 @@ func (s *AuthService) LoginUser(ctx context.Context, email, password string) (*j
 		Email: email,
 	}
 
-	existedUser, err := s.UsersService.GetOne(ctx, &filters)
+	existedUser, err := s.usersService.GetOne(ctx, &filters)
 
 	if err != nil {
 		return nil, err
@@ -58,7 +58,7 @@ func (s *AuthService) LoginUser(ctx context.Context, email, password string) (*j
 	}
 
 	token := jwt.NewJWT(jwt.JWTDependencies{
-		Config: s.Config,
+		Config: s.config,
 	}).Create(payload)
 
 	return token, err

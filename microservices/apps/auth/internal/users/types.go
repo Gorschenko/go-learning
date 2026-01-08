@@ -7,7 +7,7 @@ type UsersHandlerDependencies struct {
 }
 
 type UsersHandler struct {
-	UsersService *UsersService
+	usersService *UsersService
 }
 
 type UsersServiceDependencies struct {
@@ -16,6 +16,6 @@ type UsersServiceDependencies struct {
 }
 
 type UsersService struct {
-	UsersRepository      *UsersRepository
-	CacheUsersRepository *cache.CacheUsersRepository
+	usersRepository      *UsersRepository
+	cacheUsersRepository *cache.CacheUsersRepository
 }

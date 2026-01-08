@@ -10,7 +10,7 @@ import (
 
 func NewUsersHandler(router *http.ServeMux, dependencies *UsersHandlerDependencies) {
 	handler := &UsersHandler{
-		UsersService: dependencies.UsersService,
+		usersService: dependencies.UsersService,
 	}
 
 	getOneURL := users_api.GetOneMethod + " " + users_api.GetOnePath
@@ -37,7 +37,7 @@ func (h *UsersHandler) GetOne() http.HandlerFunc {
 		ctx := r.Context()
 		body, _ := ctx.Value(static.ContextQueryKey).(users_api.UserFiltersDto)
 
-		user, err := h.UsersService.GetOne(ctx, &body)
+		user, err := h.usersService.GetOne(ctx, &body)
 
 		if err != nil {
 			api.SendJSONError(w, err)
@@ -57,7 +57,7 @@ func (h *UsersHandler) UpdateOne() http.HandlerFunc {
 		ctx := r.Context()
 		body, _ := ctx.Value(static.ContextBodyKey).(users_api.UpdateOneRequestBodyDto)
 
-		count, err := h.UsersService.UpdateOne(ctx, &body.Filters, &body.Update)
+		count, err := h.usersService.UpdateOne(ctx, &body.Filters, &body.Update)
 
 		if err != nil {
 			api.SendJSONError(w, err)
@@ -77,7 +77,7 @@ func (h *UsersHandler) DeleteOne() http.HandlerFunc {
 		ctx := r.Context()
 		body, _ := ctx.Value(static.ContextBodyKey).(users_api.UserFiltersDto)
 
-		count, err := h.UsersService.DeleteOne(ctx, &body)
+		count, err := h.usersService.DeleteOne(ctx, &body)
 
 		if err != nil {
 			api.SendJSONError(w, err)

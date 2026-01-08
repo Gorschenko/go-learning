@@ -10,21 +10,21 @@ import (
 
 func NewUsersService(dependencies *UsersServiceDependencies) *UsersService {
 	return &UsersService{
-		UsersRepository:      dependencies.UsersRepository,
-		CacheUsersRepository: dependencies.CacheUsersRepository,
+		usersRepository:      dependencies.UsersRepository,
+		cacheUsersRepository: dependencies.CacheUsersRepository,
 	}
 }
 
 func (s *UsersService) GetOne(ctx context.Context, filters *users_api.UserFiltersDto) (*database.User, error) {
 	if filters.ID != 0 {
-		cacheUser, _ := s.CacheUsersRepository.GetUser(ctx, filters.ID)
+		cacheUser, _ := s.cacheUsersRepository.GetUser(ctx, filters.ID)
 
 		if cacheUser != nil {
 			return cacheUser, nil
 		}
 	}
 
-	user, err := s.UsersRepository.GetOne(filters)
+	user, err := s.usersRepository.GetOne(filters)
 
 	if err != nil {
 		return nil, err
@@ -34,7 +34,7 @@ func (s *UsersService) GetOne(ctx context.Context, filters *users_api.UserFilter
 		return nil, errors.New(api.CodeNotFound)
 	}
 
-	s.CacheUsersRepository.SetUser(ctx, user)
+	s.cacheUsersRepository.SetUser(ctx, user)
 
 	return user, nil
 }
@@ -50,7 +50,7 @@ func (s *UsersService) UpdateOne(ctx context.Context, filters *users_api.UserFil
 		return 0, err
 	}
 
-	count, err := s.UsersRepository.UpdateOne(filters, update)
+	count, err := s.usersRepository.UpdateOne(filters, update)
 
 	return int(count), err
 }
@@ -62,7 +62,7 @@ func (s *UsersService) DeleteOne(ctx context.Context, filters *users_api.UserFil
 		return 0, err
 	}
 
-	count, err := s.UsersRepository.DeleteOne(filters)
+	count, err := s.usersRepository.DeleteOne(filters)
 
 	return int(count), err
 }

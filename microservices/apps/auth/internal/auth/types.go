@@ -10,7 +10,7 @@ type AuthHandlerDependencies struct {
 }
 
 type AuthHandler struct {
-	AuthService *AuthService
+	authService *AuthService
 }
 
 type AuthServiceDependencies struct {
@@ -20,7 +20,7 @@ type AuthServiceDependencies struct {
 }
 
 type AuthService struct {
-	Config           *configs.Config
-	UsersService     *users.UsersService
-	UsersRespository *users.UsersRepository
+	config           *configs.Config
+	usersService     *users.UsersService
+	usersRespository *users.UsersRepository
 }
