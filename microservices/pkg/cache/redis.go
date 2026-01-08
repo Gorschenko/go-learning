@@ -11,7 +11,7 @@ import (
 )
 
 type CacheRepository struct {
-	Client *redis.Client
+	client *redis.Client
 }
 
 func NewCacheRepository(config *configs.Config) (*CacheRepository, error) {
@@ -33,7 +33,7 @@ func NewCacheRepository(config *configs.Config) (*CacheRepository, error) {
 	}
 
 	cache := CacheRepository{
-		Client: client,
+		client,
 	}
 
 	return &cache, nil
@@ -46,7 +46,7 @@ func (r *CacheRepository) Get(ctx context.Context, key string) (string, error) {
 		"Method", "GET",
 		"Key", key,
 	)
-	result, err := r.Client.Get(ctx, key).Result()
+	result, err := r.client.Get(ctx, key).Result()
 
 	logger.Debug(
 		"CacheRepository",
@@ -67,7 +67,7 @@ func (r *CacheRepository) Set(ctx context.Context, key, value string, ttl time.D
 		"Value", value,
 		"TTL", ttl,
 	)
-	result, err := r.Client.Set(ctx, key, value, ttl).Result()
+	result, err := r.client.Set(ctx, key, value, ttl).Result()
 
 	logger.Debug(
 		"CacheRepository",
@@ -87,7 +87,7 @@ func (r *CacheRepository) Delete(ctx context.Context, keys ...string) error {
 		"Key", keys,
 	)
 
-	result, err := r.Client.Del(ctx, keys...).Result()
+	result, err := r.client.Del(ctx, keys...).Result()
 
 	logger.Debug(
 		"CacheRepository",
