@@ -1,6 +1,7 @@
 package auth
 
 import (
+	"context"
 	"errors"
 	"pkg/api"
 	users_api "pkg/api/users"
@@ -11,15 +12,17 @@ import (
 func NewAuthService(dependencies *AuthServiceDependencies) *AuthService {
 	return &AuthService{
 		Config:           dependencies.Config,
+		UsersService:     dependencies.UsersService,
 		UsersRespository: dependencies.UsersRepository,
 	}
 }
 
-func (s *AuthService) RegisterUser(user *database.User) (*database.User, error) {
+func (s *AuthService) RegisterUser(ctx context.Context, user *database.User) (*database.User, error) {
 	filters := users_api.UserFiltersDto{
 		Email: user.Email,
 	}
-	existedUser, _ := s.UsersRespository.GetOne(&filters)
+
+	existedUser, _ := s.UsersService.GetOne(ctx, &filters)
 
 	if existedUser != nil {
 		return nil, errors.New(api.CodeAlreadyExists)
@@ -30,12 +33,12 @@ func (s *AuthService) RegisterUser(user *database.User) (*database.User, error) 
 	return createdUser, err
 }
 
-func (s *AuthService) LoginUser(email, password string) (*jwt.JWTToken, error) {
+func (s *AuthService) LoginUser(ctx context.Context, email, password string) (*jwt.JWTToken, error) {
 	filters := users_api.UserFiltersDto{
 		Email: email,
 	}
 
-	existedUser, err := s.UsersRespository.GetOne(&filters)
+	existedUser, err := s.UsersService.GetOne(ctx, &filters)
 
 	if err != nil {
 		return nil, err

@@ -34,9 +34,10 @@ func NewUsersHandler(router *http.ServeMux, dependencies *UsersHandlerDependenci
 
 func (h *UsersHandler) GetOne() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		body, _ := r.Context().Value(static.ContextQueryKey).(users_api.UserFiltersDto)
+		ctx := r.Context()
+		body, _ := ctx.Value(static.ContextQueryKey).(users_api.UserFiltersDto)
 
-		user, err := h.UsersService.GetOne(&body)
+		user, err := h.UsersService.GetOne(ctx, &body)
 
 		if err != nil {
 			api.SendJSONError(w, err)
@@ -53,9 +54,10 @@ func (h *UsersHandler) GetOne() http.HandlerFunc {
 
 func (h *UsersHandler) UpdateOne() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		body, _ := r.Context().Value(static.ContextBodyKey).(users_api.UpdateOneRequestBodyDto)
+		ctx := r.Context()
+		body, _ := ctx.Value(static.ContextBodyKey).(users_api.UpdateOneRequestBodyDto)
 
-		count, err := h.UsersService.UpdateOne(&body.Filters, &body.Update)
+		count, err := h.UsersService.UpdateOne(ctx, &body.Filters, &body.Update)
 
 		if err != nil {
 			api.SendJSONError(w, err)
@@ -72,9 +74,10 @@ func (h *UsersHandler) UpdateOne() http.HandlerFunc {
 
 func (h *UsersHandler) DeleteOne() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		body, _ := r.Context().Value(static.ContextBodyKey).(users_api.UserFiltersDto)
+		ctx := r.Context()
+		body, _ := ctx.Value(static.ContextBodyKey).(users_api.UserFiltersDto)
 
-		count, err := h.UsersService.DeleteOne(&body)
+		count, err := h.UsersService.DeleteOne(ctx, &body)
 
 		if err != nil {
 			api.SendJSONError(w, err)

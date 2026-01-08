@@ -15,10 +15,12 @@ type AuthHandler struct {
 
 type AuthServiceDependencies struct {
 	Config          *configs.Config
+	UsersService    *users.UsersService
 	UsersRepository *users.UsersRepository
 }
 
 type AuthService struct {
 	Config           *configs.Config
+	UsersService     *users.UsersService
 	UsersRespository *users.UsersRepository
 }

@@ -1,6 +1,7 @@
 package cache
 
 import (
+	"context"
 	"encoding/json"
 	"pkg/database"
 	"strconv"
@@ -22,9 +23,9 @@ func NewCacheUsersRepository(dependencies *CacheUsersRepositoryDependencies) *Ca
 	}
 }
 
-func (r *CacheUsersRepository) GetUser(ID int) (*database.User, error) {
+func (r *CacheUsersRepository) GetUser(ctx context.Context, ID int) (*database.User, error) {
 	key := r.Prefix + strconv.Itoa(ID)
-	userString, err := r.Client.Get(r.Ctx, key).Bytes()
+	userString, err := r.Client.Get(ctx, key).Bytes()
 
 	if err != nil {
 		return nil, err
@@ -36,7 +37,7 @@ func (r *CacheUsersRepository) GetUser(ID int) (*database.User, error) {
 	return user, err
 }
 
-func (r *CacheUsersRepository) SetUser(user *database.User) error {
+func (r *CacheUsersRepository) SetUser(ctx context.Context, user *database.User) error {
 	key := r.Prefix + strconv.Itoa(int(user.ID))
 	userString, err := json.Marshal(user)
 
@@ -44,7 +45,7 @@ func (r *CacheUsersRepository) SetUser(user *database.User) error {
 		return err
 	}
 
-	err = r.Client.Set(r.Ctx, key, userString, CacheTTLLow).Err()
+	err = r.Client.Set(ctx, key, userString, CacheTTLLow).Err()
 
 	return err
 }

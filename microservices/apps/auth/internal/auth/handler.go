@@ -29,7 +29,8 @@ func NewAuthHandler(router *http.ServeMux, dependencies *AuthHandlerDependencies
 
 func (h *AuthHandler) RegisterUser() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		body, _ := r.Context().Value(static.ContextBodyKey).(auth_api.RegisterRequestBodyDto)
+		ctx := r.Context()
+		body, _ := ctx.Value(static.ContextBodyKey).(auth_api.RegisterRequestBodyDto)
 
 		user := database.User{
 			Email:    body.Email,
@@ -37,7 +38,7 @@ func (h *AuthHandler) RegisterUser() http.HandlerFunc {
 			Name:     body.Name,
 		}
 
-		createdUser, err := h.AuthService.RegisterUser(&user)
+		createdUser, err := h.AuthService.RegisterUser(ctx, &user)
 
 		if err != nil {
 			api.SendJSONError(w, err)
@@ -54,9 +55,10 @@ func (h *AuthHandler) RegisterUser() http.HandlerFunc {
 
 func (h *AuthHandler) LoginUser() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		body, _ := r.Context().Value(static.ContextBodyKey).(auth_api.LoginRequestBodyDto)
+		ctx := r.Context()
+		body, _ := ctx.Value(static.ContextBodyKey).(auth_api.LoginRequestBodyDto)
 
-		token, err := h.AuthService.LoginUser(body.Email, body.Password)
+		token, err := h.AuthService.LoginUser(ctx, body.Email, body.Password)
 
 		if err != nil {
 			api.SendJSONError(w, err)

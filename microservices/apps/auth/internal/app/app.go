@@ -45,13 +45,15 @@ func GetApp(configPath string) (http.Handler, *configs.Config) {
 	})
 
 	// services
-	authService := auth.NewAuthService(&auth.AuthServiceDependencies{
-		Config:          config,
-		UsersRepository: usersRepository,
-	})
+
 	usersService := users.NewUsersService(&users.UsersServiceDependencies{
 		UsersRepository:      usersRepository,
 		CacheUsersRepository: cacheUsersRepository,
+	})
+	authService := auth.NewAuthService(&auth.AuthServiceDependencies{
+		Config:          config,
+		UsersService:    usersService,
+		UsersRepository: usersRepository,
 	})
 
 	// handlers

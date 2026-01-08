@@ -1,6 +1,7 @@
 package users
 
 import (
+	"context"
 	"errors"
 	"pkg/api"
 	users_api "pkg/api/users"
@@ -14,9 +15,9 @@ func NewUsersService(dependencies *UsersServiceDependencies) *UsersService {
 	}
 }
 
-func (s *UsersService) GetOne(filters *users_api.UserFiltersDto) (*database.User, error) {
+func (s *UsersService) GetOne(ctx context.Context, filters *users_api.UserFiltersDto) (*database.User, error) {
 	if filters.ID != 0 {
-		cacheUser, _ := s.CacheUsersRepository.GetUser(filters.ID)
+		cacheUser, _ := s.CacheUsersRepository.GetUser(ctx, filters.ID)
 
 		if cacheUser != nil {
 			return cacheUser, nil
@@ -33,13 +34,17 @@ func (s *UsersService) GetOne(filters *users_api.UserFiltersDto) (*database.User
 		return nil, errors.New(api.CodeNotFound)
 	}
 
-	s.CacheUsersRepository.SetUser(user)
+	s.CacheUsersRepository.SetUser(ctx, user)
 
 	return user, nil
 }
 
-func (s *UsersService) UpdateOne(filters *users_api.UserFiltersDto, update *users_api.UserUpdateDto) (int, error) {
-	_, err := s.GetOne(filters)
+/*
+Нужно исправить:
+Нужно обновить кэш.
+*/
+func (s *UsersService) UpdateOne(ctx context.Context, filters *users_api.UserFiltersDto, update *users_api.UserUpdateDto) (int, error) {
+	_, err := s.GetOne(ctx, filters)
 
 	if err != nil {
 		return 0, err
@@ -50,8 +55,8 @@ func (s *UsersService) UpdateOne(filters *users_api.UserFiltersDto, update *user
 	return int(count), err
 }
 
-func (s *UsersService) DeleteOne(filters *users_api.UserFiltersDto) (int, error) {
-	_, err := s.GetOne(filters)
+func (s *UsersService) DeleteOne(ctx context.Context, filters *users_api.UserFiltersDto) (int, error) {
+	_, err := s.GetOne(ctx, filters)
 
 	if err != nil {
 		return 0, err
