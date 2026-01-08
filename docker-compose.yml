@@ -26,6 +26,10 @@ services:
     image: eclipse-mosquitto:latest
     ports:
       - 1883:1883
+    volumes:
+      - ./deploy/mosquitto:/mosquitto/config
+      - ../docker-volumes/mosquitto/data:/mosquitto/data
+      - ../docker-volumes/mosquitto/log:/mosquitto/log
     restart: always
     networks:
       - go

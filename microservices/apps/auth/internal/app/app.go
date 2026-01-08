@@ -9,6 +9,7 @@ import (
 	"pkg/database"
 	"pkg/logger"
 	"pkg/middlewares"
+	pkg_mqtt "pkg/mqtt"
 	"time"
 )
 
@@ -24,6 +25,15 @@ func GetApp(configPath string) (http.Handler, *configs.Config) {
 	if err != nil {
 		panic(err)
 	}
+
+	_, err = pkg_mqtt.NewMQTTService(config)
+	if err != nil {
+		panic(err)
+	}
+
+	// mqttService.Subscribe("#", 0, func(ctx context.Context, message mqtt.Message) {
+	// 	fmt.Printf("Message %+v\n", message)
+	// })
 
 	router := http.NewServeMux()
 
