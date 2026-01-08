@@ -7,7 +7,7 @@
 - + TimeoutMiddleware
 - + HttpApi
 - + Возвращать клиенту ошибку в виде объекта, а не строки.
-- Добавить CorrelationID при логирование Redis.
+- + Добавить CorrelationID при логирование Redis.
 - Добавить CorrelationID при логирование MQTT.
 - Swagger.
 

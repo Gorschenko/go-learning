@@ -64,7 +64,7 @@ func GetApp(configPath string) (http.Handler, *configs.Config) {
 		UsersService: usersService,
 	})
 
-	middlewaresStack := middlewares.CombainMiddlewares(
+	middlewaresStack := middlewares.CombineMiddlewares(
 		middlewares.CorrelationIdMiddleware,
 		middlewares.LogsMiddleware,
 		middlewares.TimeoutMiddleware(5*time.Second),

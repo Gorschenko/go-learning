@@ -25,7 +25,7 @@ func NewCacheUsersRepository(dependencies *CacheUsersRepositoryDependencies) *Ca
 
 func (r *CacheUsersRepository) GetUser(ctx context.Context, ID int) (*database.User, error) {
 	key := r.Prefix + strconv.Itoa(ID)
-	userString, err := r.Client.Get(ctx, key).Bytes()
+	userString, err := r.CacheRepository.Get(ctx, key)
 
 	if err != nil {
 		return nil, err
@@ -33,7 +33,7 @@ func (r *CacheUsersRepository) GetUser(ctx context.Context, ID int) (*database.U
 
 	var user *database.User
 
-	err = json.Unmarshal(userString, &user)
+	err = json.Unmarshal([]byte(userString), &user)
 	return user, err
 }
 
@@ -44,8 +44,7 @@ func (r *CacheUsersRepository) SetUser(ctx context.Context, user *database.User)
 	if err != nil {
 		return err
 	}
-
-	err = r.Client.Set(ctx, key, userString, CacheTTLLow).Err()
+	err = r.CacheRepository.Set(ctx, key, string(userString), CacheTTLLow)
 
 	return err
 }

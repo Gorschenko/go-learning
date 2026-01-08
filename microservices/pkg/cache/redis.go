@@ -3,6 +3,7 @@ package cache
 import (
 	"context"
 	"pkg/configs"
+	"pkg/logger"
 	"strconv"
 	"time"
 
@@ -39,13 +40,61 @@ func NewCacheRepository(config *configs.Config) (*CacheRepository, error) {
 }
 
 func (r *CacheRepository) Get(ctx context.Context, key string) (string, error) {
-	return r.Client.Get(ctx, key).Result()
+	logger := logger.GetLogger(ctx)
+	logger.Debug(
+		"CacheRepository",
+		"Method", "GET",
+		"Key", key,
+	)
+	result, err := r.Client.Get(ctx, key).Result()
+
+	logger.Debug(
+		"CacheRepository",
+		"Method", "GET",
+		"Result", result,
+		"Error", err,
+	)
+
+	return result, err
 }
 
 func (r *CacheRepository) Set(ctx context.Context, key, value string, ttl time.Duration) error {
-	return r.Client.Set(ctx, key, value, ttl).Err()
+	logger := logger.GetLogger(ctx)
+	logger.Debug(
+		"CacheRepository",
+		"Method", "SET",
+		"Key", key,
+		"Value", value,
+		"TTL", ttl,
+	)
+	result, err := r.Client.Set(ctx, key, value, ttl).Result()
+
+	logger.Debug(
+		"CacheRepository",
+		"Method", "SET",
+		"Result", result,
+		"Error", err,
+	)
+
+	return err
 }
 
 func (r *CacheRepository) Delete(ctx context.Context, keys ...string) error {
-	return r.Client.Del(ctx, keys...).Err()
+	logger := logger.GetLogger(ctx)
+	logger.Debug(
+		"CacheRepository",
+		"Method", "DEL",
+		"Key", keys,
+	)
+
+	result, err := r.Client.Del(ctx, keys...).Result()
+
+	logger.Debug(
+		"CacheRepository",
+		"Method", "DEL",
+		"Result", result,
+		"Error", err,
+	)
+
+	return err
 }
