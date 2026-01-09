@@ -75,8 +75,9 @@ func (m *MqttService) Subscribe(topic string, qos byte, handler HandlerFunc) err
 
 		logger.Info(
 			"MQTTService",
-			"Received message on topic", message.Topic(),
-			"Messsage", message.Payload(),
+			"Received message", "",
+			"Topic", message.Topic(),
+			"Payload", message.Payload(),
 		)
 
 		handler(ctx, message)
@@ -101,8 +102,9 @@ func (m *MqttService) Publish(ctx context.Context, topic string, qos byte, paylo
 	logger := logger.GetLogger(ctx)
 	logger.Info(
 		"MQTTService",
-		"Published message on topic", topic,
-		"Messsage", payloadToString,
+		"Published message", "",
+		"Topic", topic,
+		"Payload", payloadToString,
 	)
 
 	if token.Wait() && token.Error() != nil {

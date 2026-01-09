@@ -11,9 +11,9 @@ import (
 	"github.com/go-playground/validator/v10"
 )
 
-func ValidateBody[DTO any](next http.Handler) http.Handler {
+func ValidateBody[Body any](next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		var body DTO
+		var body Body
 
 		err := json.NewDecoder(r.Body).Decode(&body)
 		if err != nil {

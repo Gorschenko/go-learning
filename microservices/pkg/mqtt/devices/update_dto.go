@@ -14,5 +14,6 @@ const (
 )
 
 type DeviceUpdateDto struct {
-	Status DeviceStatus `json:"status"`
+	Status  DeviceStatus `json:"status" validate:"required"`
+	Status2 string       `json:"status2" validate:"required"`
 }

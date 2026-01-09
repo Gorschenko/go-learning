@@ -11,4 +11,6 @@ type MqttService struct {
 	options *mqtt.ClientOptions
 }
 
+type MiddlewareFunc func(HandlerFunc) HandlerFunc
+
 type HandlerFunc func(ctx context.Context, message mqtt.Message)

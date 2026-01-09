@@ -5,4 +5,5 @@ const (
 	ContextParamsKey     = "ContextParamsKey"
 	ContextQueryKey      = "ContextQueryKey"
 	ContextCorrelationID = "ContextCorrelationID"
+	ContextPayloadKey    = "ContextPayloadKey"
 )
