@@ -1,6 +1,9 @@
 package users
 
-import "pkg/cache"
+import (
+	"pkg/cache"
+	"pkg/database"
+)
 
 type UsersHandlerDependencies struct {
 	UsersService *UsersService
@@ -18,4 +21,8 @@ type UsersServiceDependencies struct {
 type UsersService struct {
 	usersRepository      *UsersRepository
 	cacheUsersRepository *cache.CacheUsersRepository
+}
+
+type UsersRepository struct {
+	database *database.Db
 }

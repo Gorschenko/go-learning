@@ -7,5 +7,5 @@ type User struct {
 	Email    string `gorm:"uniqueIndex;not null"`
 	Password string `gorm:"not null"`
 	Name     string `gorm:"not null;default:''"`
-	Cars     []Car  `gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
+	// Devices  []Device `gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
 }

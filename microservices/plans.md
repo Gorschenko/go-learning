@@ -1,11 +1,14 @@
 ### ПО:
-- + ValidateQueryMiddleware
-- + ValidateParamsMiddleware
-- + ValidateBodyMiddleware
-- + CorrelationIdMiddleware
-- + LogMiddleware
-- + TimeoutMiddleware
+- + ValidateQueryMiddleware (HTTP)
+- + ValidateParamsMiddleware (HTTP)
+- + ValidateBodyMiddleware (HTTP)
+- + CorrelationIdMiddleware (HTTP)
+- + LogMiddleware (HTTP)
+- + TimeoutMiddleware (HTTP)
 - + ValidatePayloadMiddleware (MQTT)
+-   LogMiddleware (MQTT)
+-   TimeoutMiddleware (MQTT)
+-   CorrelationIdMiddleware (MQTT)
 - + HttpApi
 - + Возвращать клиенту ошибку в виде объекта, а не строки.
 - + CorrelationID при логирование Redis.
@@ -15,8 +18,8 @@
 ### Технологии:
 - + Redis.
 - Kafka.
-- MQTT.
-- Деплой. Какие есть способы.
+- + MQTT.
+- Деплой. Способы: linux-daemon; docker.
 
 ### Тесты.
 - + E2E-тесты.

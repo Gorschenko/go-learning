@@ -9,10 +9,6 @@ import (
 	"gorm.io/gorm"
 )
 
-type UsersRepository struct {
-	Database *database.Db
-}
-
 func NewUsersRepository(dependencies *database.RepositoryDependencies) *UsersRepository {
 	needToMigrate := dependencies.Config.Database.Automigrate
 
@@ -22,12 +18,12 @@ func NewUsersRepository(dependencies *database.RepositoryDependencies) *UsersRep
 	}
 
 	return &UsersRepository{
-		Database: dependencies.Database,
+		database: dependencies.Database,
 	}
 }
 
 func (r *UsersRepository) Create(user *database.User) (*database.User, error) {
-	result := r.Database.DB.Create(user)
+	result := r.database.DB.Create(user)
 
 	if result.Error != nil {
 		return nil, result.Error
@@ -37,7 +33,7 @@ func (r *UsersRepository) Create(user *database.User) (*database.User, error) {
 }
 
 func (r *UsersRepository) UpdateOne(filters *users_api.UserFiltersDto, update *users_api.UserUpdateDto) (int64, error) {
-	query := r.Database.DB.
+	query := r.database.DB.
 		Model(&database.User{})
 	query = r.prepareQuery(query, filters)
 
@@ -49,7 +45,7 @@ func (r *UsersRepository) UpdateOne(filters *users_api.UserFiltersDto, update *u
 func (r *UsersRepository) GetOne(filters *users_api.UserFiltersDto) (*database.User, error) {
 	var user database.User
 
-	query := r.Database.DB.
+	query := r.database.DB.
 		Model(&database.User{})
 	query = r.prepareQuery(query, filters)
 
@@ -67,7 +63,7 @@ func (r *UsersRepository) GetOne(filters *users_api.UserFiltersDto) (*database.U
 }
 
 func (r *UsersRepository) DeleteOne(filters *users_api.UserFiltersDto) (int64, error) {
-	query := r.Database.DB.
+	query := r.database.DB.
 		Model(&database.User{})
 	query = r.prepareQuery(query, filters)
 

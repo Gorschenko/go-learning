@@ -15,22 +15,29 @@ func GetApp(configPath string) (http.Handler, *configs.Config) {
 		panic(err)
 	}
 
-	logger.SetupLogger(config)
-
-	_, err = database.NewDb(config)
+	db, err := database.NewDb(config)
 	if err != nil {
 		panic(err)
 	}
+
+	logger.SetupLogger(config)
+	router := http.NewServeMux()
 
 	mqttService, err := pkg_mqtt.NewMqttService(config)
 	if err != nil {
 		panic(err)
 	}
 
+	// repositories
+	devices.NewDevicesRepository(&database.RepositoryDependencies{
+		Database: db,
+		Config:   config,
+	})
+
+	// services
+
 	// handlers
 	devices.NewMqttDevicesHandler(mqttService)
-
-	router := http.NewServeMux()
 
 	return router, config
 }

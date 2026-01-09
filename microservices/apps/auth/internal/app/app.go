@@ -18,13 +18,12 @@ func GetApp(configPath string) (http.Handler, *configs.Config) {
 		panic(err)
 	}
 
-	logger.SetupLogger(config)
-
 	db, err := database.NewDb(config)
 	if err != nil {
 		panic(err)
 	}
 
+	logger.SetupLogger(config)
 	router := http.NewServeMux()
 
 	cacheRepository, err := cache.NewCacheRepository(config)

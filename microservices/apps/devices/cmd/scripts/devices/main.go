@@ -4,6 +4,7 @@ import (
 	"context"
 	"math/rand"
 	"pkg/configs"
+	"pkg/database"
 	"pkg/logger"
 	"pkg/mqtt"
 	mqtt_devices_api "pkg/mqtt/devices"
@@ -47,14 +48,14 @@ func main() {
 	}
 }
 
-func getRandomDeviceStatus() mqtt_devices_api.DeviceStatus {
+func getRandomDeviceStatus() database.DeviceStatus {
 	num := rand.Intn(100)
 
 	if num <= 10 {
-		return mqtt_devices_api.DevicesStatusError
+		return database.DevicesStatusUnknown
 	} else if num > 10 && num <= 50 {
-		return mqtt_devices_api.DeviceStatusOnline
+		return database.DeviceStatusOnline
 	} else {
-		return mqtt_devices_api.DeviceStatusOffline
+		return database.DeviceStatusOffline
 	}
 }
