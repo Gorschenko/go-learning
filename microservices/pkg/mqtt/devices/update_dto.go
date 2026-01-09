@@ -9,6 +9,8 @@ const (
 const (
 	DeviceStatusOnline  DeviceStatus = "online"
 	DeviceStatusOffline DeviceStatus = "offline"
+	// Для обработки ошибок
+	DevicesStatusError DeviceStatus = "error"
 )
 
 type DeviceUpdateDto struct {

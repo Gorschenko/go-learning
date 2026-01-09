@@ -1,10 +1,12 @@
 package app
 
 import (
+	"devices/internal/devices"
 	"net/http"
 	"pkg/configs"
 	"pkg/database"
 	"pkg/logger"
+	pkg_mqtt "pkg/mqtt"
 )
 
 func GetApp(configPath string) (http.Handler, *configs.Config) {
@@ -19,6 +21,14 @@ func GetApp(configPath string) (http.Handler, *configs.Config) {
 	if err != nil {
 		panic(err)
 	}
+
+	mqttService, err := pkg_mqtt.NewMqttService(config)
+	if err != nil {
+		panic(err)
+	}
+
+	// handlers
+	devices.NewMqttDevicesHandler(mqttService)
 
 	router := http.NewServeMux()
 

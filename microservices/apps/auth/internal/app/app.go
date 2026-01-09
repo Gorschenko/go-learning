@@ -3,18 +3,13 @@ package app
 import (
 	"auth/internal/auth"
 	"auth/internal/users"
-	"context"
-	"fmt"
 	"net/http"
 	"pkg/cache"
 	"pkg/configs"
 	"pkg/database"
 	"pkg/logger"
 	"pkg/middlewares"
-	pkg_mqtt "pkg/mqtt"
 	"time"
-
-	mqtt "github.com/eclipse/paho.mqtt.golang"
 )
 
 func GetApp(configPath string) (http.Handler, *configs.Config) {
@@ -29,15 +24,6 @@ func GetApp(configPath string) (http.Handler, *configs.Config) {
 	if err != nil {
 		panic(err)
 	}
-
-	mqttService, err := pkg_mqtt.NewMqttService(config)
-	if err != nil {
-		panic(err)
-	}
-
-	mqttService.Subscribe("#", 0, func(ctx context.Context, message mqtt.Message) {
-		fmt.Printf("Message %+v\n", message)
-	})
 
 	router := http.NewServeMux()
 
@@ -59,7 +45,6 @@ func GetApp(configPath string) (http.Handler, *configs.Config) {
 	})
 
 	// services
-
 	usersService := users.NewUsersService(&users.UsersServiceDependencies{
 		UsersRepository:      usersRepository,
 		CacheUsersRepository: cacheUsersRepository,

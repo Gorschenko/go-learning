@@ -2,11 +2,14 @@ package mqtt
 
 import (
 	"context"
+	"encoding/json"
 	"pkg/configs"
 	"pkg/logger"
+	"pkg/static"
 	"strconv"
 
 	mqtt "github.com/eclipse/paho.mqtt.golang"
+	"github.com/google/uuid"
 )
 
 func NewMqttService(config *configs.Config) (*MqttService, error) {
@@ -66,12 +69,16 @@ func (m *MqttService) Disconnect() {
 func (m *MqttService) Subscribe(topic string, qos byte, handler HandlerFunc) error {
 	token := m.client.Subscribe(topic, qos, func(client mqtt.Client, message mqtt.Message) {
 		ctx := context.Background()
+		correlationId := uuid.New().String()
+		ctx = context.WithValue(ctx, static.ContextCorrelationID, correlationId)
 		logger := logger.GetLogger(ctx)
+
 		logger.Info(
 			"MQTTService",
 			"Received message on topic", message.Topic(),
 			"Messsage", message.Payload(),
 		)
+
 		handler(ctx, message)
 	})
 
@@ -83,13 +90,19 @@ func (m *MqttService) Subscribe(topic string, qos byte, handler HandlerFunc) err
 }
 
 func (m *MqttService) Publish(ctx context.Context, topic string, qos byte, payload any) error {
-	token := m.client.Publish(topic, qos, false, payload)
+	payloadToString, err := json.Marshal(payload)
+
+	if err != nil {
+		return err
+	}
+
+	token := m.client.Publish(topic, qos, false, payloadToString)
 
 	logger := logger.GetLogger(ctx)
 	logger.Info(
 		"MQTTService",
 		"Published message on topic", topic,
-		"Messsage", payload,
+		"Messsage", payloadToString,
 	)
 
 	if token.Wait() && token.Error() != nil {

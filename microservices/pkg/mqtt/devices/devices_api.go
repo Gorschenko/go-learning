@@ -2,7 +2,6 @@ package mqtt_devices_api
 
 import (
 	"context"
-	"encoding/json"
 	"pkg/mqtt"
 )
 
@@ -21,14 +20,8 @@ func NewDevicesApi(dependencies *DevicesDependencies) *DevicesApi {
 }
 
 func (api *DevicesApi) SendUpdateDeviceEvent(ctx context.Context, serialNumber string, update *DeviceUpdateDto) error {
-	updateString, err := json.Marshal(update)
-
-	if err != nil {
-		return err
-	}
-
 	topic := serialNumber + "/" + TopicDevicesUpdated
-	err = api.mqttSevice.Publish(ctx, topic, 0, updateString)
+	err := api.mqttSevice.Publish(ctx, topic, 0, update)
 
 	if err != nil {
 		return err
