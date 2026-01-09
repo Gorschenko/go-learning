@@ -17,6 +17,7 @@ func NewMqttDevicesHandler(mqttService *pkg_mqtt.MqttService) {
 	handler := &MqttDevicesHandler{}
 
 	udpdateDeviceMiddlewares := mqtt_middlewares.CombineMiddlewares(
+		mqtt_middlewares.CorrelationIdMiddleware,
 		mqtt_middlewares.LogsMiddleware,
 		mqtt_middlewares.ValidatePayload[mqtt_devices_api.DeviceUpdateDto],
 	)

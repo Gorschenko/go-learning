@@ -8,11 +8,12 @@
 - + ValidatePayloadMiddleware (MQTT)
 - + LogMiddleware (MQTT)
 -   TimeoutMiddleware (MQTT)
--   CorrelationIdMiddleware (MQTT)
+- + CorrelationIdMiddleware (MQTT)
 - + HttpApi
 - + Возвращать клиенту ошибку в виде объекта, а не строки.
 - + CorrelationID при логирование Redis.
 - + CorrelationID при логирование MQTT: публикация и подписка.
+- Telegram для уведомления об ошибках. Подумать как подключать.
 - Базовый репозитория для БД.
 - Swagger.
 

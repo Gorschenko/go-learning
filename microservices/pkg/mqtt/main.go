@@ -5,11 +5,9 @@ import (
 	"encoding/json"
 	"pkg/configs"
 	"pkg/logger"
-	"pkg/static"
 	"strconv"
 
 	mqtt "github.com/eclipse/paho.mqtt.golang"
-	"github.com/google/uuid"
 )
 
 func NewMqttService(config *configs.Config) (*MqttService, error) {
@@ -69,8 +67,8 @@ func (m *MqttService) Disconnect() {
 func (m *MqttService) Subscribe(topic string, qos byte, handler Handler) error {
 	token := m.client.Subscribe(topic, qos, func(client mqtt.Client, message mqtt.Message) {
 		ctx := context.Background()
-		correlationId := uuid.New().String()
-		ctx = context.WithValue(ctx, static.ContextCorrelationID, correlationId)
+		// correlationId := uuid.New().String()
+		// ctx = context.WithValue(ctx, static.ContextCorrelationID, correlationId)
 
 		handler(ctx, message)
 	})
@@ -93,7 +91,7 @@ func (m *MqttService) Publish(ctx context.Context, topic string, qos byte, paylo
 
 	logger := logger.GetLogger(ctx)
 	logger.Info(
-		"MQTTService",
+		"MqttService",
 		"Published message", "",
 		"Topic", topic,
 		"Payload", payloadToString,
