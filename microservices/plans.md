@@ -6,13 +6,14 @@
 - + LogMiddleware (HTTP)
 - + TimeoutMiddleware (HTTP)
 - + ValidatePayloadMiddleware (MQTT)
--   LogMiddleware (MQTT)
+- + LogMiddleware (MQTT)
 -   TimeoutMiddleware (MQTT)
 -   CorrelationIdMiddleware (MQTT)
 - + HttpApi
 - + Возвращать клиенту ошибку в виде объекта, а не строки.
 - + CorrelationID при логирование Redis.
 - + CorrelationID при логирование MQTT: публикация и подписка.
+- Базовый репозитория для БД.
 - Swagger.
 
 ### Технологии:

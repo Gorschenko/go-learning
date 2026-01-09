@@ -66,19 +66,11 @@ func (m *MqttService) Disconnect() {
 	m.client.Disconnect(250)
 }
 
-func (m *MqttService) Subscribe(topic string, qos byte, handler HandlerFunc) error {
+func (m *MqttService) Subscribe(topic string, qos byte, handler Handler) error {
 	token := m.client.Subscribe(topic, qos, func(client mqtt.Client, message mqtt.Message) {
 		ctx := context.Background()
 		correlationId := uuid.New().String()
 		ctx = context.WithValue(ctx, static.ContextCorrelationID, correlationId)
-		logger := logger.GetLogger(ctx)
-
-		logger.Info(
-			"MQTTService",
-			"Received message", "",
-			"Topic", message.Topic(),
-			"Payload", message.Payload(),
-		)
 
 		handler(ctx, message)
 	})

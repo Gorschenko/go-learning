@@ -1,16 +1,17 @@
-package mqtt
+package mqtt_middlewares
 
 import (
 	"context"
 	"encoding/json"
 	"pkg/logger"
+	pkg_mqtt "pkg/mqtt"
 	"pkg/static"
 
 	mqtt "github.com/eclipse/paho.mqtt.golang"
 	"github.com/go-playground/validator/v10"
 )
 
-func ValidatePayload[Payload any](next HandlerFunc) HandlerFunc {
+func ValidatePayload[Payload any](next pkg_mqtt.Handler) pkg_mqtt.Handler {
 	return func(ctx context.Context, message mqtt.Message) {
 		var payload Payload
 
