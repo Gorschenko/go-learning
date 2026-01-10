@@ -13,7 +13,10 @@ func NewUsersRepository(dependencies *database.RepositoryDependencies) *UsersRep
 	needToMigrate := dependencies.Config.Database.Automigrate
 
 	if needToMigrate {
-		dependencies.Database.DB.AutoMigrate(&database.User{})
+		err := dependencies.Database.DB.AutoMigrate(&database.User{})
+		if err != nil {
+			panic(err)
+		}
 		slog.Debug("User automigrate completed")
 	}
 
@@ -22,8 +25,11 @@ func NewUsersRepository(dependencies *database.RepositoryDependencies) *UsersRep
 	}
 }
 
-func (r *UsersRepository) Create(user *database.User) (*database.User, error) {
-	result := r.database.DB.Create(user)
+func (r *UsersRepository) CreateOne(user *database.User) (*database.User, error) {
+
+	result := r.database.DB.
+		Model(&database.User{}).
+		Create(user)
 
 	if result.Error != nil {
 		return nil, result.Error

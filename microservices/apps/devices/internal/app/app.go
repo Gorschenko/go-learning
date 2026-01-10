@@ -29,15 +29,21 @@ func GetApp(configPath string) (http.Handler, *configs.Config) {
 	}
 
 	// repositories
-	devices.NewDevicesRepository(&database.RepositoryDependencies{
+	devicesRepository := devices.NewDevicesRepository(&database.RepositoryDependencies{
 		Database: db,
 		Config:   config,
 	})
 
 	// services
+	devicesService := devices.NewDevicesService(&devices.DevicesServiceDependencies{
+		DevicesRepository: devicesRepository,
+	})
 
 	// handlers
-	devices.NewMqttDevicesHandler(mqttService)
+	devices.NewMqttDevicesHandler(&devices.MqttDevicesHandlerDependencies{
+		MqttService:    mqttService,
+		DevicesService: devicesService,
+	})
 
 	return router, config
 }

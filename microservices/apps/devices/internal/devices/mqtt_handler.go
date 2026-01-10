@@ -2,20 +2,21 @@ package devices
 
 import (
 	"context"
-	"fmt"
 	pkg_mqtt "pkg/mqtt"
 	mqtt_devices_api "pkg/mqtt/devices"
 	mqtt_middlewares "pkg/mqtt/middlewares"
 	"pkg/static"
+	"strings"
 	"time"
 
 	mqtt "github.com/eclipse/paho.mqtt.golang"
 )
 
-type MqttDevicesHandler struct{}
-
-func NewMqttDevicesHandler(mqttService *pkg_mqtt.MqttService) {
-	handler := &MqttDevicesHandler{}
+func NewMqttDevicesHandler(dependencies *MqttDevicesHandlerDependencies) {
+	handler := &MqttDevicesHandler{
+		mqttService:    dependencies.MqttService,
+		devicesService: dependencies.DevicesService,
+	}
 
 	udpdateDeviceMiddlewares := mqtt_middlewares.CombineMiddlewares(
 		mqtt_middlewares.CorrelationIdMiddleware,
@@ -23,14 +24,17 @@ func NewMqttDevicesHandler(mqttService *pkg_mqtt.MqttService) {
 		mqtt_middlewares.TimeoutMiddleware(5*time.Second),
 		mqtt_middlewares.ValidatePayload[mqtt_devices_api.DeviceUpdateDto],
 	)
-	mqttService.Subscribe("#", 0,
-		udpdateDeviceMiddlewares(handler.UpdateDevice()),
+	handler.mqttService.Subscribe("#", 0,
+		udpdateDeviceMiddlewares(handler.UpdateDeviceStatus()),
 	)
 }
 
-func (h *MqttDevicesHandler) UpdateDevice() pkg_mqtt.Handler {
+func (h *MqttDevicesHandler) UpdateDeviceStatus() pkg_mqtt.Handler {
 	return func(ctx context.Context, message mqtt.Message) {
 		payload, _ := ctx.Value(static.ContextPayloadKey).(mqtt_devices_api.DeviceUpdateDto)
-		fmt.Printf("Payload from handler %+v\n", payload)
+		topic := message.Topic()
+		parts := strings.Split(topic, "/")
+		serialNumber := parts[0]
+		h.devicesService.UpdateDeviceStatus(serialNumber, payload.Status)
 	}
 }

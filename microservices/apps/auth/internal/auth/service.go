@@ -28,7 +28,7 @@ func (s *AuthService) RegisterUser(ctx context.Context, user *database.User) (*d
 		return nil, errors.New(api.CodeAlreadyExists)
 	}
 
-	createdUser, err := s.usersRespository.Create(user)
+	createdUser, err := s.usersRespository.CreateOne(user)
 
 	return createdUser, err
 }

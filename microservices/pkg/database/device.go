@@ -21,7 +21,7 @@ const (
 
 type Device struct {
 	gorm.Model
-	SerialNumber string       `gorm:"index;not null"`
-	Type         DeviceType   `gorm:"not null;type:ENUM('igla','compass','unknown');default:'unknown'"`
-	Status       DeviceStatus `gorm:"not null;type:ENUM('online,'offline');default:'offline'"`
+	SerialNumber string       `gorm:"uniqueIndex;not null"`
+	Type         DeviceType   `gorm:"not null;type:varchar(20);default:'unknown'"`
+	Status       DeviceStatus `gorm:"not null;type:varchar(20);default:'offline'"`
 }
