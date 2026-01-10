@@ -25,7 +25,7 @@
 - + TimeoutMiddleware (HTTP)
 - + ValidatePayloadMiddleware (MQTT)
 - + LogMiddleware (MQTT)
--   TimeoutMiddleware (MQTT)
+- + TimeoutMiddleware (MQTT)
 - + CorrelationIdMiddleware (MQTT)
 - + HttpApi
 - + Возвращать клиенту ошибку в виде объекта, а не строки.

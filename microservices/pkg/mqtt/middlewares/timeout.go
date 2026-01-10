@@ -1,20 +1,20 @@
-package middlewares
+package mqtt_middlewares
 
 import (
 	"context"
-	"errors"
-	"net/http"
-	"pkg/api"
 	"pkg/logger"
+	pkg_mqtt "pkg/mqtt"
 	"time"
+
+	mqtt "github.com/eclipse/paho.mqtt.golang"
 )
 
-func TimeoutMiddleware(timeout time.Duration) func(http.Handler) http.Handler {
-	return func(next http.Handler) http.Handler {
-		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+func TimeoutMiddleware(timeout time.Duration) func(pkg_mqtt.Handler) pkg_mqtt.Handler {
+	return func(next pkg_mqtt.Handler) pkg_mqtt.Handler {
+		return func(ctx context.Context, message mqtt.Message) {
 
 			// Создаем контекст с таймаутом
-			ctx, cancel := context.WithTimeout(r.Context(), timeout)
+			ctx, cancel := context.WithTimeout(ctx, timeout)
 			defer cancel()
 
 			logger := logger.GetLogger(ctx)
@@ -23,7 +23,7 @@ func TimeoutMiddleware(timeout time.Duration) func(http.Handler) http.Handler {
 
 			go func() {
 				// Вызываем следующий обработчик
-				next.ServeHTTP(w, r.WithContext(ctx))
+				next(ctx, message)
 				close(done)
 			}()
 
@@ -35,11 +35,12 @@ func TimeoutMiddleware(timeout time.Duration) func(http.Handler) http.Handler {
 			case <-ctx.Done():
 				// Сработал таймаут
 				if ctx.Err() == context.DeadlineExceeded {
-					logger.Warn("TimeoutMiddleware", "Timeout", timeout)
-					api.SendJSONError(w, errors.New(api.CodeRequestTimeout))
+					logger.Warn("MqttTimeoutMiddleware", "Timeout", timeout)
 					return
 				}
 			}
-		})
+
+		}
 	}
+
 }

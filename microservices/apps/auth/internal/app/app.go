@@ -62,6 +62,10 @@ func GetApp(configPath string) (http.Handler, *configs.Config) {
 		UsersService: usersService,
 	})
 
+	/*
+		Нужно исправить:
+		Нужно значение timeout вынести в конфиг
+	*/
 	middlewaresStack := middlewares.CombineMiddlewares(
 		middlewares.CorrelationIdMiddleware,
 		middlewares.LogsMiddleware,

@@ -7,6 +7,7 @@ import (
 	mqtt_devices_api "pkg/mqtt/devices"
 	mqtt_middlewares "pkg/mqtt/middlewares"
 	"pkg/static"
+	"time"
 
 	mqtt "github.com/eclipse/paho.mqtt.golang"
 )
@@ -19,6 +20,7 @@ func NewMqttDevicesHandler(mqttService *pkg_mqtt.MqttService) {
 	udpdateDeviceMiddlewares := mqtt_middlewares.CombineMiddlewares(
 		mqtt_middlewares.CorrelationIdMiddleware,
 		mqtt_middlewares.LogsMiddleware,
+		mqtt_middlewares.TimeoutMiddleware(5*time.Second),
 		mqtt_middlewares.ValidatePayload[mqtt_devices_api.DeviceUpdateDto],
 	)
 	mqttService.Subscribe("#", 0,
