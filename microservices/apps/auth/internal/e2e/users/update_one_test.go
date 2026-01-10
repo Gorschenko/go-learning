@@ -1,6 +1,7 @@
-package e2e
+package e2e_users
 
 import (
+	"auth/internal/e2e"
 	"net/http"
 	users_api "pkg/api/users"
 	"strconv"
@@ -12,9 +13,10 @@ import (
 )
 
 func TestUpdateOneUser(t *testing.T) {
+	ts, user := e2e.Setup(t)
+
 	t.Run("Positive", func(t *testing.T) {
 		t.Run(strconv.Itoa(http.StatusOK), func(t *testing.T) {
-			user := RegisterUser()
 
 			filters := users_api.UserFiltersDto{
 				Email: user.Email,
@@ -29,7 +31,7 @@ func TestUpdateOneUser(t *testing.T) {
 				Update:  update,
 			}
 
-			URL := testServer.URL + users_api.UpdateOnePath
+			URL := ts.URL + users_api.UpdateOnePath
 			var responseBody users_api.UpdateOneResponseBodyDto
 
 			response, _ := resty.
@@ -59,7 +61,7 @@ func TestUpdateOneUser(t *testing.T) {
 				Update:  update,
 			}
 
-			URL := testServer.URL + users_api.UpdateOnePath
+			URL := ts.URL + users_api.UpdateOnePath
 			var responseBody users_api.UpdateOneResponseBodyDto
 
 			response, _ := resty.

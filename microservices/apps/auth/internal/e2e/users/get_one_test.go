@@ -1,6 +1,7 @@
-package e2e
+package e2e_users
 
 import (
+	"auth/internal/e2e"
 	"encoding/json"
 	"io"
 	"net/http"
@@ -14,15 +15,16 @@ import (
 )
 
 func TestGetOneUser(t *testing.T) {
+	ts, user := e2e.Setup(t)
+
 	t.Run("Positive", func(t *testing.T) {
 		t.Run(strconv.Itoa(http.StatusOK), func(t *testing.T) {
-			user := RegisterUser()
 
 			requestQuery := users_api.UserFiltersDto{
 				Email: user.Email,
 			}
 			requestQueryValues, _ := query.Values(requestQuery)
-			URL := testServer.URL + users_api.GetOnePath
+			URL := ts.URL + users_api.GetOnePath
 			URL = URL + "?" + requestQueryValues.Encode()
 
 			response, _ := http.Get(URL)
@@ -41,7 +43,7 @@ func TestGetOneUser(t *testing.T) {
 				ID: gofakeit.Int(),
 			}
 			queryValues, _ := query.Values(requestQuery)
-			URL := testServer.URL + users_api.GetOnePath
+			URL := ts.URL + users_api.GetOnePath
 			URL = URL + "?" + queryValues.Encode()
 
 			response, _ := http.Get(URL)

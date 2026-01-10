@@ -1,6 +1,7 @@
-package e2e
+package e2e_auth
 
 import (
+	"auth/internal/e2e"
 	"bytes"
 	"encoding/json"
 	"io"
@@ -14,17 +15,17 @@ import (
 )
 
 func TestLoginUser(t *testing.T) {
+	ts, user := e2e.Setup(t)
 
 	t.Run("Positive", func(t *testing.T) {
 		t.Run(strconv.Itoa(http.StatusOK), func(t *testing.T) {
-			user := RegisterUser()
 
 			requestBody, _ := json.Marshal(&auth_api.LoginRequestBodyDto{
 				Email:    user.Email,
 				Password: user.Password,
 			})
 
-			URL := testServer.URL + auth_api.LoginPath
+			URL := ts.URL + auth_api.LoginPath
 			response, _ := http.Post(URL, "application/json", bytes.NewReader(requestBody))
 			responseBodyString, _ := io.ReadAll(response.Body)
 			var responseBody auth_api.LoginResponseBodyDto
@@ -39,7 +40,7 @@ func TestLoginUser(t *testing.T) {
 
 	t.Run("Negative", func(t *testing.T) {
 		t.Run(strconv.Itoa(http.StatusNotFound), func(t *testing.T) {
-			URL := testServer.URL + auth_api.LoginPath
+			URL := ts.URL + auth_api.LoginPath
 			requestBody, _ := json.Marshal(&auth_api.LoginRequestBodyDto{
 				Email:    gofakeit.Email(),
 				Password: gofakeit.Password(false, false, true, false, false, 5),
