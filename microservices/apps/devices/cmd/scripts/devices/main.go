@@ -2,9 +2,9 @@ package main
 
 import (
 	"context"
+	"devices/internal/devices"
 	"math/rand"
 	"pkg/configs"
-	"pkg/database"
 	"pkg/logger"
 	"pkg/mqtt"
 	mqtt_devices_api "pkg/mqtt/devices"
@@ -39,23 +39,11 @@ func main() {
 
 		serialNumber := strconv.Itoa(rand.Intn(1000))
 		update := mqtt_devices_api.DeviceUpdateDto{
-			Status: getRandomDeviceStatus(),
+			Status: devices.GetRandomDeviceStatus(),
 		}
 
-		mqttDevicesApi.SendUpdateDeviceEvent(ctx, serialNumber, &update)
+		mqttDevicesApi.SendDeviceUpdateEvent(ctx, serialNumber, &update)
 
 		time.Sleep(time.Duration(rand.Intn(3)) * time.Second)
-	}
-}
-
-func getRandomDeviceStatus() database.DeviceStatus {
-	num := rand.Intn(100)
-
-	if num <= 10 {
-		return database.DevicesStatusUnknown
-	} else if num > 10 && num <= 50 {
-		return database.DeviceStatusOnline
-	} else {
-		return database.DeviceStatusOffline
 	}
 }

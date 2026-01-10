@@ -1,6 +1,8 @@
 package devices
 
-import "pkg/database"
+import (
+	"pkg/database"
+)
 
 func NewDevicesService(dependencies *DevicesServiceDependencies) *DevicesService {
 	return &DevicesService{
@@ -18,10 +20,13 @@ func (s *DevicesService) UpdateDeviceStatus(serialNumber string, status database
 	}
 
 	if existedDevice == nil {
-		createdDevice, _ := s.devicesRepository.CreateOne(&database.Device{
+		dataToCreate := database.Device{
+			Type:         GetRandomDeviceType(),
 			SerialNumber: serialNumber,
 			Status:       status,
-		})
+		}
+
+		createdDevice, _ := s.devicesRepository.CreateOne(&dataToCreate)
 		device = createdDevice
 	}
 

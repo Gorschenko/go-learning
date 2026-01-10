@@ -24,6 +24,16 @@ func NewDevicesRepository(dependencies *database.RepositoryDependencies) *Device
 	}
 }
 
+func (r *DevicesRepository) UpdateOne(serialNumber string, update DeviceUpdateDto) (int64, error) {
+	result := r.database.DB.
+		Model(&database.User{}).
+		Where("serial_number = ?", serialNumber).
+		Limit(1).
+		UpdateColumns(update)
+
+	return result.RowsAffected, result.Error
+}
+
 func (r *DevicesRepository) CreateOne(device *database.Device) (*database.Device, error) {
 	result := r.database.DB.
 		Model(&database.Device{}).
@@ -39,11 +49,10 @@ func (r *DevicesRepository) CreateOne(device *database.Device) (*database.Device
 func (r *DevicesRepository) GetOne(serialNumber string) (*database.Device, error) {
 	var device database.Device
 
-	query := r.database.DB.
+	result := r.database.DB.
 		Model(&database.Device{}).
-		Where("serial_number = ?", serialNumber)
-
-	result := query.First(&device)
+		Where("serial_number = ?", serialNumber).
+		First(&device)
 
 	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
 		return nil, nil

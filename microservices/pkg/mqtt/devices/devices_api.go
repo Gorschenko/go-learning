@@ -19,7 +19,7 @@ func NewDevicesApi(dependencies *DevicesDependencies) *DevicesApi {
 	}
 }
 
-func (api *DevicesApi) SendUpdateDeviceEvent(ctx context.Context, serialNumber string, update *DeviceUpdateDto) error {
+func (api *DevicesApi) SendDeviceUpdateEvent(ctx context.Context, serialNumber string, update *DeviceUpdateDto) error {
 	topic := serialNumber + "/" + TopicDevicesUpdated
 	err := api.mqttSevice.Publish(ctx, topic, 0, update)
 
