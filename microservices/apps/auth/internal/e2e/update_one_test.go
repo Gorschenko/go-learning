@@ -14,7 +14,7 @@ import (
 func TestUpdateOneUser(t *testing.T) {
 	t.Run("Positive", func(t *testing.T) {
 		t.Run(strconv.Itoa(http.StatusOK), func(t *testing.T) {
-			user := CreateUser()
+			user := RegisterUser()
 
 			filters := users_api.UserFiltersDto{
 				Email: user.Email,

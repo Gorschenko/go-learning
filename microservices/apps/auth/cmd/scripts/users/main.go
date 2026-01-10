@@ -5,7 +5,6 @@ import (
 	"pkg/api"
 	auth_api "pkg/api/auth"
 	"pkg/configs"
-	"pkg/database"
 	"pkg/logger"
 	"sync"
 	"time"
@@ -25,10 +24,11 @@ func main() {
 	httpApi := api.NewHttpApi(&api.HttpApiDependencies{
 		Config: config,
 	})
-	authApi := auth_api.NewAuthApi(&auth_api.AuthApiDependencies{
-		Config:  config,
-		HttpApi: httpApi,
-	})
+	authApi := auth_api.
+		NewAuthApi(&auth_api.AuthApiDependencies{
+			HttpApi: httpApi,
+		}).
+		SetBaseURLByConfig(config)
 
 	usersCount := config.Scripts.CreateUsers.Count
 	status := &OperationStatus{
@@ -40,19 +40,19 @@ func main() {
 	result := make(chan bool, usersCount)
 	var wg sync.WaitGroup
 
-	for i := 0; i < usersCount; i++ {
+	for i := range usersCount {
 		wg.Add(1)
 
 		go func(userNumber int) {
 			defer wg.Done()
 
-			user := &database.User{
+			user := &auth_api.RegisterRequestBodyDto{
 				Email:    gofakeit.Email(),
 				Password: gofakeit.Password(false, false, true, false, false, 5),
 				Name:     gofakeit.Name(),
 			}
 
-			data, err := authApi.RegisterUser(user)
+			response, err := authApi.RegisterUser(user)
 
 			if err != nil {
 				slog.Error(
@@ -70,7 +70,7 @@ func main() {
 					"UserNumber",
 					userNumber,
 					"Data",
-					data,
+					response.User,
 				)
 
 				result <- true

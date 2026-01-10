@@ -1,4 +1,4 @@
-package auth_api
+package users_api
 
 import (
 	"pkg/api"
@@ -6,24 +6,23 @@ import (
 	"strconv"
 )
 
-type AuthApiDependencies struct {
+type UsersApiDependencies struct {
 	HttpApi *api.HttpApi
 }
 
-type AuthApi struct {
+type UsersApi struct {
 	httpApi *api.HttpApi
 	baseURL string
 }
 
-func NewAuthApi(dependencies *AuthApiDependencies) *AuthApi {
-
-	return &AuthApi{
+func NewUsersApi(dependencies *UsersApiDependencies) *UsersApi {
+	return &UsersApi{
 		httpApi: dependencies.HttpApi,
 		baseURL: "",
 	}
 }
 
-func (a *AuthApi) SetBaseURLByConfig(config *configs.Config) *AuthApi {
+func (a *UsersApi) SetBaseURLByConfig(config *configs.Config) *UsersApi {
 	protocol := config.Services.Auth.Protocol
 	hostname := config.Services.Auth.Host
 	port := config.Services.Auth.Port
@@ -35,21 +34,21 @@ func (a *AuthApi) SetBaseURLByConfig(config *configs.Config) *AuthApi {
 	return a
 }
 
-func (a *AuthApi) SetBaseURL(URL string) *AuthApi {
+func (a *UsersApi) SetBaseURL(URL string) *UsersApi {
 	a.baseURL = URL
 	return a
 }
 
-func (a *AuthApi) RegisterUser(body *RegisterRequestBodyDto) (*RegisterResponseBodyDto, error) {
-	URL := a.baseURL + RegisterPath
+func (a *UsersApi) DeleteOneUser(body *UserFiltersDto) (*DeleteOneResponseBodyDto, error) {
+	URL := a.baseURL + DeleteOnePath
 
-	var result RegisterResponseBodyDto
+	var result DeleteOneResponseBodyDto
 
 	response, err := a.httpApi.Client.
 		R().
 		SetBody(body).
 		SetResult(&result).
-		Execute(RegisterMethod, URL)
+		Execute(DeleteOneMethod, URL)
 
 	if err != nil || response.IsError() {
 		return nil, err

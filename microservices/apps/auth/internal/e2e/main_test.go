@@ -2,17 +2,16 @@ package e2e
 
 import (
 	"auth/internal/app"
-	"bytes"
-	"encoding/json"
-	"io"
 	"net/http"
 	"net/http/httptest"
 	"os"
+	"pkg/api"
 	auth_api "pkg/api/auth"
 	"pkg/database"
 	"testing"
 
 	"github.com/brianvoe/gofakeit/v7"
+	"github.com/go-resty/resty/v2"
 )
 
 var (
@@ -38,19 +37,21 @@ func teardown() {
 	defer testServer.Close()
 }
 
-func CreateUser() *database.User {
-	URL := testServer.URL + auth_api.RegisterPath
-	requestBodyDto := auth_api.RegisterRequestBodyDto{
+func RegisterUser() *database.User {
+	requestBody := auth_api.RegisterRequestBodyDto{
 		Email:    gofakeit.Email(),
 		Password: gofakeit.Password(false, false, true, false, false, 5),
 		Name:     gofakeit.Name(),
 	}
-	requestBodyString, _ := json.Marshal(&requestBodyDto)
-	response, _ := http.Post(URL, "application/json", bytes.NewReader(requestBodyString))
-	responseBodyString, _ := io.ReadAll(response.Body)
-	var responseBody auth_api.RegisterResponseBodyDto
 
-	json.Unmarshal(responseBodyString, &responseBody)
+	httpApi := api.HttpApi{
+		Client: resty.New(),
+	}
+	authHttpApi := auth_api.NewAuthApi(&auth_api.AuthApiDependencies{
+		HttpApi: &httpApi,
+	}).SetBaseURL(testServer.URL)
 
-	return responseBody.User
+	response, _ := authHttpApi.RegisterUser(&requestBody)
+
+	return response.User
 }

@@ -17,7 +17,7 @@ func TestLoginUser(t *testing.T) {
 
 	t.Run("Positive", func(t *testing.T) {
 		t.Run(strconv.Itoa(http.StatusOK), func(t *testing.T) {
-			user := CreateUser()
+			user := RegisterUser()
 
 			requestBody, _ := json.Marshal(&auth_api.LoginRequestBodyDto{
 				Email:    user.Email,
@@ -33,6 +33,7 @@ func TestLoginUser(t *testing.T) {
 			assert.Equal(t, http.StatusOK, response.StatusCode)
 			assert.NotEmpty(t, responseBody.Token)
 			assert.False(t, responseBody.ExpirationTime.IsZero())
+
 		})
 	})
 

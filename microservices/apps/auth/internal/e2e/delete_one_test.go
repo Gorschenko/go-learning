@@ -14,7 +14,7 @@ import (
 func TestDeleteOneUser(t *testing.T) {
 	t.Run("Positive", func(t *testing.T) {
 		t.Run(strconv.Itoa(http.StatusOK), func(t *testing.T) {
-			user := CreateUser()
+			user := RegisterUser()
 
 			requestBody := users_api.UserFiltersDto{
 				ID: int(user.ID),
