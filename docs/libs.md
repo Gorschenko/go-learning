@@ -17,9 +17,13 @@
     -   https://github.com/d-tsuji/awesome-go-orms
 
 - ORM:
-    -   https://github.com/go-gorm/gorm?tab=readme-ov-file
+    -   https://github.com/go-gorm/gorm
     -   go get -u gorm.io/gorm
     -   go get -u gorm.io/driver/postgres
+
+- Cron:
+    -   https://github.com/robfig/cron
+    -   go get github.com/robfig/cron/v3@v3.0.0
 
 - Redis:
     -  https://github.com/redis/go-redis
