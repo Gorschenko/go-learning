@@ -73,8 +73,7 @@
 
 <details>
     <summary>
-       Лекция 3.5 Копирование слайсов и добавление новых элементов.
-       Вариант №1
+       Лекция 3.5. Вариант №1
     </summary>
     <p>Исходные данные</p>
     <pre><code>
@@ -112,8 +111,7 @@
 
 <details>
     <summary>
-       Лекция 3.6 Копирование слайсов и добавление новых элементов.
-       Вариант №2. Добавляем элементы в исходный слайс исключительным способом.
+       Лекция 3.6. Вариант №2
     </summary>
     <p>Исходные данные</p>
     <pre><code>
@@ -153,8 +151,7 @@
 
 <details>
     <summary>
-       Лекция 3.7 Копирование слайсов и добавление новых элементов.
-       Вариант №3. Добавляем элементы в исходный слайс исключительным способом, копируем другой массив
+       Лекция 3.7. Вариант №3
     </summary>
     <p>Исходные данные</p>
     <pre><code>
@@ -200,8 +197,7 @@
 
 <details>
     <summary>
-       Лекция 3.8 Копирование слайсов и добавление новых элементов.
-       Вариант №4. Заполнение слайса через цикл
+        Лекция 3.8. Вариант №4
     </summary>
     <p>Исходные данные</p>
     <pre><code>
@@ -254,8 +250,7 @@
 
 <details>
     <summary>
-       Лекция 3.9 Копирование слайсов и добавление новых элементов.
-       Вариант №4. Заполнение слайса через цикл
+        Лекция 3.9. Вариант №5
     </summary>
     <p>Исходные данные</p>
     <pre><code>
@@ -287,6 +282,203 @@
             //
             d := b[:3]
             fmt.Println("d =", d) // d=[3,55,10]
+        </pre></code>
+    </details>
+</details>
+
+<details>
+    <summary>
+        Лекция 3.10. Вариант №6. Передача по ссылке
+    </summary>
+    <p>Исходные данные</p>
+    <pre><code>
+        const MAX = 5
+        //
+        func main() {
+            s: = generate()
+            mutation(s)
+            fmt.Println("s =", s)
+            fmt.Println(s[0:MAX])
+        }
+        // 
+        func generate() []int {
+            out := make([]int, 0, MAX)
+            for i:= 1; i < MAX; i++ {
+                out = append(out, i)
+            }
+            return out
+        }
+        //
+        func mutation(s []int) {
+            s = append(s, -1)
+        }
+    </pre></code>
+    <details>
+        <summary>
+            Решение
+        </summary>
+        <pre><code>
+            const MAX = 5
+            //
+            func main() {
+                s: = generate() // l=4, c=5, s=[1,2,3,4],0
+                mutation(s) // s=[1,2,3,4],-1
+                fmt.Println("s =", s)
+                fmt.Println(s[0:MAX]) // s=[1,2,3,4,-1]
+            }
+            // 
+            func generate() []int {
+                out := make([]int, 0, MAX) // l=0, c=5, out=[],0,0,0,0,0
+                for i:= 1; i < MAX; i++ {
+                    out = append(out, i)
+                }
+                return out
+            }
+            //
+            func mutation(s []int) {
+                s = append(s, -1) // l=5, c=5, based on out, s=[1,2,3,4,-1]
+            }
+        </pre></code>
+    </details>
+</details>
+
+<details>
+    <summary>
+        Лекция 3.11. Вариант №7. Задача от GPT
+    </summary>
+        <p>Исходные данные</p>
+        <pre><code>
+            s := make([]int, 0, 5)
+            s = append(s, 1, 2, 3)
+            //
+            subSlice := s[1:3]
+            //
+            subSlice[0] = 99
+            subSlice = append(subSlice, 4)
+            //
+            s = append(s, 5, 6, 7)
+            //
+            fmt.Println("s = ", s)
+            fmt.Println("subSlice = ", subSlice)
+        </pre></code>
+    <details>
+        <summary>
+            Решение
+        </summary>
+        <pre><code>
+            s := make([]int, 0, 5) // l=0, c=5
+            s = append(s, 1, 2, 3) // l=3, c=5, s=[1,2,3],0,0
+            //
+            subSlice := s[1:3] // l=2, c=4, based on s, subSlice=[2,3],0,0
+            //
+            subSlice[0] = 99 // subSlice=[99,3],0,0, s=[1,99,3],0,0 
+            subSlice = append(subSlice, 4) // l=3, c=4, based on s, subSlice=[1,99,3,4],0, s=[1,99,3],4,0 
+            //
+            s = append(s, 5, 6, 7) // l=6, c=10, ,new array, s=[1,99,3,5,6,7],0,0,0,0
+            //
+            fmt.Println("s =", s)
+            fmt.Println("subSlice =", subSlice)
+        </pre></code>
+    </details>
+</details>
+
+<details>
+    <summary>
+        Лекция 3.12. Вариант №8. Задача от GPT. Самая сложная
+    </summary>
+    <p>Исходные данные</p>
+    <pre><code>
+        func modify(s []int, n int) {
+            s = append(s, n)
+            s[0] = 999
+        }
+        //
+        func main() {
+            s1 := make([]int, 3, 5)
+            s2 := s1[:2]
+            //
+            s1[0] = 1
+            s2[1] = 2
+            //
+            modify(s1, 55)
+            modify(s2, 66)
+            //
+            fmt.Println("s1 =", s1)
+            fmt.Println("s2 = ", s2)
+            fmt.Println("s1 cap =", cap(s1))
+            fmt.Println("s2 cap =", cap(s2))
+            //
+            s3 :=s2[0:5]
+            fmt.Println("s3 =", s3)
+        }
+    </pre></code>
+    <details>
+        <summary>
+            Решение
+        </summary>
+        <pre><code>
+        func modify(s []int, n int) {
+            s = append(s, n) // based on s2, s=[999,2,66],55,0, s1=[999,2,66],55,0, s2=[999,2],66,55,0
+            s[0] = 999
+        }
+        //
+        func main() {
+            s1 := make([]int, 3, 5) // l=3, c=5, s1=[0,0,0],0,0
+            s2 := s1[:2] // l=2, c=5, based on s1, s2=[0,0],0,0,0
+            //
+            s1[0] = 1 // s1=[1,0,0],0,0, s2=[1,0],0,0,0
+            s2[1] = 2 // s1=[1,2,0],0,0, s2=[1,2],0,0,0
+            //
+            modify(s1, 55) // s=[999,2,0,55],0, s1=[999,2,0],55,0, s2[]=[999,2],0,55,0
+            modify(s2, 66) // s=[999,2,66],55,0, s1=[999,2,66],55,0, s2=[999,2],66,55,0
+            //
+            fmt.Println("s1 =", s1)
+            fmt.Println("s2 = ", s2)
+            fmt.Println("s1 cap =", cap(s1))
+            fmt.Println("s2 cap =", cap(s2))
+            //
+            s3 :=s2[0:5]
+            fmt.Println("s3 =", s3) // s2=[999,2,66,55,0]
+        }
+        </pre></code>
+    </details>
+</details>
+
+<details>
+    <summary>
+        Лекция 3.13. Вариант №9. Копирование больших данных
+    </summary>
+    <p>Исходные данные</p>
+    <pre><code>
+        func getBytes(start, end int) []byte {
+            arr := [999999999]byte{} // большой объем данных - около 1 Гб
+            slice := arr[start:end]
+            return slice // возвращается ссылка
+        }
+        //
+        func main() {
+            s := getBytes(10, 20) // работаем с большим слайсом, пока не завершится функция main
+            fmt.Println(s)
+        }
+    </pre></code>
+    <details>
+        <summary>
+            Решение
+        </summary>
+        <pre><code>
+            func getBytes(start, end int) []byte {
+                arr := [999999999]byte{}
+                //
+                slice := make([]byte, end-start)
+                copy(slice, arr[start:end])
+                //
+                return slice 
+            }
+            //
+            func main() {
+                s := getBytes(10, 20)
+                fmt.Println(s)
+            }
         </pre></code>
     </details>
 </details>
