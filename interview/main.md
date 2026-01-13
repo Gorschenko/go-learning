@@ -1,1 +1,1 @@
-1. [Слайсы](./slices/main.md)
+1. [Слайсы](./docs/slices.md)
