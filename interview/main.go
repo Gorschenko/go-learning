@@ -1,16 +1,38 @@
 package main
 
-import "fmt"
-
-type SomeStruct struct{}
-
-func foo() interface{} {
-	var result *SomeStruct // = nil, здесь может быть ссылка на любой тип
-	return result
+type ABC interface {
+	A()
+	B()
+	C()
 }
+type AB interface {
+	A()
+	B()
+}
+type BC interface {
+	B()
+	C()
+}
+type abc struct{}
+
+//
+func (a abc) A() {}
+func (a abc) B() {}
+func (a abc) C() {}
+
+//
+type ab struct{}
+
+//
+func (a ab) A() {}
+func (a ab) B() {}
+
+//
 func main() {
-	res := foo()
-	if res != nil {
-		fmt.Println("res != nil, res =", res)
-	}
+	var a interface{}
+	a = abc{}
+
+	ab := a.(AB)
+	ab.A()
+	ab.C()
 }
