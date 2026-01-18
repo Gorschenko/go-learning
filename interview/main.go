@@ -1,38 +1,12 @@
 package main
 
-type ABC interface {
-	A()
-	B()
-	C()
-}
-type AB interface {
-	A()
-	B()
-}
-type BC interface {
-	B()
-	C()
-}
-type abc struct{}
+import "fmt"
 
-//
-func (a abc) A() {}
-func (a abc) B() {}
-func (a abc) C() {}
-
-//
-type ab struct{}
-
-//
-func (a ab) A() {}
-func (a ab) B() {}
-
-//
 func main() {
-	var a interface{}
-	a = abc{}
-
-	ab := a.(AB)
-	ab.A()
-	ab.C()
+	greetings := "привет как дела"
+	fmt.Println(greetings)
+	runes := []rune(greetings)
+	runes[1] = 's'
+	result := string(runes)
+	fmt.Println(result)
 }
